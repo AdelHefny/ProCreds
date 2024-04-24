@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import Steps from "./components/steps";
+import TemplatesCarusel from "./components/templatesCarusel";
 
 export default function Home() {
   return (
@@ -48,6 +49,7 @@ export default function Home() {
           </Link>
         </section>
         <Steps />
+        <TemplatesCarusel />
       </motion.div>
     </AnimatePresence>
   );

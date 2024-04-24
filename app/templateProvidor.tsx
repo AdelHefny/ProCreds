@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { TemplateContext } from "./templateContext";
+import { TemplateContext, templateType } from "./templateContext";
 import { AnimatePresence } from "framer-motion";
 
 export default function TemplateProvidor({
@@ -8,7 +8,7 @@ export default function TemplateProvidor({
 }: {
   children: string | JSX.Element | JSX.Element[];
 }) {
-  const [template, setTemplate] = useState({
+  const [template, setTemplate] = useState<templateType>({
     id: 3,
     name: "asd",
     pages: [],

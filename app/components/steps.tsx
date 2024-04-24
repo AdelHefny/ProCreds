@@ -2,7 +2,7 @@ import Link from "next/link";
 
 function Steps() {
   return (
-    <section className="flex flex-col md:flex-row items-center md:items-start space-y-16 md:space-y-0 justify-center py-20 h-[60vh] mt-20 px-32 md:px-16 bg-secant2 w-full md:space-x-16 text-main">
+    <section className="flex flex-col md:flex-row items-center md:items-start space-y-16 md:space-y-0 justify-center py-20 min-h-[60vh] mt-20 px-32 md:px-16 bg-secant2 w-full md:space-x-16 text-main">
       <div className="flex flex-col items-center justify-between md:w-1/3 ">
         <span className="rounded-full bg-gradient-to-br from-secant to-secant3 w-8 h-8 text-center flex items-center justify-center">
           1

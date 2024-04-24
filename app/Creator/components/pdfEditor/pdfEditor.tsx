@@ -5,6 +5,7 @@ import "./pdfEditor.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/fontawesome-free-solid";
 import { TemplateContext } from "@/app/templateContext";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 export default function PdfEditor() {
   const [scale, setScale] = useState(1);
@@ -50,7 +51,7 @@ export default function PdfEditor() {
             setScale((prev) => Math.min(2, prev + 0.1));
           }}
         >
-          <FontAwesomeIcon icon={faPlus} />
+          <FontAwesomeIcon icon={faPlus as IconProp} />
         </button>
         <button
           className="bg-amber-500 w-12 h-5 rounded-md text-sm"
@@ -58,7 +59,7 @@ export default function PdfEditor() {
             setScale((prev) => Math.max(0.1, prev - 0.1));
           }}
         >
-          <FontAwesomeIcon icon={faMinus} />
+          <FontAwesomeIcon icon={faMinus as IconProp} />
         </button>
       </div>
       <motion.div
