@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-main h-[100vh] text-white">
+      <body className="bg-main text-secant2 ">
         <Nav />
         <TemplateProvidor>
           <main>{children}</main>

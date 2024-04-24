@@ -1,24 +1,24 @@
 "use client";
 import { useState, useEffect } from "react";
 import { TemplateContext } from "./templateContext";
+import { AnimatePresence } from "framer-motion";
 
 export default function TemplateProvidor({
   children,
 }: {
   children: string | JSX.Element | JSX.Element[];
 }) {
-  const [template, setTemplate] = useState({ name: "ad" });
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
+  const [template, setTemplate] = useState({
+    id: 3,
+    name: "asd",
+    pages: [],
+    undoStack: [],
+    redoStack: [],
+    saved: false,
   });
-  if (!isMounted) {
-    return (
-      <TemplateContext.Provider value={[template, setTemplate]}>
-        {children}
-      </TemplateContext.Provider>
-    );
-  } else {
-    return <>{children}</>;
-  }
+  return (
+    <TemplateContext.Provider value={[template, setTemplate]}>
+      <AnimatePresence mode="wait">{children}</AnimatePresence>
+    </TemplateContext.Provider>
+  );
 }

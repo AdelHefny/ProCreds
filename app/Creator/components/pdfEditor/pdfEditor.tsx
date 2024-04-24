@@ -1,17 +1,23 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import "./pdfEditor.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faMinus,
-  faPlus,
-  IconDefinition,
-} from "@fortawesome/fontawesome-free-solid";
+import { faMinus, faPlus } from "@fortawesome/fontawesome-free-solid";
+import { TemplateContext } from "@/app/templateContext";
 
 export default function PdfEditor() {
   const [scale, setScale] = useState(1);
   const content = useRef<HTMLDivElement>(null);
+  const [templateState, setter] = useContext(TemplateContext);
+  const contentDiv = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    templateState.pages.map((ele) => {
+      if (contentDiv.current) {
+        contentDiv.current.innerHTML += ele;
+      }
+    });
+  });
   const handleWheel = (e: {
     ctrlKey: any;
     preventDefault: () => void;
@@ -20,10 +26,7 @@ export default function PdfEditor() {
     if (e.ctrlKey && content.current) {
       e.preventDefault();
       setScale((prev) => {
-        console.log(
-          Math.max(0.1, Math.min(3, prev + (e.deltaY > 0 ? 0.1 : -0.1)))
-        );
-        return Math.max(0.1, Math.min(3, prev + (e.deltaY > 0 ? 0.1 : -0.1)));
+        return Math.max(0.1, Math.min(3, prev + (e.deltaY > 0 ? 0.05 : -0.05)));
       });
     }
   };
@@ -61,6 +64,7 @@ export default function PdfEditor() {
       <motion.div
         className={`w-32 h-32 bg-white content`}
         animate={{ scale: scale }}
+        ref={contentDiv}
       ></motion.div>
     </section>
   );

@@ -1,9 +1,54 @@
+"use client";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import PdfEditor from "./components/pdfEditor/pdfEditor";
+import Link from "next/link";
+import Steps from "./components/steps";
+
 export default function Home() {
   return (
-    <div className="flex items-center justify-center h-screen">
-      <h1>div</h1>
-    </div>
+    <AnimatePresence mode="wait">
+      <motion.div className="flex flex-col items-center justify-center">
+        <section className="flex flex-col items-center justify-center min-h-screen sm:mt-16 mt-24 px-16">
+          <h1 className="font-bold text-3xl text-center pb-4">
+            Resume builder, Easy way to start and apply
+          </h1>
+          <p className="w-3/4 text-lg text-center">
+            Begin crafting your credentials with simple steps and refine them
+            along the way.
+          </p>
+          <div className="flex flex-row items-center justify-center pt-4">
+            <Image
+              src={"/template.PNG"}
+              alt="template image"
+              width={150}
+              height={300}
+              className="-rotate-[20deg] translate-y-5 translate-x-8 select-none"
+            />
+            <Image
+              src={"/template.PNG"}
+              alt="template image"
+              width={150}
+              height={300}
+              className="z-10 select-none"
+            />
+            <Image
+              src={"/template.PNG"}
+              alt="template image"
+              width={150}
+              height={300}
+              className="rotate-[20deg] translate-y-5 -translate-x-8 select-none"
+            />
+          </div>
+          <Link
+            href={"/Creator"}
+            className="h-10 p-4 bg-gradient-to-br from-secant flex items-center justify-center to-secant2 mt-10 rounded-full text-main"
+          >
+            Start Creating
+          </Link>
+        </section>
+        <Steps />
+      </motion.div>
+    </AnimatePresence>
   );
 }

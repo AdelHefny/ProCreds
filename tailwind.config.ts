@@ -8,9 +8,10 @@ const config: Config = {
   ],
   theme: {
     colors: {
-      main: "#030637",
-      secant: "#3C0753",
-      secant2: "#720455",
+      main: "#DAD7CD",
+      secant: "#A3B18A",
+      secant2: "#344E41",
+      secant3: "#3A5A40",
       interactive: "#910A67",
       transparent: "transparent",
       current: "currentColor",

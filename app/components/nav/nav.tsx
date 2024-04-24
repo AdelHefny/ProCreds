@@ -1,30 +1,23 @@
 "use client";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
+import Logo from "./logo";
 function Nav() {
   return (
     <motion.nav
       initial={{ y: "-140%", x: "-50%" }}
       animate={{ y: 0 }}
-      className="flex space-x-6 items-center justify-between px-7 fixed top-2 rounded-full bg-secant bg-opacity-60 backdrop-blur-md left-1/2 sm:w-96 w-3/4 h-16 z-40"
+      className="flex space-x-6 items-center justify-between px-7 fixed top-2 rounded-full bg-secant bg-opacity-60 backdrop-blur-md left-1/2 sm:w-[28rem] w-[90%] h-16 z-40"
     >
-      <Link href={"#"} className="text-interactive font-extrabold font-mono">
-        <Image
-          src={"/procreds-high-resolution-logo.png"}
-          alt="logo"
-          width={256}
-          height={256}
-        />
-      </Link>
+      <Logo />
       <ul className="flex items-center justify-center space-x-2">
-        <li>
+        <li className="relative font-bold after:absolute after:content-[''] after:w-0 after:h-[2px] after:bg-secant2 hover:after:w-full after:bottom-0 after:right-0 after:transition-all after:duration-500 hover:after:left-0 ">
           <Link href={"/"}>Home</Link>
         </li>
-        <li>
+        <li className="relative font-bold after:absolute after:content-[''] after:w-0 after:h-[2px] after:bg-secant2 hover:after:w-full after:bottom-0 after:right-0 after:transition-all after:duration-500 hover:after:left-0 ">
           <Link href={"/Creator"}>Create</Link>
         </li>
-        <li>
+        <li className="relative font-bold after:absolute after:content-[''] after:w-0 after:h-[2px] after:bg-secant2 hover:after:w-full after:bottom-0 after:right-0 after:transition-all after:duration-500 hover:after:left-0 ">
           <Link href={"/"}>Contacts</Link>
         </li>
       </ul>
