@@ -1,9 +1,10 @@
 "use client";
 import { useContext, useEffect, useRef } from "react";
 import { AnimatePresence, Variants, motion } from "framer-motion";
-import { TemplateContext } from "../templateContext";
+import { TemplateContext, templateType } from "../templateContext";
 import { templates } from "./templates";
 import PdfEditor from "./components/pdfEditor/pdfEditor";
+import NormalTemplate from "./components/normalTemplate/normalTemplate.tsx";
 
 const templatesvariants: Variants = {
   hidden: {
@@ -65,7 +66,7 @@ function Creator() {
   const [templateState, setter] = useContext(TemplateContext);
   return (
     <AnimatePresence mode="wait">
-      {!templateState.pages.length ? (
+      {templateState.templateId == -1 ? (
         <motion.section
           key="template-selection"
           variants={templatesvariants}
@@ -76,23 +77,22 @@ function Creator() {
         >
           <AnimatePresence mode="wait">
             {templates.map((ele) => {
-              const examplePage = useRef<HTMLDivElement>(null);
-              useEffect(() => {
-                if (examplePage.current) {
-                  examplePage.current.innerHTML = ele.pages[0];
-                }
-              });
               return (
                 <motion.div
                   key={ele.name}
                   className="sm:w-64 w-[90%] h-96 cursor-pointer flex flex-col items-center justify-center"
                   onClick={() => {
-                    setter(ele);
+                    setter((prevState: templateType) => {
+                      let cache = Object.create(prevState);
+                      cache.templateId = ele.templateId;
+                      return cache;
+                    });
                   }}
                   variants={templatesChildrenvariants}
                 >
                   <h3>{ele.name}</h3>
-                  <div className="" ref={examplePage}></div>
+                  {ele.templateId == 0 && <NormalTemplate templateData={ele} />}
+                  {ele.templateId == 1 && <NormalTemplate templateData={ele} />}
                 </motion.div>
               );
             })}
@@ -105,12 +105,8 @@ function Creator() {
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="flex flex-row h-screen"
+          className="flex flex-row h-screen relative"
         >
-          <section className="w-1/4">
-            <h1>{templateState.name}</h1>
-            <h1>{templateState.pages.length}</h1>
-          </section>
           <PdfEditor />
         </motion.section>
       )}

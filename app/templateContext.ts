@@ -1,17 +1,49 @@
 import { SetStateAction, createContext } from "react";
 
 export type templateType = {
-  id: number;
+  templateId: number;
   name: string;
-  pages: string[];
-  undoStack: string[];
-  redoStack: string[];
+  content: {
+    header: {
+      jobTitle: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      Phone: string;
+      City: string;
+      description: string;
+    };
+    sections: {
+      title: string;
+      details: string[];
+    }[];
+  };
+  undoStack: templateType[];
+  redoStack: templateType[];
   saved: boolean;
 };
 
 export const TemplateContext = createContext<
   [templateType, (arg: SetStateAction<templateType>) => void]
 >([
-  { id: 3, name: "", pages: [], undoStack: [], redoStack: [], saved: false },
+  {
+    templateId: -1,
+    name: "",
+    content: {
+      header: {
+        jobTitle: "",
+        firstName: "",
+        lastName: "",
+        email: "",
+        Phone: "",
+        City: "",
+        description: "",
+      },
+      sections: [],
+    },
+    undoStack: [],
+    redoStack: [],
+    saved: false,
+  },
   (arg: SetStateAction<templateType>) => {},
 ]);

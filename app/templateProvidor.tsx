@@ -9,9 +9,20 @@ export default function TemplateProvidor({
   children: string | JSX.Element | JSX.Element[];
 }) {
   const [template, setTemplate] = useState<templateType>({
-    id: 3,
-    name: "asd",
-    pages: [],
+    templateId: -1,
+    name: "",
+    content: {
+      header: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        Phone: "",
+        jobTitle: "",
+        City: "",
+        description: "",
+      },
+      sections: [],
+    },
     undoStack: [],
     redoStack: [],
     saved: false,

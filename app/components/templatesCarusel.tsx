@@ -2,86 +2,49 @@ import { faCaretLeft, faCaretRight } from "@fortawesome/fontawesome-free-solid";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 import { useRef } from "react";
+import { templates } from "../Creator/templates";
 
 function TemplatesCarousel() {
-  const carouselRef = useRef(null);
-  const { scrollYProgress } = useScroll({ target: carouselRef });
-
-  // Calculate rotation angle and x position based on scroll progress
-  const rotateZ = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [0, 45] // Rotate from -360 to 360 degrees
-  );
-  const translateX = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [-10, 10] // Move from -100 to 100 pixels horizontally
-  );
-
-  // Calculate circular motion
-  const circleX = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [-100, 100] // Move from -100 to 100 pixels horizontally
-  );
-  const circleY = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [0, 200] // Move from 0 to 200 pixels vertically
-  );
-
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: carouselRef,
+    offset: ["end end", "start start"],
+  });
+  const motionX = useTransform(scrollYProgress, [1, 0], [0, 1]);
+  const scrollPos = useTransform(() => {
+    console.log(motionX.get());
+    return motionX.get() * 1000;
+  });
   return (
-    <section className="min-h-[200vh] w-full">
-      <button>
-        <FontAwesomeIcon icon={faCaretRight as IconDefinition} />
-      </button>
-      <button>
-        <FontAwesomeIcon icon={faCaretLeft as IconDefinition} />
-      </button>
-      <div
-        ref={carouselRef}
-        className="w-full h-96 overflow-hidden flex items-center justify-center"
-        style={{ perspective: "500px" }}
+    <section
+      className="min-h-[200vh] w-full flex items-center justify-center overflow-hidden"
+      ref={carouselRef}
+    >
+      <motion.div
+        className="flex flex-row items-center justify-center min-w-max space-x-5"
+        style={{ x: scrollPos }}
       >
-        <motion.img
-          src="/template.PNG"
-          alt="template image"
-          style={{
-            rotateZ,
-            translateX,
-            x: circleX, // Apply circular motion horizontally
-            y: circleY, // Apply circular motion vertically
-            transformOrigin: "center center",
-          }}
-          className="w-64 h-64 bg-secant2 rounded-lg"
-        />
-        <motion.img
-          src="/template.PNG"
-          alt="template image"
-          style={{
-            rotateZ,
-            translateX,
-            x: circleX, // Apply circular motion horizontally
-            y: circleY, // Apply circular motion vertically
-            transformOrigin: "center center",
-          }}
-          className="w-64 h-64 bg-secant2 rounded-lg"
-        />
-        <motion.img
-          src="/template.PNG"
-          alt="template image"
-          style={{
-            rotateZ,
-            translateX,
-            x: circleX, // Apply circular motion horizontally
-            y: circleY, // Apply circular motion vertically
-            transformOrigin: "center center",
-          }}
-          className="w-64 h-64 bg-secant2 rounded-lg"
-        />
-      </div>
+        {templates.map(() => (
+          <Image
+            width={"300"}
+            height={"300"}
+            alt="resume template"
+            src={`/template.PNG`}
+            className={`min-w-[27vw]`}
+          />
+        ))}
+        {templates.map(() => (
+          <Image
+            width={"300"}
+            height={"300"}
+            alt="resume template"
+            src={`/template.PNG`}
+            className={`min-w-[27vw]`}
+          />
+        ))}
+      </motion.div>
     </section>
   );
 }

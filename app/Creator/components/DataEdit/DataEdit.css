@@ -1,0 +1,12 @@
+fieldset div:has(input:focus)::before {
+  /* CSS properties for the before pseudo-element when input is focused */
+  /* For example, you can set the scale to 100% to make it visible */
+  transform: scaleX(1);
+  opacity: 1;
+}
+fieldset div::before {
+  /* CSS properties for the before pseudo-element when input is focused */
+  /* For example, you can set the scale to 100% to make it visible */
+  transform: scaleX(0);
+  opacity: 0;
+}
