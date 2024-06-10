@@ -186,10 +186,16 @@ export default function PdfEditor() {
           ref={contentDiv}
         >
           {templateState.templateId == 0 && (
-            <NormalTemplate templateData={templateState} />
+            <NormalTemplate
+              templateData={templateState}
+              templateSetter={setter}
+            />
           )}
           {templateState.templateId == 1 && (
-            <NormalTemplate templateData={templateState} />
+            <NormalTemplate
+              templateData={templateState}
+              templateSetter={setter}
+            />
           )}
         </motion.div>
       </section>

@@ -23,6 +23,18 @@ export default function TemplateProvidor({
       },
       sections: [],
     },
+    style: {
+      header: {
+        jobTitle: {},
+        firstName: {},
+        lastName: {},
+        email: {},
+        Phone: {},
+        City: {},
+        description: {},
+      },
+      sections: [],
+    },
     undoStack: [],
     redoStack: [],
     saved: false,

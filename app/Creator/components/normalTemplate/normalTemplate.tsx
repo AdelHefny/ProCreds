@@ -1,14 +1,20 @@
-import { templateType } from "@/app/templateContext";
-import { useContext } from "react";
+"use client";
+import { styleDatatype, templateType } from "@/app/templateContext";
+import { SetStateAction, useContext } from "react";
 import "./normalTemplate.css";
+import { color } from "framer-motion";
 function Header({
   headerData,
+  styleData,
 }: {
   headerData: { name: string; jobTitle: string; email: string };
+  styleData: styleDatatype;
 }) {
   return (
     <header className="flex items-center justify-center flex-col">
-      <h1 className="text-lg fontbold">{headerData.name}</h1>
+      <h1 className="text-lg fontbold" style={styleData.header.firstName}>
+        {headerData.name}
+      </h1>
       <h3>{headerData.email}</h3>
       <p>{headerData.jobTitle}</p>
     </header>
@@ -35,7 +41,13 @@ function Section({
   );
 }
 
-function NormalTemplate({ templateData }: { templateData: templateType }) {
+function NormalTemplate({
+  templateData,
+  templateSetter,
+}: {
+  templateData: templateType;
+  templateSetter: (arg: SetStateAction<templateType>) => void;
+}) {
   return (
     <div className="card min-w-96 min-h-96">
       <div className="container">
@@ -48,11 +60,13 @@ function NormalTemplate({ templateData }: { templateData: templateType }) {
             email: templateData.content.header.email,
             jobTitle: templateData.content.header.jobTitle,
           }}
+          styleData={templateData.style}
         />
-
-        {templateData.content.sections.map((ele) => (
-          <Section title={ele.title} sectionData={ele.details} />
-        ))}
+        {templateData.content.sections.map((ele, index) => {
+          return (
+            <Section title={ele.title} sectionData={ele.details} key={index} />
+          );
+        })}
       </div>
     </div>
   );

@@ -82,17 +82,28 @@ function Creator() {
                   key={ele.name}
                   className="sm:w-64 w-[90%] h-96 cursor-pointer flex flex-col items-center justify-center"
                   onClick={() => {
-                    setter((prevState: templateType) => {
-                      let cache = Object.create(prevState);
-                      cache.templateId = ele.templateId;
-                      return cache;
+                    setter((prev: templateType) => {
+                      return {
+                        ...prev,
+                        templateId: ele.templateId,
+                      };
                     });
                   }}
                   variants={templatesChildrenvariants}
                 >
                   <h3>{ele.name}</h3>
-                  {ele.templateId == 0 && <NormalTemplate templateData={ele} />}
-                  {ele.templateId == 1 && <NormalTemplate templateData={ele} />}
+                  {ele.templateId == 0 && (
+                    <NormalTemplate
+                      templateData={ele}
+                      templateSetter={setter}
+                    />
+                  )}
+                  {ele.templateId == 1 && (
+                    <NormalTemplate
+                      templateData={ele}
+                      templateSetter={setter}
+                    />
+                  )}
                 </motion.div>
               );
             })}

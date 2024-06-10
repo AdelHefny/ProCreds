@@ -1,4 +1,25 @@
-import { SetStateAction, createContext } from "react";
+import {
+  CSSProperties,
+  HTMLAttributes,
+  SetStateAction,
+  createContext,
+} from "react";
+
+export type styleDatatype = {
+  header: {
+    jobTitle: CSSProperties;
+    firstName: CSSProperties;
+    lastName: CSSProperties;
+    email: CSSProperties;
+    Phone: CSSProperties;
+    City: CSSProperties;
+    description: CSSProperties;
+  };
+  sections: {
+    title: CSSProperties;
+    details: CSSProperties[];
+  }[];
+};
 
 export type templateType = {
   templateId: number;
@@ -18,6 +39,7 @@ export type templateType = {
       details: string[];
     }[];
   };
+  style: styleDatatype;
   undoStack: templateType[];
   redoStack: templateType[];
   saved: boolean;
@@ -38,6 +60,18 @@ export const TemplateContext = createContext<
         Phone: "",
         City: "",
         description: "",
+      },
+      sections: [],
+    },
+    style: {
+      header: {
+        jobTitle: {},
+        firstName: {},
+        lastName: {},
+        email: {},
+        Phone: {},
+        City: {},
+        description: {},
       },
       sections: [],
     },

@@ -65,6 +65,18 @@ function DataEdit() {
                     onChange={(event) => {
                       const { value } = event.target;
                       setter((prev: templateType) => {
+                        console.log(prev);
+                        console.log(templateState);
+                        console.log("ade", {
+                          ...prev,
+                          content: {
+                            ...prev.content,
+                            header: {
+                              ...prev.content.header,
+                              lastName: value,
+                            },
+                          },
+                        });
                         return {
                           ...prev,
                           content: {
@@ -84,12 +96,15 @@ function DataEdit() {
                 </div>
               </fieldset>
             </div>
-            {Object.keys(templateState.content.header).map((ele) => {
+            {Object.keys(templateState.content.header).map((ele, index) => {
               if (ele == "firstName" || ele == "lastName") {
                 return;
               }
               return (
-                <fieldset className="flex flex-row items-center justify-between ">
+                <fieldset
+                  className="flex flex-row items-center justify-between "
+                  key={index}
+                >
                   <label htmlFor={`${ele}`}>{ele}</label>
                   <div className="before:content-[''] before:bg-secant before:h-[2px] before:w-full before:origin-center before:absolute before:bottom-0 before:left-0 before:transition-all before:ease-in-out before:duration-300 relative">
                     <input
