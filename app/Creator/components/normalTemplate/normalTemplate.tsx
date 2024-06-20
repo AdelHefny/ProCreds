@@ -7,7 +7,13 @@ function Header({
   headerData,
   styleData,
 }: {
-  headerData: { name: string; jobTitle: string; email: string };
+  headerData: {
+    name: string;
+    jobTitle: string;
+    email: string;
+    phone: string;
+    city: string;
+  };
   styleData: styleDatatype;
 }) {
   return (
@@ -15,8 +21,10 @@ function Header({
       <h1 className="text-lg fontbold" style={styleData.header.firstName}>
         {headerData.name}
       </h1>
+      <h3>{headerData.jobTitle}</h3>
       <h3>{headerData.email}</h3>
-      <p>{headerData.jobTitle}</p>
+      <h3>{headerData.phone}</h3>
+      <h3>{headerData.city}</h3>
     </header>
   );
 }
@@ -33,8 +41,8 @@ function Section({
       <h2>{title}</h2>
       <hr />
       <ul>
-        {sectionData.map((ele) => (
-          <li>{ele}</li>
+        {sectionData.map((ele, index) => (
+          <li key={index}>{ele}</li>
         ))}
       </ul>
     </section>
@@ -59,6 +67,8 @@ function NormalTemplate({
               templateData.content.header.lastName,
             email: templateData.content.header.email,
             jobTitle: templateData.content.header.jobTitle,
+            phone: templateData.content.header.Phone,
+            city: templateData.content.header.City,
           }}
           styleData={templateData.style}
         />

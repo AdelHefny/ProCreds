@@ -13,10 +13,11 @@
     "@fortawesome/fontawesome-free-solid": "^5.0.13",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "eslint-config-next": "^14.2.4",
     "framer-motion": "^11.1.7",
-    "next": "14.2.2",
-    "react": "^18",
-    "react-dom": "^18"
+    "next": "^14.2.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@types/node": "^20",

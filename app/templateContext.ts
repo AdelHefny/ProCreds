@@ -26,9 +26,9 @@ export type templateType = {
   name: string;
   content: {
     header: {
-      jobTitle: string;
       firstName: string;
       lastName: string;
+      jobTitle: string;
       email: string;
       Phone: string;
       City: string;
@@ -40,8 +40,6 @@ export type templateType = {
     }[];
   };
   style: styleDatatype;
-  undoStack: templateType[];
-  redoStack: templateType[];
   saved: boolean;
 };
 
@@ -75,8 +73,6 @@ export const TemplateContext = createContext<
       },
       sections: [],
     },
-    undoStack: [],
-    redoStack: [],
     saved: false,
   },
   (arg: SetStateAction<templateType>) => {},

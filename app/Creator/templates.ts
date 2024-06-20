@@ -64,8 +64,6 @@ export const templates: templateType[] = [
       },
       sections: [],
     },
-    undoStack: [],
-    redoStack: [],
     saved: false,
   },
   {
@@ -132,8 +130,6 @@ export const templates: templateType[] = [
       },
       sections: [],
     },
-    undoStack: [],
-    redoStack: [],
     saved: false,
   },
   {
@@ -163,8 +159,6 @@ export const templates: templateType[] = [
       },
       sections: [],
     },
-    undoStack: [],
-    redoStack: [],
     saved: false,
   },
 ];

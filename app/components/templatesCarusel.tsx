@@ -14,7 +14,6 @@ function TemplatesCarousel() {
   });
   const motionX = useTransform(scrollYProgress, [1, 0], [0, 1]);
   const scrollPos = useTransform(() => {
-    console.log(motionX.get());
     return motionX.get() * 1000;
   });
   return (
@@ -26,22 +25,24 @@ function TemplatesCarousel() {
         className="flex flex-row items-center justify-center min-w-max space-x-5"
         style={{ x: scrollPos }}
       >
-        {templates.map(() => (
+        {templates.map((ele) => (
           <Image
             width={"300"}
             height={"300"}
             alt="resume template"
             src={`/template.PNG`}
             className={`min-w-[27vw]`}
+            key={ele.templateId}
           />
         ))}
-        {templates.map(() => (
+        {templates.map((ele) => (
           <Image
             width={"300"}
             height={"300"}
             alt="resume template"
             src={`/template.PNG`}
             className={`min-w-[27vw]`}
+            key={ele.templateId}
           />
         ))}
       </motion.div>

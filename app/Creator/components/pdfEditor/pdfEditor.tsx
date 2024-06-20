@@ -3,20 +3,40 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import "./pdfEditor.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faPlus } from "@fortawesome/fontawesome-free-solid";
-import { TemplateContext } from "@/app/templateContext";
+import {
+  faArrowAltCircleLeft,
+  faArrowCircleLeft,
+  faArrowLeft,
+  faArrowRight,
+  faBackward,
+  faMinus,
+  faPlus,
+  faRedo,
+  faStepBackward,
+  faStepForward,
+  faUndo,
+} from "@fortawesome/fontawesome-free-solid";
+import { TemplateContext, templateType } from "@/app/templateContext";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import ContextMenu from "../contextMenu";
 import NormalTemplate from "../normalTemplate/normalTemplate";
 import DataEdit from "../DataEdit/DataEdit";
+import { HistoryContext } from "@/app/historyContext";
 
-export default function PdfEditor() {
+export default function PdfEditor({
+  handleRedo,
+  handleUndo,
+}: {
+  handleUndo: () => void;
+  handleRedo: () => void;
+}) {
   const [scale, setScale] = useState(1);
   const content = useRef<HTMLDivElement>(null);
   const [templateState, setter] = useContext(TemplateContext);
   const contentDiv = useRef<HTMLDivElement>(null);
   const contextMenuEle = useRef<HTMLUListElement>(null);
   const clickPosition = useRef<{ x: number; y: number } | null>(null);
+  const [history, setHistory] = useContext(HistoryContext);
   const showMenu = (e: MouseEvent) => {
     e.preventDefault();
     if (contextMenuEle.current) {
@@ -178,6 +198,20 @@ export default function PdfEditor() {
             }}
           >
             <FontAwesomeIcon icon={faMinus as IconProp} />
+          </button>
+        </div>
+        <div className="absolute bottom-0 left-0 flex items-center justify-center space-x-1 z-30">
+          <button
+            className="bg-amber-500 w-12 h-5 rounded-md text-sm"
+            onClick={handleUndo}
+          >
+            <FontAwesomeIcon icon={faUndo as IconProp} />
+          </button>
+          <button
+            className="bg-amber-500 w-12 h-5 rounded-md text-sm"
+            onClick={handleRedo}
+          >
+            <FontAwesomeIcon icon={faRedo as IconProp} />
           </button>
         </div>
         <motion.div

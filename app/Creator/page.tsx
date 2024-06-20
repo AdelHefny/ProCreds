@@ -1,10 +1,11 @@
 "use client";
-import { useContext, useEffect, useRef } from "react";
+import { useCallback, useContext, useEffect, useRef } from "react";
 import { AnimatePresence, Variants, motion } from "framer-motion";
 import { TemplateContext, templateType } from "../templateContext";
 import { templates } from "./templates";
 import PdfEditor from "./components/pdfEditor/pdfEditor";
 import NormalTemplate from "./components/normalTemplate/normalTemplate.tsx";
+import { HistoryContext } from "../historyContext.ts";
 
 const templatesvariants: Variants = {
   hidden: {
@@ -64,6 +65,63 @@ const templatesChildrenvariants: Variants = {
 };
 function Creator() {
   const [templateState, setter] = useContext(TemplateContext);
+  const [history, setHistory] = useContext(HistoryContext);
+  const handleUndo = useCallback(() => {
+    if (history.undoStack[history.undoStack.length - 1] != undefined)
+      setter(history.undoStack[history.undoStack.length - 1]);
+    setHistory((prev) => {
+      if (prev.undoStack.length > 1) {
+        const newUndoStack = [...prev.undoStack];
+        const newRedoStack = [...prev.redoStack];
+        const lastAction = newUndoStack.pop();
+        if (lastAction !== undefined) {
+          newRedoStack.push(lastAction);
+        }
+        return {
+          ...prev,
+          undoStack: newUndoStack,
+          redoStack: newRedoStack,
+        };
+      }
+      return prev;
+    });
+  }, [history, setter, setHistory]);
+
+  const handleRedo = useCallback(() => {
+    if (history.redoStack[history.redoStack.length - 1] != undefined)
+      setter(history.redoStack[history.redoStack.length - 1]);
+    setHistory((prev) => {
+      if (prev.redoStack.length > 0) {
+        const newUndoStack = [...prev.undoStack];
+        const newRedoStack = [...prev.redoStack];
+        const redoItem = newRedoStack.pop();
+        if (redoItem !== undefined) {
+          newUndoStack.push(redoItem);
+        }
+        return {
+          ...prev,
+          undoStack: newUndoStack,
+          redoStack: newRedoStack,
+        };
+      }
+      return prev;
+    });
+  }, [history, setter, setHistory]);
+
+  const keyDownHandle = useCallback(
+    (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "z") {
+        event.preventDefault();
+        handleUndo();
+      }
+    },
+    [handleUndo]
+  );
+
+  useEffect(() => {
+    window.addEventListener("keydown", keyDownHandle, true);
+    return () => window.removeEventListener("keydown", keyDownHandle, true);
+  }, [keyDownHandle]);
   return (
     <AnimatePresence mode="wait">
       {templateState.templateId == -1 ? (
@@ -82,6 +140,14 @@ function Creator() {
                   key={ele.name}
                   className="sm:w-64 w-[90%] h-96 cursor-pointer flex flex-col items-center justify-center"
                   onClick={() => {
+                    setHistory((prev) => {
+                      return {
+                        redoStack: [],
+                        undoStack: [
+                          { ...templateState, templateId: ele.templateId },
+                        ],
+                      };
+                    });
                     setter((prev: templateType) => {
                       return {
                         ...prev,
@@ -118,7 +184,7 @@ function Creator() {
           exit="exit"
           className="flex flex-row h-screen relative"
         >
-          <PdfEditor />
+          <PdfEditor handleUndo={handleUndo} handleRedo={handleRedo} />
         </motion.section>
       )}
     </AnimatePresence>

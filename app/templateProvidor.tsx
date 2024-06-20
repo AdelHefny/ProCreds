@@ -15,9 +15,9 @@ export default function TemplateProvidor({
       header: {
         firstName: "",
         lastName: "",
+        jobTitle: "",
         email: "",
         Phone: "",
-        jobTitle: "",
         City: "",
         description: "",
       },
@@ -35,8 +35,6 @@ export default function TemplateProvidor({
       },
       sections: [],
     },
-    undoStack: [],
-    redoStack: [],
     saved: false,
   });
   return (
