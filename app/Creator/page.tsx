@@ -1,11 +1,12 @@
 "use client";
-import { useCallback, useContext, useEffect, useRef } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { AnimatePresence, Variants, motion } from "framer-motion";
 import { TemplateContext, templateType } from "../templateContext";
 import { templates } from "./templates";
 import PdfEditor from "./components/pdfEditor/pdfEditor";
 import NormalTemplate from "./components/normalTemplate/normalTemplate.tsx";
 import { HistoryContext } from "../historyContext.ts";
+import SelectedContext from "./contexts/selectedContext.tsx";
 
 const templatesvariants: Variants = {
   hidden: {
@@ -66,6 +67,7 @@ const templatesChildrenvariants: Variants = {
 function Creator() {
   const [templateState, setter] = useContext(TemplateContext);
   const [history, setHistory] = useContext(HistoryContext);
+  const [selectedElement, setSelectedElement] = useState("");
   const handleUndo = useCallback(() => {
     if (history.undoStack[history.undoStack.length - 1] != undefined)
       setter(history.undoStack[history.undoStack.length - 1]);
@@ -123,71 +125,73 @@ function Creator() {
     return () => window.removeEventListener("keydown", keyDownHandle, true);
   }, [keyDownHandle]);
   return (
-    <AnimatePresence mode="wait">
-      {templateState.templateId == -1 ? (
-        <motion.section
-          key="template-selection"
-          variants={templatesvariants}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          className="flex flex-col min-h-screen sm:flex-row items-center sm:space-x-6 justify-center h-full mt-24 overflow-hidden"
-        >
-          <AnimatePresence mode="wait">
-            {templates.map((ele) => {
-              return (
-                <motion.div
-                  key={ele.name}
-                  className="sm:w-64 w-[90%] h-96 cursor-pointer flex flex-col items-center justify-center"
-                  onClick={() => {
-                    setHistory((prev) => {
-                      return {
-                        redoStack: [],
-                        undoStack: [
-                          { ...templateState, templateId: ele.templateId },
-                        ],
-                      };
-                    });
-                    setter((prev: templateType) => {
-                      return {
-                        ...prev,
-                        templateId: ele.templateId,
-                      };
-                    });
-                  }}
-                  variants={templatesChildrenvariants}
-                >
-                  <h3>{ele.name}</h3>
-                  {ele.templateId == 0 && (
-                    <NormalTemplate
-                      templateData={ele}
-                      templateSetter={setter}
-                    />
-                  )}
-                  {ele.templateId == 1 && (
-                    <NormalTemplate
-                      templateData={ele}
-                      templateSetter={setter}
-                    />
-                  )}
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </motion.section>
-      ) : (
-        <motion.section
-          key="pdf-editor"
-          variants={editorVarients}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          className="flex flex-row h-screen relative"
-        >
-          <PdfEditor handleUndo={handleUndo} handleRedo={handleRedo} />
-        </motion.section>
-      )}
-    </AnimatePresence>
+    <SelectedContext.Provider value={[selectedElement, setSelectedElement]}>
+      <AnimatePresence mode="wait">
+        {templateState.templateId == -1 ? (
+          <motion.section
+            key="template-selection"
+            variants={templatesvariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="flex flex-col min-h-screen sm:flex-row items-center sm:space-x-6 justify-center h-full mt-24 overflow-hidden"
+          >
+            <AnimatePresence mode="wait">
+              {templates.map((ele) => {
+                return (
+                  <motion.div
+                    key={ele.name}
+                    className="sm:w-64 w-[90%] h-96 cursor-pointer flex flex-col items-center justify-center"
+                    onClick={() => {
+                      setHistory((prev) => {
+                        return {
+                          redoStack: [],
+                          undoStack: [
+                            { ...templateState, templateId: ele.templateId },
+                          ],
+                        };
+                      });
+                      setter((prev: templateType) => {
+                        return {
+                          ...prev,
+                          templateId: ele.templateId,
+                        };
+                      });
+                    }}
+                    variants={templatesChildrenvariants}
+                  >
+                    <h3>{ele.name}</h3>
+                    {ele.templateId == 0 && (
+                      <NormalTemplate
+                        templateData={ele}
+                        templateSetter={setter}
+                      />
+                    )}
+                    {ele.templateId == 1 && (
+                      <NormalTemplate
+                        templateData={ele}
+                        templateSetter={setter}
+                      />
+                    )}
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </motion.section>
+        ) : (
+          <motion.section
+            key="pdf-editor"
+            variants={editorVarients}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="flex flex-row h-screen relative"
+          >
+            <PdfEditor handleUndo={handleUndo} handleRedo={handleRedo} />
+          </motion.section>
+        )}
+      </AnimatePresence>
+    </SelectedContext.Provider>
   );
 }
 

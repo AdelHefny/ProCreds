@@ -1,23 +1,28 @@
-import { MouseEvent, useEffect, useRef } from "react";
+import TabContext from "@/app/Creator/contexts/tabContext";
+import { RefObject, useContext, useEffect, useRef } from "react";
 
-interface TabSectionProps {
-  tabSetter: (val: number) => void;
-}
-
-function TabSection({ tabSetter }: TabSectionProps) {
-  const marker = useRef<HTMLDivElement>(null);
+function TabSection({
+  markerRef,
+  styleTab,
+}: {
+  markerRef: RefObject<HTMLDivElement>;
+  styleTab: RefObject<HTMLButtonElement>;
+}) {
   const sectionBtn = useRef<HTMLButtonElement>(null);
+  const [, setCurrTab] = useContext(TabContext);
+
   const handleSectionTab = (target: EventTarget, val: number) => {
-    tabSetter(val);
-    if (marker.current) {
-      marker.current.style.width =
-        (target as HTMLDivElement).offsetWidth + "px";
-      marker.current.style.left = (target as HTMLDivElement).offsetLeft + "px";
+    setCurrTab(val);
+    if (markerRef.current && target instanceof HTMLElement) {
+      markerRef.current.style.width = target.offsetWidth + "px";
+      markerRef.current.style.left = target.offsetLeft + "px";
     }
   };
+
   useEffect(() => {
     sectionBtn.current?.click();
   }, []);
+
   return (
     <section className="flex flex-row w-fit items-center justify-center relative">
       <div>
@@ -34,17 +39,14 @@ function TabSection({ tabSetter }: TabSectionProps) {
       <div>
         <button
           className="outline-none p-2"
+          ref={styleTab}
           onClick={(e) => {
             handleSectionTab(e.target, 1);
           }}
         >
-          style
+          Style
         </button>
       </div>
-      <div
-        className="w-20 transition-all duration-300 drop-shadow-lg h-full absolute bottom-0 bg-gradient-to-b from-transparent to-secant  z-20 left-0"
-        ref={marker}
-      ></div>
     </section>
   );
 }

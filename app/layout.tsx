@@ -19,7 +19,7 @@ export default function RootLayout({
         <Nav />
         <HistoryProvidor>
           <TemplateProvidor>
-            <main>{children}</main>
+            <main className="overflow-hidden">{children}</main>
           </TemplateProvidor>
         </HistoryProvidor>
       </body>

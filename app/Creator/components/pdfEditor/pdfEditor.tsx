@@ -4,24 +4,18 @@ import { motion } from "framer-motion";
 import "./pdfEditor.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faArrowAltCircleLeft,
-  faArrowCircleLeft,
-  faArrowLeft,
-  faArrowRight,
-  faBackward,
   faMinus,
   faPlus,
   faRedo,
-  faStepBackward,
-  faStepForward,
   faUndo,
 } from "@fortawesome/fontawesome-free-solid";
-import { TemplateContext, templateType } from "@/app/templateContext";
+import { TemplateContext } from "@/app/templateContext";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import ContextMenu from "../contextMenu";
 import NormalTemplate from "../normalTemplate/normalTemplate";
 import DataEdit from "../DataEdit/DataEdit";
-import { HistoryContext } from "@/app/historyContext";
+import TabContext from "../../contexts/tabContext";
+import SelectedContext from "../../contexts/selectedContext";
 
 export default function PdfEditor({
   handleRedo,
@@ -36,11 +30,15 @@ export default function PdfEditor({
   const contentDiv = useRef<HTMLDivElement>(null);
   const contextMenuEle = useRef<HTMLUListElement>(null);
   const clickPosition = useRef<{ x: number; y: number } | null>(null);
-  const [history, setHistory] = useContext(HistoryContext);
+  const [styleElement, setStyleElement] = useState("");
+  const [currTab, setCurrTab] = useState(0);
+  const marker = useRef<HTMLDivElement>(null);
+  const styleTab = useRef<HTMLButtonElement>(null);
+  const [selectedElement, setSelectedElement] = useContext(SelectedContext);
   const showMenu = (e: MouseEvent) => {
     e.preventDefault();
     if (contextMenuEle.current) {
-      contextMenuEle.current.style.transition = "opacity 0.3s ease-in-out";
+      setStyleElement((e.target as HTMLParagraphElement).id);
       contextMenuEle.current.classList.remove("off");
       contextMenuEle.current.style.top = `${e.clientY + 10}px`;
       contextMenuEle.current.style.left = `${e.clientX + 10}px`;
@@ -114,6 +112,28 @@ export default function PdfEditor({
       });
     }
   };
+  const settingSelected = (e: MouseEvent) => {
+    setSelectedElement((prev) => {
+      if (prev == (e.target as Element).id) {
+        return "";
+      }
+      return (e.target as Element).id;
+    });
+  };
+  useEffect(() => {
+    if (content.current) {
+      content.current
+        .querySelectorAll(
+          ".card h2,.card h3,.card h1,.card p,.card hr ,.card li"
+        )
+        .forEach((ele) => {
+          (ele as HTMLParagraphElement).style.border =
+            (ele as HTMLParagraphElement).id == selectedElement
+              ? "solid #a3b18a 2px"
+              : "";
+        });
+    }
+  }, [selectedElement]);
   useEffect(() => {
     if (content.current && contextMenuEle.current) {
       content.current.addEventListener("wheel", handleWheel);
@@ -133,8 +153,14 @@ export default function PdfEditor({
         content.current?.removeEventListener("mousemove", mouseMoveHandler);
       });
       content.current
-        .querySelectorAll(".card h2,.card h1,.card p,.card hr ,.card li")
+        .querySelectorAll(
+          ".card h2,.card h3,.card h1,.card p,.card hr ,.card li"
+        )
         .forEach((ele) => {
+          (ele as HTMLParagraphElement).addEventListener(
+            "click",
+            settingSelected
+          );
           (ele as HTMLParagraphElement).addEventListener(
             "contextmenu",
             showMenu
@@ -156,8 +182,14 @@ export default function PdfEditor({
           content.current?.removeEventListener("mousemove", mouseMoveHandler);
         });
         content.current
-          .querySelectorAll(".card h2,.card h1,.card p,.card hr ,.card li")
+          .querySelectorAll(
+            ".card h2,.card h3,.card h1,.card p,.card hr ,.card li"
+          )
           .forEach((ele) => {
+            (ele as HTMLParagraphElement).removeEventListener(
+              "click",
+              settingSelected
+            );
             (ele as HTMLParagraphElement).removeEventListener(
               "contextmenu",
               showMenu
@@ -174,9 +206,14 @@ export default function PdfEditor({
     };
   }, []);
   return (
-    <>
-      <DataEdit />
-      <ContextMenu refObject={contextMenuEle} />
+    <TabContext.Provider value={[currTab, setCurrTab]}>
+      <DataEdit markerRef={marker} styleTab={styleTab} />
+      <ContextMenu
+        refObject={contextMenuEle}
+        styleElement={styleElement}
+        marker={marker}
+        styleTab={styleTab}
+      />
       <section
         className="bg-secant2 overflow-hidden bg-opacity-70 h-full flex items-center justify-center relative w-3/4 editor cursor-grab"
         onWheel={handleWheel}
@@ -233,6 +270,6 @@ export default function PdfEditor({
           )}
         </motion.div>
       </section>
-    </>
+    </TabContext.Provider>
   );
 }

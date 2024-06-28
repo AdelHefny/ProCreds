@@ -1,0 +1,50 @@
+.edit_menu {
+  opacity: 0;
+  visibility: hidden;
+  left: 80%;
+  top: 0%;
+  transition: 150ms ease-in-out all 300ms;
+  z-index: -1;
+}
+
+.context_menu:hover .edit_menu {
+  left: 104%;
+  visibility: visible;
+  opacity: 1;
+}
+.context_menu:hover .edit_arrow {
+  right: 0.25rem;
+}
+
+.color_btn:hover .color_arrow {
+  right: 0.25rem;
+}
+.color_btn:hover .color_menu {
+  left: 104%;
+  visibility: visible;
+  opacity: 1;
+}
+.color_menu {
+  opacity: 0;
+  left: 80%;
+  visibility: hidden;
+  top: 0%;
+  transition: 150ms ease-in-out all 300ms;
+  z-index: -2;
+}
+.font_btn:hover .font_arrow {
+  right: 0.25rem;
+}
+.font_btn:hover .font_menu {
+  left: 104%;
+  visibility: visible;
+  opacity: 1;
+}
+.font_menu {
+  opacity: 0;
+  left: 80%;
+  visibility: hidden;
+  top: 0%;
+  transition: 150ms ease-in-out all 300ms;
+  z-index: -3;
+}

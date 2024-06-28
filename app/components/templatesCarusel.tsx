@@ -42,7 +42,7 @@ function TemplatesCarousel() {
             alt="resume template"
             src={`/template.PNG`}
             className={`min-w-[27vw]`}
-            key={ele.templateId}
+            key={ele.templateId + templates.length}
           />
         ))}
       </motion.div>

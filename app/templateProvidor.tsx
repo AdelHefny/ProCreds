@@ -23,18 +23,7 @@ export default function TemplateProvidor({
       },
       sections: [],
     },
-    style: {
-      header: {
-        jobTitle: {},
-        firstName: {},
-        lastName: {},
-        email: {},
-        Phone: {},
-        City: {},
-        description: {},
-      },
-      sections: [],
-    },
+    style: {},
     saved: false,
   });
   return (

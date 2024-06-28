@@ -15,59 +15,78 @@ export const templates: templateType[] = [
       },
       sections: [
         {
+          id: "0",
           title: "Contact",
-          details: ["john@example.com", "Cityville", "(123) 456-7890"],
+          details: [
+            { id: "0-1", text: "john@example.com" },
+            { id: "0-2", text: "Cityville" },
+            { id: "0-3", text: "(123) 456-7890" },
+          ],
         },
         {
+          id: "1",
           title: "Education",
           details: [
-            "Bachelor of Science in Computer Science - University of City",
-            "Graduated: May 2022",
+            {
+              id: "1-1",
+              text: "Bachelor of Science in Computer Science - University of City",
+            },
+            { id: "1-2", text: "Graduated: May 2022" },
           ],
         },
         {
           title: "Skills",
+          id: "2",
           details: [
-            "JavaScript",
-            "HTML5 & CSS3",
-            "Python",
-            "React",
-            "Node.js",
-            "SQL",
+            {
+              id: "2-1",
+              text: "JavaScript",
+            },
+            {
+              id: "2-2",
+              text: "HTML5 & CSS3",
+            },
+            {
+              id: "2-3",
+              text: "Python",
+            },
+            {
+              id: "2-4",
+              text: "React",
+            },
+            {
+              id: "2-5",
+              text: "Node.js",
+            },
+            {
+              id: "2-6",
+              text: "SQL",
+            },
           ],
         },
         {
+          id: "3",
           title: "Experience",
           details: [
-            "Software Developer - XYZ Company (2019-2022)",
-            "Internship - ABC Tech (Summer 2018)",
+            { id: "3-1", text: "Software Developer - XYZ Company (2019-2022)" },
+            { id: "3-2", text: "Internship - ABC Tech (Summer 2018)" },
           ],
         },
         {
+          id: "4",
           title: "Projects",
           details: [
-            "E-commerce website using React and Node.js",
-            "Mobile app development using React Native",
+            { id: "4-1", text: "E-commerce website using React and Node.js" },
+            { id: "4-2", text: "Mobile app development using React Native" },
           ],
         },
       ],
     },
-    style: {
-      header: {
-        jobTitle: {},
-        firstName: {},
-        lastName: {},
-        email: {},
-        Phone: {},
-        City: {},
-        description: {},
-      },
-      sections: [],
-    },
+    style: {},
     saved: false,
   },
   {
-    templateId: 0,
+    templateId: 1,
     name: "fancy",
     content: {
       header: {
@@ -81,59 +100,78 @@ export const templates: templateType[] = [
       },
       sections: [
         {
+          id: "0",
           title: "Contact",
-          details: ["john@example.com", "Cityville", "(123) 456-7890"],
+          details: [
+            { id: "0-1", text: "john@example.com" },
+            { id: "0-2", text: "Cityville" },
+            { id: "0-3", text: "(123) 456-7890" },
+          ],
         },
         {
+          id: "1",
           title: "Education",
           details: [
-            "Bachelor of Science in Computer Science - University of City",
-            "Graduated: May 2022",
+            {
+              id: "1-1",
+              text: "Bachelor of Science in Computer Science - University of City",
+            },
+            { id: "1-2", text: "Graduated: May 2022" },
           ],
         },
         {
           title: "Skills",
+          id: "2",
           details: [
-            "JavaScript",
-            "HTML5 & CSS3",
-            "Python",
-            "React",
-            "Node.js",
-            "SQL",
+            {
+              id: "2-1",
+              text: "JavaScript",
+            },
+            {
+              id: "2-2",
+              text: "HTML5 & CSS3",
+            },
+            {
+              id: "2-3",
+              text: "Python",
+            },
+            {
+              id: "2-4",
+              text: "React",
+            },
+            {
+              id: "2-5",
+              text: "Node.js",
+            },
+            {
+              id: "2-6",
+              text: "SQL",
+            },
           ],
         },
         {
+          id: "3",
           title: "Experience",
           details: [
-            "Software Developer - XYZ Company (2019-2022)",
-            "Internship - ABC Tech (Summer 2018)",
+            { id: "3-1", text: "Software Developer - XYZ Company (2019-2022)" },
+            { id: "3-2", text: "Internship - ABC Tech (Summer 2018)" },
           ],
         },
         {
+          id: "4",
           title: "Projects",
           details: [
-            "E-commerce website using React and Node.js",
-            "Mobile app development using React Native",
+            { id: "4-1", text: "E-commerce website using React and Node.js" },
+            { id: "4-2", text: "Mobile app development using React Native" },
           ],
         },
       ],
     },
-    style: {
-      header: {
-        jobTitle: {},
-        firstName: {},
-        lastName: {},
-        email: {},
-        Phone: {},
-        City: {},
-        description: {},
-      },
-      sections: [],
-    },
+    style: {},
     saved: false,
   },
   {
-    templateId: 0,
+    templateId: 2,
     name: "Blank",
     content: {
       header: {
@@ -147,18 +185,7 @@ export const templates: templateType[] = [
       },
       sections: [],
     },
-    style: {
-      header: {
-        jobTitle: {},
-        firstName: {},
-        lastName: {},
-        email: {},
-        Phone: {},
-        City: {},
-        description: {},
-      },
-      sections: [],
-    },
+    style: {},
     saved: false,
   },
 ];

@@ -1,9 +1,10 @@
 .editor .card h2:hover,
+.editor .card h3:hover,
 .editor .card hr:hover,
 .editor .card p:hover,
 .editor .card h1:hover,
 .editor .card ul li:hover {
-  border: dashed black 2px;
+  border: solid #a3b18a 2px;
   cursor: pointer;
 }
 

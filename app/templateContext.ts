@@ -5,20 +5,8 @@ import {
   createContext,
 } from "react";
 
-export type styleDatatype = {
-  header: {
-    jobTitle: CSSProperties;
-    firstName: CSSProperties;
-    lastName: CSSProperties;
-    email: CSSProperties;
-    Phone: CSSProperties;
-    City: CSSProperties;
-    description: CSSProperties;
-  };
-  sections: {
-    title: CSSProperties;
-    details: CSSProperties[];
-  }[];
+export type StyleMapping = {
+  [key: string]: CSSProperties;
 };
 
 export type templateType = {
@@ -35,11 +23,15 @@ export type templateType = {
       description: string;
     };
     sections: {
+      id: string;
       title: string;
-      details: string[];
+      details: {
+        id: string;
+        text: string;
+      }[];
     }[];
   };
-  style: styleDatatype;
+  style: StyleMapping;
   saved: boolean;
 };
 
@@ -61,18 +53,7 @@ export const TemplateContext = createContext<
       },
       sections: [],
     },
-    style: {
-      header: {
-        jobTitle: {},
-        firstName: {},
-        lastName: {},
-        email: {},
-        Phone: {},
-        City: {},
-        description: {},
-      },
-      sections: [],
-    },
+    style: {},
     saved: false,
   },
   (arg: SetStateAction<templateType>) => {},
