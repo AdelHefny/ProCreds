@@ -56,6 +56,7 @@ function DataEdit({
                 <div className="before:content-[''] before:bg-secant before:h-[2px] before:w-full before:origin-center before:absolute before:bottom-0 before:left-0 before:transition-all before:ease-in-out before:duration-300 relative">
                   <input
                     className="focus:outline-none px-4 py-1 w-28 caret-secant"
+                    tabIndex={!currTab ? 1 : -1}
                     onChange={(event) => {
                       const { value } = event.target;
                       if (wordsCont + 1 >= 3) {
@@ -110,6 +111,7 @@ function DataEdit({
                 <div className="before:content-[''] before:bg-secant before:h-[2px] before:w-full before:origin-center before:absolute before:bottom-0 before:left-0 before:transition-all before:ease-in-out before:duration-300 relative">
                   <input
                     className="focus:outline-none px-4 py-1 w-28 caret-secant"
+                    tabIndex={!currTab ? 1 : -1}
                     onChange={(event) => {
                       const { value } = event.target;
                       if (wordsCont + 1 >= 3) {
@@ -187,6 +189,7 @@ function DataEdit({
                   <div className="before:content-[''] before:bg-secant before:h-[2px] before:w-full before:origin-center before:absolute before:bottom-0 before:left-0 before:transition-all before:ease-in-out before:duration-300 relative">
                     <input
                       className="focus:outline-none px-4 py-1 caret-secant"
+                      tabIndex={!currTab ? 1 : -1}
                       onChange={(event) => {
                         const { value } = event.target;
                         if (wordsCont + 1 >= 3) {

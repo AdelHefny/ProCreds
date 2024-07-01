@@ -39,7 +39,7 @@ function Header({
         <h3 style={styleData["header-city"]} id="header-city">
           {headerData.city}
         </h3>
-        <hr />
+        <hr id="header-hr" />
       </header>
       <section>
         <p style={styleData["header-description"]} id="header-description">
@@ -66,7 +66,7 @@ function Section({
       <h2 style={styleData[`${id}-0`]} id={`${id}-0`}>
         {title}
       </h2>
-      <hr />
+      <hr id={`${id}-hr`} />
       <ul>
         {sectionData.map((ele, index) => (
           <li

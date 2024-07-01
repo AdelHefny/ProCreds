@@ -48,3 +48,19 @@
   transition: 150ms ease-in-out all 300ms;
   z-index: -3;
 }
+.weight_btn:hover .weight_arrow {
+  right: 0.25rem;
+}
+.weight_btn:hover .weight_menu {
+  left: 104%;
+  visibility: visible;
+  opacity: 1;
+}
+.weight_menu {
+  opacity: 0;
+  left: 80%;
+  visibility: hidden;
+  top: 0%;
+  transition: 150ms ease-in-out all 300ms;
+  z-index: -3;
+}

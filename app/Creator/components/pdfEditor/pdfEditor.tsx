@@ -35,6 +35,7 @@ export default function PdfEditor({
   const marker = useRef<HTMLDivElement>(null);
   const styleTab = useRef<HTMLButtonElement>(null);
   const [selectedElement, setSelectedElement] = useContext(SelectedContext);
+
   const showMenu = (e: MouseEvent) => {
     e.preventDefault();
     if (contextMenuEle.current) {
@@ -44,6 +45,7 @@ export default function PdfEditor({
       contextMenuEle.current.style.left = `${e.clientX + 10}px`;
     }
   };
+
   const hideMenu = (e: MouseEvent) => {
     e.preventDefault();
     if (contextMenuEle.current) {
@@ -81,6 +83,7 @@ export default function PdfEditor({
       clickPosition.current = { x: e.clientX, y: e.clientY };
     }
   };
+
   const handleWheel = (e: {
     ctrlKey: any;
     preventDefault: () => void;
@@ -112,6 +115,7 @@ export default function PdfEditor({
       });
     }
   };
+
   const settingSelected = (e: MouseEvent) => {
     setSelectedElement((prev) => {
       if (prev == (e.target as Element).id) {
@@ -120,6 +124,7 @@ export default function PdfEditor({
       return (e.target as Element).id;
     });
   };
+
   useEffect(() => {
     if (content.current) {
       content.current
@@ -134,6 +139,7 @@ export default function PdfEditor({
         });
     }
   }, [selectedElement]);
+
   useEffect(() => {
     if (content.current && contextMenuEle.current) {
       content.current.addEventListener("wheel", handleWheel);
@@ -141,6 +147,7 @@ export default function PdfEditor({
         e.preventDefault();
         clickPosition.current = { x: e.clientX, y: e.clientY };
         content.current?.addEventListener("mousemove", mouseMoveHandler);
+        setSelectedElement("");
       });
 
       content.current.addEventListener("mouseleave", (e) => {
@@ -205,6 +212,7 @@ export default function PdfEditor({
       }
     };
   }, []);
+
   return (
     <TabContext.Provider value={[currTab, setCurrTab]}>
       <DataEdit markerRef={marker} styleTab={styleTab} />
@@ -218,13 +226,19 @@ export default function PdfEditor({
         className="bg-secant2 overflow-hidden bg-opacity-70 h-full flex items-center justify-center relative w-3/4 editor cursor-grab"
         onWheel={handleWheel}
         ref={content}
+        tabIndex={0}
+        aria-label="PDF Editor"
       >
-        <div className="absolute bottom-0 right-0 flex items-center justify-center space-x-1 z-30">
+        <div
+          className="absolute bottom-0 right-0 flex items-center justify-center space-x-1 z-30"
+          aria-label="Zoom Controls"
+        >
           <button
             className="bg-amber-500 w-12 h-5 rounded-md text-sm"
             onClick={() => {
               setScale((prev) => Math.min(2, prev + 0.1));
             }}
+            aria-label="Zoom In"
           >
             <FontAwesomeIcon icon={faPlus as IconProp} />
           </button>
@@ -233,28 +247,40 @@ export default function PdfEditor({
             onClick={() => {
               setScale((prev) => Math.max(0.1, prev - 0.1));
             }}
+            aria-label="Zoom Out"
           >
             <FontAwesomeIcon icon={faMinus as IconProp} />
           </button>
         </div>
-        <div className="absolute bottom-0 left-0 flex items-center justify-center space-x-1 z-30">
+        <div
+          className="absolute bottom-0 left-0 flex items-center justify-center space-x-1 z-30"
+          aria-label="Undo/Redo Controls"
+        >
           <button
             className="bg-amber-500 w-12 h-5 rounded-md text-sm"
             onClick={handleUndo}
+            aria-label="Undo"
           >
             <FontAwesomeIcon icon={faUndo as IconProp} />
           </button>
           <button
             className="bg-amber-500 w-12 h-5 rounded-md text-sm"
             onClick={handleRedo}
+            aria-label="Redo"
           >
             <FontAwesomeIcon icon={faRedo as IconProp} />
           </button>
         </div>
         <motion.div
           className={`bg-white content`}
-          animate={{ scale: scale }}
+          animate={{
+            scale: scale,
+            x: content.current?.style.x,
+            y: content.current?.style.y,
+          }}
           ref={contentDiv}
+          role="document"
+          aria-live="polite"
         >
           {templateState.templateId == 0 && (
             <NormalTemplate
