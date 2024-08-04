@@ -7,7 +7,14 @@
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 }
-
+@layer components {
+  .parent_input {
+    @apply before:content-[''] before:bg-secant before:h-[2px] before:w-full before:origin-center before:absolute before:bottom-0 before:left-0 before:transition-all before:ease-in-out before:duration-300 relative;
+  }
+  .input_text {
+    @apply focus:outline-none px-4 py-1 caret-secant;
+  }
+}
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;

@@ -1,14 +1,14 @@
-"use client";
 import { StyleMapping, templateType } from "@/app/templateContext";
-import { CSSProperties, SetStateAction, useContext } from "react";
 import "./normalTemplate.css";
-import { color } from "framer-motion";
+import { Edit, EditLi } from "./editComponenets";
+
 function Header({
   headerData,
   styleData,
 }: {
   headerData: {
-    name: string;
+    firstName: string;
+    lastName: string;
     jobTitle: string;
     email: string;
     phone: string;
@@ -19,32 +19,61 @@ function Header({
 }) {
   return (
     <>
-      <header className="flex items-center justify-center flex-col">
-        <h1
-          className="text-lg fontbold"
-          style={styleData["header-name"]}
-          id="header-name"
-        >
-          {headerData.name}
-        </h1>
-        <h3 style={styleData["header-jobTitle"]} id="header-jobTitle">
-          {headerData.jobTitle}
-        </h3>
-        <h3 style={styleData["header-email"]} id="header-email">
-          {headerData.email}
-        </h3>
-        <h3 style={styleData["header-phone"]} id="header-phone">
-          {headerData.phone}
-        </h3>
-        <h3 style={styleData["header-city"]} id="header-city">
-          {headerData.city}
-        </h3>
+      <header className="header flex items-center justify-center flex-col overflow-hidden">
+        <div className="flex flex-row justify-center space-x-1">
+          <Edit
+            className="text-lg fontbold"
+            style={styleData["firstName"]}
+            id="firstName"
+            headerType="h1"
+            data={headerData.firstName}
+          />
+          <Edit
+            className="text-lg fontbold"
+            style={styleData["lastName"]}
+            data={headerData.lastName}
+            headerType="h1"
+            id="lastName"
+          />
+        </div>
+        <Edit
+          style={styleData["jobTitle"]}
+          id="jobTitle"
+          data={headerData.jobTitle}
+          headerType="h3"
+          className={"text-md fontbold"}
+        />
+        <Edit
+          style={styleData["email"]}
+          id="email"
+          data={headerData.email}
+          headerType="h3"
+          className={"text-md fontbold"}
+        />
+        <Edit
+          style={styleData["phone"]}
+          data={headerData.phone}
+          id="phone"
+          headerType="h3"
+          className={"text-md fontbold"}
+        />
+        <Edit
+          style={styleData["city"]}
+          id="city"
+          data={headerData.city}
+          headerType="h3"
+          className={"text-md fontbold"}
+        />
         <hr id="header-hr" />
       </header>
       <section>
-        <p style={styleData["header-description"]} id="header-description">
-          {headerData.description}
-        </p>
+        <Edit
+          data={headerData.description}
+          className="break-words"
+          id="description"
+          style={styleData["description"]}
+          headerType="p"
+        />
       </section>
     </>
   );
@@ -63,41 +92,36 @@ function Section({
 }) {
   return (
     <section className={`${title}Section section`}>
-      <h2 style={styleData[`${id}-0`]} id={`${id}-0`}>
-        {title}
-      </h2>
+      <Edit
+        id={`${id}-0`}
+        headerType="h2"
+        data={title}
+        style={styleData[`${id}-0`]}
+      />
       <hr id={`${id}-hr`} />
       <ul>
         {sectionData.map((ele, index) => (
-          <li
-            key={index}
+          <EditLi
+            className="overflow-hidden"
+            key={`${id}-${ele.id}`}
+            data={ele.text}
             style={styleData[`${id}-${ele.id}`]}
             id={`${id}-${ele.id}`}
-          >
-            {ele.text}
-          </li>
+          />
         ))}
       </ul>
     </section>
   );
 }
 
-function NormalTemplate({
-  templateData,
-  templateSetter,
-}: {
-  templateData: templateType;
-  templateSetter: (arg: SetStateAction<templateType>) => void;
-}) {
+function NormalTemplate({ templateData }: { templateData: templateType }) {
   return (
-    <div className="card max-w-96 min-w-96 min-h-96">
+    <div className="card">
       <div className="container">
         <Header
           headerData={{
-            name:
-              templateData.content.header.firstName +
-              " " +
-              templateData.content.header.lastName,
+            firstName: templateData.content.header.firstName,
+            lastName: templateData.content.header.lastName,
             email: templateData.content.header.email,
             jobTitle: templateData.content.header.jobTitle,
             phone: templateData.content.header.Phone,

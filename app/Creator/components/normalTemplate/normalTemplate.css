@@ -20,3 +20,20 @@ h1 {
   list-style-type: none;
   padding: 0;
 }
+.header h1,
+.header h3 {
+  white-space: nowrap;
+  overflow: hidden;
+}
+.parent_input:has(input:focus)::before {
+  /* CSS properties for the before pseudo-element when input is focused */
+  /* For example, you can set the scale to 100% to make it visible */
+  transform: scaleX(1);
+  opacity: 1;
+}
+.parent_input::before {
+  /* CSS properties for the before pseudo-element when input is focused */
+  /* For example, you can set the scale to 100% to make it visible */
+  transform: scaleX(0);
+  opacity: 0;
+}

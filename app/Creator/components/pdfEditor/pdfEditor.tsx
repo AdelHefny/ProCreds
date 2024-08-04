@@ -16,6 +16,7 @@ import NormalTemplate from "../normalTemplate/normalTemplate";
 import DataEdit from "../DataEdit/DataEdit";
 import TabContext from "../../contexts/tabContext";
 import SelectedContext from "../../contexts/selectedContext";
+import EditModeContext from "../../contexts/editModeContext";
 
 export default function PdfEditor({
   handleRedo,
@@ -26,7 +27,7 @@ export default function PdfEditor({
 }) {
   const [scale, setScale] = useState(1);
   const content = useRef<HTMLDivElement>(null);
-  const [templateState, setter] = useContext(TemplateContext);
+  const [templateState] = useContext(TemplateContext);
   const contentDiv = useRef<HTMLDivElement>(null);
   const contextMenuEle = useRef<HTMLUListElement>(null);
   const clickPosition = useRef<{ x: number; y: number } | null>(null);
@@ -35,7 +36,15 @@ export default function PdfEditor({
   const marker = useRef<HTMLDivElement>(null);
   const styleTab = useRef<HTMLButtonElement>(null);
   const [selectedElement, setSelectedElement] = useContext(SelectedContext);
-
+  const [editMode, setEditMode] = useState({
+    edit: false,
+    who: "",
+  });
+  const edit_mode_setter = (edit: boolean, who: string) => {
+    setEditMode(() => {
+      return { edit, who };
+    });
+  };
   const showMenu = (e: MouseEvent) => {
     e.preventDefault();
     if (contextMenuEle.current) {
@@ -129,7 +138,7 @@ export default function PdfEditor({
     if (content.current) {
       content.current
         .querySelectorAll(
-          ".card h2,.card h3,.card h1,.card p,.card hr ,.card li"
+          ".card .container header h2,.card h3,.card .container header h1,.card p,.card hr ,.card li"
         )
         .forEach((ele) => {
           (ele as HTMLParagraphElement).style.border =
@@ -142,9 +151,10 @@ export default function PdfEditor({
 
   useEffect(() => {
     if (content.current && contextMenuEle.current) {
-      content.current.addEventListener("wheel", handleWheel);
+      content.current.addEventListener("wheel", handleWheel, {
+        passive: false,
+      });
       content.current.addEventListener("mousedown", (e) => {
-        e.preventDefault();
         clickPosition.current = { x: e.clientX, y: e.clientY };
         content.current?.addEventListener("mousemove", mouseMoveHandler);
         setSelectedElement("");
@@ -182,8 +192,9 @@ export default function PdfEditor({
       if (content.current && contextMenuEle.current) {
         content.current.removeEventListener("wheel", handleWheel);
         content.current.removeEventListener("mousedown", (e) => {
-          e.preventDefault();
+          clickPosition.current = { x: e.clientX, y: e.clientY };
           content.current?.addEventListener("mousemove", mouseMoveHandler);
+          setSelectedElement("");
         });
         content.current.removeEventListener("mouseup", () => {
           content.current?.removeEventListener("mousemove", mouseMoveHandler);
@@ -211,7 +222,7 @@ export default function PdfEditor({
         contextMenuEle.current.removeEventListener("mouseleave", hideMenu);
       }
     };
-  }, []);
+  }, [editMode]);
 
   return (
     <TabContext.Provider value={[currTab, setCurrTab]}>
@@ -224,7 +235,6 @@ export default function PdfEditor({
       />
       <section
         className="bg-secant2 overflow-hidden bg-opacity-70 h-full flex items-center justify-center relative w-3/4 editor cursor-grab"
-        onWheel={handleWheel}
         ref={content}
         tabIndex={0}
         aria-label="PDF Editor"
@@ -271,30 +281,26 @@ export default function PdfEditor({
             <FontAwesomeIcon icon={faRedo as IconProp} />
           </button>
         </div>
-        <motion.div
-          className={`bg-white content`}
-          animate={{
-            scale: scale,
-            x: content.current?.style.x,
-            y: content.current?.style.y,
-          }}
-          ref={contentDiv}
-          role="document"
-          aria-live="polite"
-        >
-          {templateState.templateId == 0 && (
-            <NormalTemplate
-              templateData={templateState}
-              templateSetter={setter}
-            />
-          )}
-          {templateState.templateId == 1 && (
-            <NormalTemplate
-              templateData={templateState}
-              templateSetter={setter}
-            />
-          )}
-        </motion.div>
+        <EditModeContext.Provider value={[editMode, edit_mode_setter]}>
+          <motion.div
+            className={`bg-white content w-96 aspect-[210/297]`}
+            animate={{
+              scale: scale,
+              x: content.current?.style.x,
+              y: content.current?.style.y,
+            }}
+            ref={contentDiv}
+            role="document"
+            aria-live="polite"
+          >
+            {templateState.templateId == 0 && (
+              <NormalTemplate templateData={templateState} />
+            )}
+            {templateState.templateId == 1 && (
+              <NormalTemplate templateData={templateState} />
+            )}
+          </motion.div>
+        </EditModeContext.Provider>
       </section>
     </TabContext.Provider>
   );

@@ -112,7 +112,17 @@ function Creator() {
 
   const keyDownHandle = useCallback(
     (event: KeyboardEvent) => {
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "z") {
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        event.key.toLowerCase() === "z" &&
+        event.shiftKey
+      ) {
+        event.preventDefault();
+        handleRedo();
+      } else if (
+        (event.ctrlKey || event.metaKey) &&
+        event.key.toLowerCase() === "z"
+      ) {
         event.preventDefault();
         handleUndo();
       }
@@ -162,16 +172,10 @@ function Creator() {
                   >
                     <h3>{ele.name}</h3>
                     {ele.templateId == 0 && (
-                      <NormalTemplate
-                        templateData={ele}
-                        templateSetter={setter}
-                      />
+                      <NormalTemplate templateData={ele} />
                     )}
                     {ele.templateId == 1 && (
-                      <NormalTemplate
-                        templateData={ele}
-                        templateSetter={setter}
-                      />
+                      <NormalTemplate templateData={ele} />
                     )}
                   </motion.div>
                 );
