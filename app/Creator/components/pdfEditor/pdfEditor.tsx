@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import "./pdfEditor.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faCheck,
   faMinus,
   faPlus,
   faRedo,
@@ -36,6 +37,8 @@ export default function PdfEditor({
   const marker = useRef<HTMLDivElement>(null);
   const styleTab = useRef<HTMLButtonElement>(null);
   const [selectedElement, setSelectedElement] = useContext(SelectedContext);
+  const [isSaving, setIsSaving] = useState(false);
+  const [initialLoad, setInitialLoad] = useState(true);
   const [editMode, setEditMode] = useState({
     edit: false,
     who: "",
@@ -117,7 +120,6 @@ export default function PdfEditor({
             translateX = parseFloat(translateMatch[1]);
             translateY = parseFloat(translateMatch[2]);
           }
-          // Apply the new translation
           contentDiv.current.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scaleValue})`;
         }
         return scaleValue;
@@ -133,6 +135,22 @@ export default function PdfEditor({
       return (e.target as Element).id;
     });
   };
+
+  useEffect(() => {
+    if (initialLoad) {
+      setInitialLoad(false);
+      console.log("1");
+      return;
+    }
+    console.log("2");
+    setIsSaving(true);
+    const intervalId = setInterval(() => {
+      localStorage.setItem("templateState", JSON.stringify(templateState));
+      setIsSaving(false);
+    }, 3000);
+
+    return () => clearInterval(intervalId);
+  }, [templateState, initialLoad]);
 
   useEffect(() => {
     if (content.current) {
@@ -266,6 +284,16 @@ export default function PdfEditor({
           className="absolute bottom-0 left-0 flex items-center justify-center space-x-1 z-30"
           aria-label="Undo/Redo Controls"
         >
+          <div className="flex flex-row justify-center items-center space-x-4 ml-2">
+            {isSaving ? (
+              <div className="loader"></div>
+            ) : (
+              <FontAwesomeIcon
+                icon={faCheck as IconProp}
+                className="text-secant3 h-[25px]"
+              />
+            )}
+          </div>
           <button
             className="bg-amber-500 w-12 h-5 rounded-md text-sm"
             onClick={handleUndo}
