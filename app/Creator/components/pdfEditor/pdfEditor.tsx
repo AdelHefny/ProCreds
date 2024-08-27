@@ -33,7 +33,7 @@ export default function PdfEditor({
   const contextMenuEle = useRef<HTMLUListElement>(null);
   const clickPosition = useRef<{ x: number; y: number } | null>(null);
   const [styleElement, setStyleElement] = useState("");
-  const [currTab, setCurrTab] = useState(0);
+  const [currTab, setCurrTab] = useState(2);
   const marker = useRef<HTMLDivElement>(null);
   const styleTab = useRef<HTMLButtonElement>(null);
   const [selectedElement, setSelectedElement] = useContext(SelectedContext);
@@ -150,7 +150,7 @@ export default function PdfEditor({
     }, 3000);
 
     return () => clearInterval(intervalId);
-  }, [templateState, initialLoad]);
+  }, [templateState]);
 
   useEffect(() => {
     if (content.current) {
@@ -244,7 +244,6 @@ export default function PdfEditor({
 
   return (
     <TabContext.Provider value={[currTab, setCurrTab]}>
-      <DataEdit markerRef={marker} styleTab={styleTab} />
       <ContextMenu
         refObject={contextMenuEle}
         styleElement={styleElement}
@@ -252,13 +251,14 @@ export default function PdfEditor({
         styleTab={styleTab}
       />
       <section
-        className="bg-secant2 overflow-hidden bg-opacity-70 h-full flex items-center justify-center relative w-3/4 editor cursor-grab"
+        className="bg-secant2 overflow-hidden bg-opacity-70 h-full flex items-center justify-center relative w-full editor cursor-grab"
         ref={content}
         tabIndex={0}
         aria-label="PDF Editor"
       >
+        <DataEdit markerRef={marker} styleTab={styleTab} />
         <div
-          className="absolute bottom-0 right-0 flex items-center justify-center space-x-1 z-30"
+          className="absolute bottom-0 text-secant right-0 flex items-center justify-center space-x-1 z-30"
           aria-label="Zoom Controls"
         >
           <button
@@ -281,7 +281,7 @@ export default function PdfEditor({
           </button>
         </div>
         <div
-          className="absolute bottom-0 left-0 flex items-center justify-center space-x-1 z-30"
+          className="absolute text-secant bottom-0 left-0 flex items-center justify-center space-x-1 z-30"
           aria-label="Undo/Redo Controls"
         >
           <div className="flex flex-row justify-center items-center space-x-4 ml-2">
@@ -290,12 +290,12 @@ export default function PdfEditor({
             ) : (
               <FontAwesomeIcon
                 icon={faCheck as IconProp}
-                className="text-secant3 h-[25px]"
+                className="h-[35px]"
               />
             )}
           </div>
           <button
-            className="bg-amber-500 w-12 h-5 rounded-md text-sm"
+            className="bg-amber-500 w-12  h-5 rounded-md text-sm"
             onClick={handleUndo}
             aria-label="Undo"
           >

@@ -76,8 +76,8 @@ function ContextMenu({
     setCurrTab(1);
     setSelectedElement(styleElement);
     if (marker.current && styleTab.current) {
-      marker.current.style.width = styleTab.current.offsetWidth + "px";
-      marker.current.style.left = styleTab.current.offsetLeft + "px";
+      marker.current.style.height = styleTab.current.offsetHeight + "px";
+      marker.current.style.top = styleTab.current.offsetTop + "px";
     }
   };
   return (

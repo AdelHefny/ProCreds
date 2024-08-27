@@ -9,26 +9,18 @@
 }
 /* HTML: <div class="loader"></div> */
 .loader {
-  width: 40px;
+  width: 35px;
   aspect-ratio: 1;
   border-radius: 50%;
-  padding: 3px;
-  background: radial-gradient(farthest-side, #3a5a40 95%, #0000) 50% 0/12px 12px
-      no-repeat,
-    radial-gradient(
-        farthest-side,
-        #0000 calc(100% - 5px),
-        #a3b18a calc(100% - 4px)
-      )
-      content-box;
-  animation: l6 2s infinite;
+  border: 8px solid;
+  border-color: #344e41 #0000;
+  animation: l1 1s infinite;
 }
-@keyframes l6 {
+@keyframes l1 {
   to {
-    transform: rotate(1turn);
+    transform: rotate(0.5turn);
   }
 }
-
 .off {
   top: -200vh;
   opacity: 0;

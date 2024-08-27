@@ -1,6 +1,7 @@
 import { StyleMapping, templateType } from "@/app/templateContext";
 import "./normalTemplate.css";
 import { Edit, EditLi } from "./editComponenets";
+import Section from "./components/section";
 
 function Header({
   headerData,
@@ -79,41 +80,6 @@ function Header({
   );
 }
 
-function Section({
-  id,
-  title,
-  sectionData,
-  styleData,
-}: {
-  id: string;
-  title: string;
-  sectionData: { id: string; text: string }[];
-  styleData: StyleMapping;
-}) {
-  return (
-    <section className={`${title}Section section`}>
-      <Edit
-        id={`${id}-0`}
-        headerType="h2"
-        data={title}
-        style={styleData[`${id}-0`]}
-      />
-      <hr id={`${id}-hr`} />
-      <ul>
-        {sectionData.map((ele, index) => (
-          <EditLi
-            className="overflow-hidden"
-            key={`${id}-${ele.id}`}
-            data={ele.text}
-            style={styleData[`${id}-${ele.id}`]}
-            id={`${id}-${ele.id}`}
-          />
-        ))}
-      </ul>
-    </section>
-  );
-}
-
 function NormalTemplate({ templateData }: { templateData: templateType }) {
   return (
     <div className="card">
@@ -132,13 +98,21 @@ function NormalTemplate({ templateData }: { templateData: templateType }) {
         />
         {templateData.content.sections.map((ele) => {
           return (
-            <Section
-              title={ele.title}
-              id={ele.id}
-              sectionData={ele.details}
-              styleData={templateData.style}
-              key={ele.id}
-            />
+            <section className={`${ele.title}Section section`}>
+              <Edit
+                id={`${ele.id}-0`}
+                headerType="h2"
+                data={ele.title}
+                style={templateData.style[`${ele.id}-0`]}
+              />
+              <hr id={`${ele.id}-hr`} />
+              <Section
+                id={ele.id}
+                sectionData={ele.details}
+                styleData={templateData.style}
+                key={ele.id}
+              />
+            </section>
           );
         })}
       </div>
