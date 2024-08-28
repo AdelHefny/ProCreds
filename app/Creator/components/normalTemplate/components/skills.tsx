@@ -11,10 +11,10 @@ function SkillsSection({
   styleData: StyleMapping;
 }) {
   return (
-    <ul className="flex flex-row flex-wrap">
+    <ul className="flex flex-row flex-wrap space-x-2 my-2">
       {sectionData.map((ele) => (
         <EditLi
-          className="overflow-hidden bg-secant3 text-white rounded-lg"
+          className="overflow-hidden px-1 bg-secant3 text-white rounded-lg"
           key={`${id}-${ele.id}`}
           data={ele.text}
           style={styleData[`${id}-${ele.id}`]}

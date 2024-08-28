@@ -2,6 +2,7 @@ import { StyleMapping, templateType } from "@/app/templateContext";
 import "./normalTemplate.css";
 import { Edit, EditLi } from "./editComponenets";
 import Section from "./components/section";
+import SkillsSection from "./components/skills";
 
 function Header({
   headerData,
@@ -99,19 +100,33 @@ function NormalTemplate({ templateData }: { templateData: templateType }) {
         {templateData.content.sections.map((ele) => {
           return (
             <section className={`${ele.title}Section section`}>
-              <Edit
+              <h1
                 id={`${ele.id}-0`}
-                headerType="h2"
-                data={ele.title}
+                className="text-secant3 font-extrabold text-lg font-sans"
                 style={templateData.style[`${ele.id}-0`]}
+              >
+                {ele.title}
+              </h1>
+              <hr
+                id={`${ele.id}-hr`}
+                className="block h-px w-16 border-0 border-t border-secant3 p-0"
               />
-              <hr id={`${ele.id}-hr`} />
-              <Section
-                id={ele.id}
-                sectionData={ele.details}
-                styleData={templateData.style}
-                key={ele.id}
-              />
+              {ele.title == "Skills" && (
+                <SkillsSection
+                  id={ele.id}
+                  sectionData={ele.details}
+                  styleData={templateData.style}
+                  key={ele.id}
+                />
+              )}
+              {ele.title == "Custom" && (
+                <Section
+                  id={ele.id}
+                  sectionData={ele.details}
+                  styleData={templateData.style}
+                  key={ele.id}
+                />
+              )}
             </section>
           );
         })}

@@ -33,7 +33,7 @@ export default function PdfEditor({
   const contextMenuEle = useRef<HTMLUListElement>(null);
   const clickPosition = useRef<{ x: number; y: number } | null>(null);
   const [styleElement, setStyleElement] = useState("");
-  const [currTab, setCurrTab] = useState(2);
+  const [currTab, setCurrTab] = useState(3);
   const marker = useRef<HTMLDivElement>(null);
   const styleTab = useRef<HTMLButtonElement>(null);
   const [selectedElement, setSelectedElement] = useContext(SelectedContext);

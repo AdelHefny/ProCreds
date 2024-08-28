@@ -1,7 +1,7 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./checkbox.css";
-import { TemplateContext } from "@/app/templateContext";
-const sectionsList = [
+import { TemplateContext, templateType } from "@/app/templateContext";
+const avSections = [
   "Experience",
   "Skills",
   "Projects",
@@ -10,17 +10,42 @@ const sectionsList = [
 ];
 function LayoutTab() {
   const [template, setter] = useContext(TemplateContext);
+  const [sectionsList, setSectionsList] = useState(avSections);
   const [selectedCar, setSelectedCar] = useState("");
+
+  useEffect(() => {
+    setSectionsList(
+      avSections.filter(
+        (section) =>
+          !template.content.sections.some(({ title }) => title === section)
+      )
+    );
+  }, [template.content.sections]);
+
   const handleSelectChange = (event) => {
     const value = event.target.value;
-    setSelectedCar("Add");
-    if (value === "volvo") {
-      console.log("adel");
-    }
+    const newSection = {
+      id: template.content.sections.length.toString(),
+      title: value,
+      details: [],
+    };
+
+    setter((prev) => ({
+      ...prev,
+      content: {
+        ...prev.content,
+        sections: [...prev.content.sections, newSection],
+      },
+    }));
+
+    setSectionsList((prevSections) =>
+      prevSections.filter((section) => section !== value)
+    );
   };
+
   return (
     <section className="relative bg-secant p-4 rounded-3xl h-24 flex flex-col justify-between items-center">
-      <section className="">
+      <section>
         <div className="flex flex-row justify-between items-center space-x-2">
           <div className="checkbox-wrapper-23">
             <input type="checkbox" id="check-23" />
@@ -33,10 +58,10 @@ function LayoutTab() {
           <label htmlFor="check-23">Photo</label>
         </div>
       </section>
-      <section className="">
+      <section>
         <select
-          name="cars"
-          id="cars"
+          name="sections"
+          id="sections"
           className="rounded-3xl h-7 cursor-pointer outline-none text-white text-center selectEle"
           value={selectedCar}
           onChange={handleSelectChange}
@@ -44,30 +69,15 @@ function LayoutTab() {
           <option value="" hidden>
             Add
           </option>
-          {sectionsList.map((ele) => {
-            let flag = false;
-            for (let i = 0; i < template.content.sections.length; i++) {
-              if (ele == template.content.sections[i].title) {
-                flag = true;
-                break;
-              }
-            }
-            if (!flag) {
-              return (
-                <option className="bg-secant2" value={`${ele}`}>
-                  {ele}
-                </option>
-              );
-            } else {
-              return null;
-            }
-          })}
-
+          {sectionsList.map((section) => (
+            <option key={section} className="bg-secant2" value={section}>
+              {section}
+            </option>
+          ))}
           <option className="bg-secant2" value="Custom">
             Custom
           </option>
         </select>
-        <div></div>
       </section>
     </section>
   );
