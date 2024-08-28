@@ -1,11 +1,10 @@
 "use client";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import Steps from "./components/steps";
 import TemplatesCarusel from "./components/templatesCarusel";
-
+import "./animGradient.css";
 export default function Home() {
   return (
     <AnimatePresence mode="wait">
@@ -43,7 +42,7 @@ export default function Home() {
           </div>
           <Link
             href={"/Creator"}
-            className="h-10 p-4 bg-gradient-to-br from-secant flex items-center justify-center to-secant2 mt-10 rounded-full text-main"
+            className="startCreating h-10 text-sm p-4 flex items-center justify-center mt-10 rounded-full text-main"
           >
             Start Creating
           </Link>

@@ -1,0 +1,46 @@
+@property --templateChoseColor1 {
+  syntax: "<color>";
+  initial-value: #a3b18a;
+  inherits: false;
+}
+@property --templateChoseColor2 {
+  syntax: "<color>";
+  initial-value: #344e41;
+  inherits: false;
+}
+@property --startCreatingColor1 {
+  syntax: "<color>";
+  initial-value: #a3b18a;
+  inherits: false;
+}
+@property --startCreatingColor2 {
+  syntax: "<color>";
+  initial-value: #344e41;
+  inherits: false;
+}
+.startCreating {
+  background: linear-gradient(
+    to bottom right,
+    var(--startCreatingColor1),
+    var(--startCreatingColor2)
+  );
+  transition: --startCreatingColor1 0.7s 0.1s ease-in-out,
+    --startCreatingColor2 0.5s ease-in-out;
+}
+.startCreating:hover {
+  --startCreatingColor2: #a3b18a;
+  --startCreatingColor1: #344e41;
+}
+.templateCreator {
+  background: linear-gradient(
+    to bottom right,
+    var(--templateChoseColor1),
+    var(--templateChoseColor2)
+  );
+  transition: --templateChoseColor1 0.7s 0.1s ease-in-out,
+    --templateChoseColor2 0.5s ease-in-out;
+}
+.templateCreator:hover {
+  --templateChoseColor1: #344e41;
+  --templateChoseColor2: #a3b18a;
+}

@@ -1,5 +1,5 @@
 import Link from "next/link";
-
+import "../animGradient.css";
 function Steps() {
   return (
     <section className="flex flex-col md:flex-row items-center md:items-start space-y-16 md:space-y-0 justify-center py-20 min-h-[60vh] mt-20 px-32 md:px-16 bg-secant2 w-full md:space-x-16 text-main">
@@ -16,7 +16,7 @@ function Steps() {
         </p>
         <Link
           href={"/Creator"}
-          className=" h-10 bg-gradient-to-br p-4 from-secant flex items-center justify-center to-secant2 mt-10 rounded-full text-main"
+          className="templateCreator h-10  p-4 flex items-center justify-center mt-10 rounded-full text-main"
         >
           Chose a template
         </Link>

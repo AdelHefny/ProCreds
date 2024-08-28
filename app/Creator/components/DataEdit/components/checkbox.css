@@ -47,7 +47,26 @@
   stroke-dashoffset: 101;
   transition: all 250ms cubic-bezier(1, 0, 0.37, 0.91);
 }
+@property --myColor1 {
+  syntax: "<color>";
+  initial-value: #6c01ff;
+  inherits: false;
+}
+
+@property --myColor2 {
+  syntax: "<color>";
+  initial-value: #0be2e5;
+  inherits: false;
+}
 .selectEle {
-  background: #6c01ff;
-  background: linear-gradient(45deg, #0be2e5, #6c01ff);
+  /* Optional: change initial value of the variables */
+  /* --myColor1: #f64; --myColor2: brown; */
+
+  background: linear-gradient(45deg, var(--myColor1), var(--myColor2));
+  transition: --myColor1 0.7s 0.1s ease-in-out, --myColor2 0.5s ease-in-out;
+}
+
+.selectEle:hover {
+  --myColor1: #0be2e5;
+  --myColor2: #6c01ff;
 }

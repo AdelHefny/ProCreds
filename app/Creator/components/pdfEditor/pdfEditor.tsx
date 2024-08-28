@@ -68,30 +68,25 @@ export default function PdfEditor({
   };
 
   const mouseMoveHandler = (e: MouseEvent) => {
+    console.log("currentTranslate");
     if (contentDiv.current && clickPosition.current) {
       const offsetX = e.clientX - clickPosition.current.x;
       const offsetY = e.clientY - clickPosition.current.y;
-      const currentTransform = contentDiv.current.style.transform;
-      const currentScale = currentTransform.match(/scale\(([^)]+)\)/);
-      const translateMatch = currentTransform.match(
-        /translate\(([^,]+),([^)]+)\)/
-      );
+      const currentTranslate = contentDiv.current.style.translate;
+      const translateMatch = currentTranslate.split(" ");
       let translateX = 0;
       let translateY = 0;
 
-      if (translateMatch) {
-        translateX = parseFloat(translateMatch[1]);
-        translateY = parseFloat(translateMatch[2]);
+      if (translateMatch.length > 1) {
+        translateX = parseFloat(translateMatch[0]);
+        translateY = parseFloat(translateMatch[1]);
       }
 
-      // Update translation values based on mouse movement
       const newX = translateX + offsetX;
       const newY = translateY + offsetY;
-      const scaleValue = currentScale ? parseFloat(currentScale[1]) : 1;
-      // Apply the new translation
-      contentDiv.current.style.transform = `translate(${newX}px, ${newY}px) scale(${scaleValue})`;
 
-      // Update click position for the next movement
+      contentDiv.current.style.translate = `${newX}px ${newY}px`;
+
       clickPosition.current = { x: e.clientX, y: e.clientY };
     }
   };
@@ -109,18 +104,7 @@ export default function PdfEditor({
           Math.min(3, prev + (e.deltaY > 0 ? -0.05 : 0.05))
         );
         if (contentDiv.current) {
-          const currentTransform = contentDiv.current.style.transform;
-          const translateMatch = currentTransform.match(
-            /translate\(([^,]+),([^)]+)\)/
-          );
-          let translateX = 0;
-          let translateY = 0;
-
-          if (translateMatch) {
-            translateX = parseFloat(translateMatch[1]);
-            translateY = parseFloat(translateMatch[2]);
-          }
-          contentDiv.current.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scaleValue})`;
+          contentDiv.current.style.scale = `${scaleValue}`;
         }
         return scaleValue;
       });
@@ -264,7 +248,13 @@ export default function PdfEditor({
           <button
             className="bg-amber-500 w-12 h-5 rounded-md text-sm"
             onClick={() => {
-              setScale((prev) => Math.min(2, prev + 0.1));
+              setScale((prev) => {
+                let scaleValue = Math.min(2, prev + 0.1);
+                if (contentDiv.current) {
+                  contentDiv.current.style.scale = `${scaleValue}`;
+                }
+                return scaleValue;
+              });
             }}
             aria-label="Zoom In"
           >
@@ -273,7 +263,13 @@ export default function PdfEditor({
           <button
             className="bg-amber-500 w-12 h-5 rounded-md text-sm"
             onClick={() => {
-              setScale((prev) => Math.max(0.1, prev - 0.1));
+              setScale((prev) => {
+                let scaleValue = Math.max(0.1, prev - 0.1);
+                if (contentDiv.current) {
+                  contentDiv.current.style.scale = `${scaleValue}`;
+                }
+                return scaleValue;
+              });
             }}
             aria-label="Zoom Out"
           >
@@ -311,12 +307,7 @@ export default function PdfEditor({
         </div>
         <EditModeContext.Provider value={[editMode, edit_mode_setter]}>
           <motion.div
-            className={`bg-white content w-96 aspect-[210/297]`}
-            animate={{
-              scale: scale,
-              x: content.current?.style.x,
-              y: content.current?.style.y,
-            }}
+            className={`bg-white content w-96 aspect-[210/297] document`}
             ref={contentDiv}
             role="document"
             aria-live="polite"

@@ -25,3 +25,6 @@
   top: -200vh;
   opacity: 0;
 }
+.document {
+  transition: scale 0.1s ease-in-out;
+}
