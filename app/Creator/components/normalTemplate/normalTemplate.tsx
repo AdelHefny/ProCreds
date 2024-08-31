@@ -83,7 +83,7 @@ function Header({
 
 function NormalTemplate({ templateData }: { templateData: templateType }) {
   return (
-    <div className="card">
+    <div className="card templateDocument">
       <div className="container">
         <Header
           headerData={{
@@ -99,7 +99,7 @@ function NormalTemplate({ templateData }: { templateData: templateType }) {
         />
         {templateData.content.sections.map((ele) => {
           return (
-            <section className={`${ele.title}Section section`}>
+            <section key={ele.id} className={`${ele.title}Section section`}>
               <h1
                 id={`${ele.id}-0`}
                 className="text-secant3 font-extrabold text-lg font-sans"

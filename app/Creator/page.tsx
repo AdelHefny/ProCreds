@@ -70,7 +70,7 @@ function Creator() {
   const [selectedElement, setSelectedElement] = useState("");
   const handleUndo = useCallback(() => {
     if (history.undoStack[history.undoStack.length - 1] != undefined)
-      setter(history.undoStack[history.undoStack.length - 1]);
+      setter(() => history.undoStack[history.undoStack.length - 1]);
     setHistory((prev) => {
       if (prev.undoStack.length > 1) {
         const newUndoStack = [...prev.undoStack];

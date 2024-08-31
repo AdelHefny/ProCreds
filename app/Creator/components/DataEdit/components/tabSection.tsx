@@ -3,7 +3,8 @@ import { faPaintBrush, faPenSquare } from "@fortawesome/fontawesome-free-solid";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { RefObject, useContext, useEffect, useRef } from "react";
-
+import layoutImage from "../../../../../public/layout-60.png";
+import Image from "next/image";
 function TabSection({
   markerRef,
   styleTab,
@@ -49,7 +50,11 @@ function TabSection({
               });
             }}
           >
-            <FontAwesomeIcon icon={faPaintBrush as IconDefinition} />
+            <Image
+              className="w-[1.125rem]"
+              src={layoutImage}
+              alt="layout image"
+            />
           </button>
         </div>
         <div>

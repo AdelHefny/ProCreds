@@ -49,13 +49,13 @@
 }
 @property --myColor1 {
   syntax: "<color>";
-  initial-value: #6c01ff;
+  initial-value: #a3b18a;
   inherits: false;
 }
 
 @property --myColor2 {
   syntax: "<color>";
-  initial-value: #0be2e5;
+  initial-value: #344e41;
   inherits: false;
 }
 .selectEle {
@@ -67,6 +67,6 @@
 }
 
 .selectEle:hover {
-  --myColor1: #0be2e5;
-  --myColor2: #6c01ff;
+  --myColor1: #344e41;
+  --myColor2: #a3b18a;
 }

@@ -68,7 +68,6 @@ export default function PdfEditor({
   };
 
   const mouseMoveHandler = (e: MouseEvent) => {
-    console.log("currentTranslate");
     if (contentDiv.current && clickPosition.current) {
       const offsetX = e.clientX - clickPosition.current.x;
       const offsetY = e.clientY - clickPosition.current.y;
@@ -123,10 +122,8 @@ export default function PdfEditor({
   useEffect(() => {
     if (initialLoad) {
       setInitialLoad(false);
-      console.log("1");
       return;
     }
-    console.log("2");
     setIsSaving(true);
     const intervalId = setInterval(() => {
       localStorage.setItem("templateState", JSON.stringify(templateState));

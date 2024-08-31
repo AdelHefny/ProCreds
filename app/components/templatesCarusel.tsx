@@ -1,6 +1,3 @@
-import { faCaretLeft, faCaretRight } from "@fortawesome/fontawesome-free-solid";
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { useRef } from "react";
