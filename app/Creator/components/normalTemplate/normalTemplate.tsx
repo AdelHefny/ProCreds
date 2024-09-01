@@ -1,8 +1,9 @@
 import { StyleMapping, templateType } from "@/app/templateContext";
 import "./normalTemplate.css";
-import { Edit, EditLi } from "./editComponenets";
+import { Edit, EditLi } from "./components/editComponenets";
 import Section from "./components/section";
 import SkillsSection from "./components/skills";
+import Experience from "./components/experience";
 
 function Header({
   headerData,
@@ -113,6 +114,14 @@ function NormalTemplate({ templateData }: { templateData: templateType }) {
               />
               {ele.title == "Skills" && (
                 <SkillsSection
+                  id={ele.id}
+                  sectionData={ele.details}
+                  styleData={templateData.style}
+                  key={ele.id}
+                />
+              )}
+              {ele.title == "Experience" && (
+                <Experience
                   id={ele.id}
                   sectionData={ele.details}
                   styleData={templateData.style}

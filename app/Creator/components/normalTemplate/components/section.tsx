@@ -1,5 +1,5 @@
 import { StyleMapping } from "@/app/templateContext";
-import { EditLi } from "../editComponenets";
+import { EditLi } from "./editComponenets";
 
 function Section({
   id,

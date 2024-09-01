@@ -57,15 +57,15 @@ function LayoutTab() {
     <section className="relative bg-secant p-4 rounded-3xl h-36 w-48 flex flex-col justify-between items-center">
       <section>
         <div className="flex flex-row justify-between items-center space-x-2">
-          <div className="checkbox-wrapper-23">
-            <input type="checkbox" id="check-23" />
-            <label htmlFor="check-23" style={{ width: "20px", height: "20px" }}>
+          <div className="checkbox-wrapper-20">
+            <input type="checkbox" id="check-20" />
+            <label htmlFor="check-20" style={{ width: "20px", height: "20px" }}>
               <svg viewBox="0,0,50,50">
                 <path d="M5 30 L 20 45 L 45 5"></path>
               </svg>
             </label>
           </div>
-          <label htmlFor="check-23">Photo</label>
+          <label htmlFor="check-20">Photo</label>
         </div>
       </section>
       <section className="flex justify-center items-center">

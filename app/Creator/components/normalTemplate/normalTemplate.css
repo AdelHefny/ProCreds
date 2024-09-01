@@ -4,13 +4,11 @@
   margin: 0;
   padding: 0;
   max-width: 800px;
+  aspect-ratio: 1/1.41;
+  max-height: 1128px;
+  overflow: hidden;
   margin: 50px auto;
   padding: 20px;
-}
-.templateDocument h1,
-.templateDocument h2,
-.templateDocument h3 {
-  color: #333;
 }
 .templateDocument h1 {
   margin-top: 0;

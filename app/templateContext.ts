@@ -28,6 +28,7 @@ export type templateType = {
       details: {
         id: string;
         text: string;
+        structure?: any;
       }[];
     }[];
   };

@@ -1,5 +1,5 @@
 import { StyleMapping } from "@/app/templateContext";
-import { EditLi } from "../editComponenets";
+import { Edit, EditLi } from "./editComponenets";
 
 function SkillsSection({
   id,
@@ -13,12 +13,13 @@ function SkillsSection({
   return (
     <ul className="flex flex-row flex-wrap space-x-2 my-2">
       {sectionData.map((ele) => (
-        <EditLi
+        <Edit
           className="overflow-hidden px-1 bg-secant3 text-white rounded-lg"
-          key={`${id}-${ele.id}`}
+          headerType="h3"
+          key={`${ele.id}`}
           data={ele.text}
-          style={styleData[`${id}-${ele.id}`]}
-          id={`${id}-${ele.id}`}
+          style={styleData[`${ele.id}`]}
+          id={`${ele.id}`}
         />
       ))}
     </ul>

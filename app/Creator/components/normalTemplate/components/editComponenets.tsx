@@ -1,6 +1,6 @@
 import { TemplateContext, templateType } from "@/app/templateContext";
 import { CSSProperties, useContext, useEffect, useRef } from "react";
-import EditModeContext from "../../contexts/editModeContext";
+import EditModeContext from "../../../contexts/editModeContext";
 type coPropsLi = {
   id: string;
   style: CSSProperties;
@@ -51,16 +51,31 @@ function Edit({ id, data, headerType, style, className = "" }: coProps) {
     }
   }, [editMode.edit, editMode.who, edit_mode_setter, id]);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setter((prev) => ({
-      ...prev,
-      content: {
-        ...prev.content,
-        header: {
-          ...prev.content.header,
-          [id]: e.target.value,
-        } as HeaderContent,
-      },
-    }));
+    const isNumeric = (string) => /^[+-]?\d+(\.\d+)?$/.test(string);
+    if (!isNumeric(id[0])) {
+      setter((prev) => ({
+        ...prev,
+        content: {
+          ...prev.content,
+          header: {
+            ...prev.content.header,
+            [id]: e.target.value,
+          } as HeaderContent,
+        },
+      }));
+    } else {
+      setter((prev) => {
+        let sections = [...prev.content.sections];
+        sections[+id[0]].details[+id[2] - 1].text = e.target.value;
+        return {
+          ...prev,
+          content: {
+            ...prev.content,
+            sections: sections,
+          },
+        };
+      });
+    }
   };
 
   return (
@@ -95,7 +110,11 @@ function Edit({ id, data, headerType, style, className = "" }: coProps) {
           id={id}
           className={`${className} input_text`}
           onDoubleClick={handleDoubleClick}
-          value={templateState.content.header[id as keyof HeaderContent] || ""}
+          value={
+            /^[+-]?\d+(\.\d+)?$/.test(id[0])
+              ? templateState.content.sections[+id[0]].details[+id[2] - 1].text
+              : templateState.content.header[id as keyof HeaderContent] || ""
+          }
           onChange={handleChange}
           type="text"
           name="firstName"

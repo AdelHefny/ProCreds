@@ -68,8 +68,28 @@ export const templates: templateType[] = [
           id: "3",
           title: "Experience",
           details: [
-            { id: "3-1", text: "Software Developer - XYZ Company (2019-2022)" },
-            { id: "3-2", text: "Internship - ABC Tech (Summer 2018)" },
+            {
+              id: "3-1",
+              text: "Software Developer - XYZ Company (2019-2022)",
+              structure: {
+                postion: "Software Developer",
+                company: "XYZ",
+                date: { start: "2019", end: "2022", present: false },
+                location: "cairo",
+                accomplishment: "",
+              },
+            },
+            {
+              id: "3-2",
+              text: "Internship - ABC Tech (Summer 2018)",
+              structure: {
+                postion: "Internship",
+                company: "ABC Tech",
+                date: { start: "2018", end: "2018", present: false },
+                location: "cairo",
+                accomplishment: "",
+              },
+            },
           ],
         },
         {
@@ -153,8 +173,28 @@ export const templates: templateType[] = [
           id: "3",
           title: "Experience",
           details: [
-            { id: "3-1", text: "Software Developer - XYZ Company (2019-2022)" },
-            { id: "3-2", text: "Internship - ABC Tech (Summer 2018)" },
+            {
+              id: "3-1",
+              text: "Software Developer - XYZ Company (2019-2022)",
+              structure: {
+                postion: "Software Developer",
+                company: "XYZ",
+                date: { start: "2019", end: "2022", present: false },
+                location: "cairo",
+                accomplishment: "",
+              },
+            },
+            {
+              id: "3-2",
+              text: "Internship - ABC Tech (Summer 2018)",
+              structure: {
+                postion: "Internship",
+                company: "ABC Tech",
+                date: { start: "2018", end: "2018", present: false },
+                location: "cairo",
+                accomplishment: "",
+              },
+            },
           ],
         },
         {

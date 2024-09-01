@@ -1,10 +1,11 @@
 "use client";
 import { useContext, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import "./pdfEditor.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
+  faEllipsisV,
   faMinus,
   faPlus,
   faRedo,
@@ -18,6 +19,7 @@ import DataEdit from "../DataEdit/DataEdit";
 import TabContext from "../../contexts/tabContext";
 import SelectedContext from "../../contexts/selectedContext";
 import EditModeContext from "../../contexts/editModeContext";
+import { redirect, usePathname } from "next/navigation";
 
 export default function PdfEditor({
   handleRedo,
@@ -26,7 +28,6 @@ export default function PdfEditor({
   handleUndo: () => void;
   handleRedo: () => void;
 }) {
-  const [scale, setScale] = useState(1);
   const content = useRef<HTMLDivElement>(null);
   const [templateState] = useContext(TemplateContext);
   const contentDiv = useRef<HTMLDivElement>(null);
@@ -39,10 +40,12 @@ export default function PdfEditor({
   const [selectedElement, setSelectedElement] = useContext(SelectedContext);
   const [isSaving, setIsSaving] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
+  const pathname = usePathname();
   const [editMode, setEditMode] = useState({
     edit: false,
     who: "",
   });
+  const [showOptions, setShowOptions] = useState(false);
   const edit_mode_setter = (edit: boolean, who: string) => {
     setEditMode(() => {
       return { edit, who };
@@ -97,16 +100,18 @@ export default function PdfEditor({
   }) => {
     if (e.ctrlKey && content.current) {
       e.preventDefault();
-      setScale((prev) => {
-        const scaleValue = Math.max(
-          0.1,
-          Math.min(3, prev + (e.deltaY > 0 ? -0.05 : 0.05))
-        );
-        if (contentDiv.current) {
-          contentDiv.current.style.scale = `${scaleValue}`;
-        }
-        return scaleValue;
-      });
+      const scaleValue = Math.max(
+        0.1,
+        Math.min(
+          3,
+          +(contentDiv.current.style.scale == ""
+            ? 1
+            : contentDiv.current.style.scale) + (e.deltaY > 0 ? -0.05 : 0.05)
+        )
+      );
+      if (contentDiv.current) {
+        contentDiv.current.style.scale = `${scaleValue}`;
+      }
     }
   };
 
@@ -117,6 +122,20 @@ export default function PdfEditor({
       }
       return (e.target as Element).id;
     });
+  };
+
+  const handleDownloadPdf = async () => {
+    console.log(pathname);
+    console.log(
+      "https://localhost:3000/Creator/pdf?" +
+        new URLSearchParams(JSON.stringify(templateState)).toString()
+    );
+    const anchor = document.createElement("a");
+    anchor.href =
+      "http://localhost:3000/Creator/pdf?" +
+      new URLSearchParams(JSON.stringify(templateState)).toString();
+    anchor.target = "_blank";
+    anchor.click();
   };
 
   useEffect(() => {
@@ -239,34 +258,70 @@ export default function PdfEditor({
       >
         <DataEdit markerRef={marker} styleTab={styleTab} />
         <div
-          className="absolute bottom-0 text-secant right-0 flex items-center justify-center space-x-1 z-30"
+          className="absolute top-5 right-3 w-5 h-7 text-secant3 flex items-end justify-end z-30"
+          aria-label="Options"
+        >
+          <button
+            onClick={() => {
+              setShowOptions((prev) => !prev);
+            }}
+            className="flex justify-center items-center hover:text-secant transition-colors duration-150 ease-in-out"
+          >
+            <FontAwesomeIcon icon={faEllipsisV as IconProp} className="h-7" />
+          </button>
+          <AnimatePresence>
+            {showOptions && (
+              <motion.ul
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute bg-secant top-full translate-y-1/3 w-32 flex items-center justify-center font-bold py-2 rounded-xl"
+              >
+                <li className="">
+                  <button
+                    onClick={handleDownloadPdf}
+                    className="hover:text-main transition-colors duration-150 ease-in-out rounded-2xl w-28 py-2 hover:bg-secant3"
+                  >
+                    Download
+                  </button>
+                </li>
+              </motion.ul>
+            )}
+          </AnimatePresence>
+        </div>
+        <div
+          className="absolute bottom-0 text-secant3 right-0 flex items-center justify-center space-x-1 z-30"
           aria-label="Zoom Controls"
         >
           <button
-            className="bg-amber-500 w-12 h-5 rounded-md text-sm"
+            className="bg-amber-500 w-12 h-5 rounded-md text-sm hover:text-secant transition-colors duration-150 ease-in-out"
             onClick={() => {
-              setScale((prev) => {
-                let scaleValue = Math.min(2, prev + 0.1);
-                if (contentDiv.current) {
-                  contentDiv.current.style.scale = `${scaleValue}`;
-                }
-                return scaleValue;
-              });
+              let scaleValue = Math.min(
+                2,
+                +(contentDiv.current.style.scale == ""
+                  ? 1
+                  : contentDiv.current.style.scale) + 0.1
+              );
+              if (contentDiv.current) {
+                contentDiv.current.style.scale = `${scaleValue}`;
+              }
             }}
             aria-label="Zoom In"
           >
             <FontAwesomeIcon icon={faPlus as IconProp} />
           </button>
           <button
-            className="bg-amber-500 w-12 h-5 rounded-md text-sm"
+            className="bg-amber-500 w-12 h-5 rounded-md text-sm hover:text-secant transition-colors duration-150 ease-in-out"
             onClick={() => {
-              setScale((prev) => {
-                let scaleValue = Math.max(0.1, prev - 0.1);
-                if (contentDiv.current) {
-                  contentDiv.current.style.scale = `${scaleValue}`;
-                }
-                return scaleValue;
-              });
+              let scaleValue = Math.max(
+                0.1,
+                +(contentDiv.current.style.scale == ""
+                  ? 1
+                  : contentDiv.current.style.scale) - 0.1
+              );
+              if (contentDiv.current) {
+                contentDiv.current.style.scale = `${scaleValue}`;
+              }
             }}
             aria-label="Zoom Out"
           >
@@ -274,7 +329,7 @@ export default function PdfEditor({
           </button>
         </div>
         <div
-          className="absolute text-secant bottom-0 left-0 flex items-center justify-center space-x-1 z-30"
+          className="absolute text-secant3 bottom-0 left-0 flex items-center justify-center space-x-1 z-30"
           aria-label="Undo/Redo Controls"
         >
           <div className="flex flex-row justify-center items-center space-x-4 ml-2">
@@ -288,14 +343,14 @@ export default function PdfEditor({
             )}
           </div>
           <button
-            className="bg-amber-500 w-12  h-5 rounded-md text-sm"
+            className="bg-amber-500 w-12  h-5 rounded-md text-sm hover:text-secant transition-colors duration-150 ease-in-out"
             onClick={handleUndo}
             aria-label="Undo"
           >
             <FontAwesomeIcon icon={faUndo as IconProp} />
           </button>
           <button
-            className="bg-amber-500 w-12 h-5 rounded-md text-sm"
+            className="bg-amber-500 w-12 h-5 rounded-md text-sm hover:text-secant transition-colors duration-150 ease-in-out"
             onClick={handleRedo}
             aria-label="Redo"
           >
