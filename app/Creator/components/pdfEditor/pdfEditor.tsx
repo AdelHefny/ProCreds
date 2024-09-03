@@ -359,7 +359,7 @@ export default function PdfEditor({
         </div>
         <EditModeContext.Provider value={[editMode, edit_mode_setter]}>
           <motion.div
-            className={`bg-white content w-96 aspect-[210/297] document`}
+            className={`bg-white content w-96 h-[34rem] document`}
             ref={contentDiv}
             role="document"
             aria-live="polite"

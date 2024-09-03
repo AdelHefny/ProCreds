@@ -4,6 +4,7 @@ import {
   Text,
   View,
   StyleSheet,
+  Link,
   Styles,
   Font,
 } from "@react-pdf/renderer";
@@ -100,6 +101,37 @@ const styles = StyleSheet.create({
     opacity: 1,
     backgroundColor: "",
   },
+  item: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    overflow: "hidden",
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  institution: {
+    fontSize: 14,
+  },
+  EduContainer: {
+    flexDirection: "column",
+    marginVertical: 8,
+  },
+  dateContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginVertical: 2,
+    fontSize: 12,
+    color: "#3a5a40",
+  },
+  dateText: {
+    marginHorizontal: 4,
+  },
+  description: {
+    fontSize: 12,
+  },
 });
 
 function Section({
@@ -160,7 +192,186 @@ function SkillsSection({
     </View>
   );
 }
-
+function EducationSection({
+  id,
+  sectionData,
+  styleData,
+}: {
+  id: string;
+  sectionData: {
+    id: string;
+    text: string;
+    structure?: {
+      degree: string;
+      institution: string;
+      date: { start: string; end: string; present: boolean };
+      location: string;
+      description: string;
+    };
+  }[];
+  styleData: StyleMapping;
+}) {
+  return (
+    <View style={styles.EduContainer}>
+      {sectionData.map((ele) => (
+        <View
+          key={`${id}-${ele.id}`}
+          id={`${id}-${ele.id}`}
+          style={{
+            ...styles.item,
+            ...styleData[`${id}-${ele.id}`],
+          }}
+        >
+          <Text style={styles.title}>{ele.structure?.degree}</Text>
+          <Text style={styles.institution}>{ele.structure?.institution}</Text>
+          <View style={styles.dateContainer}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text>{ele.structure?.date.start}</Text>
+              <Text style={styles.dateText}>-</Text>
+              {ele.structure?.date.present ? (
+                <Text>Present</Text>
+              ) : (
+                <Text>{ele.structure?.date.end}</Text>
+              )}
+            </View>
+            {ele.structure?.location && <Text>{ele.structure.location}</Text>}
+          </View>
+        </View>
+      ))}
+    </View>
+  );
+}
+function ExperienceSection({
+  id,
+  sectionData,
+  styleData,
+}: {
+  id: string;
+  sectionData: {
+    id: string;
+    text: string;
+    structure?: {
+      postion: string;
+      company: string;
+      date: { start: string; end: string; present: boolean };
+      location: string;
+      accomplishments: string;
+    };
+  }[];
+  styleData: StyleMapping;
+}) {
+  return (
+    <View style={{ flexDirection: "column", marginVertical: 8 }}>
+      {sectionData.map((ele) => (
+        <View
+          key={`${id}-${ele.id}`}
+          id={`${id}-${ele.id}`}
+          style={{
+            paddingHorizontal: 8,
+            paddingVertical: 4,
+            borderRadius: 8,
+            overflow: "hidden",
+            ...styleData[`${id}-${ele.id}`],
+          }}
+        >
+          <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+            {ele.structure?.postion}
+          </Text>
+          <Text style={{ fontSize: 14 }}>{ele.structure?.company}</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginVertical: 2,
+              fontSize: 12,
+              color: "#3a5a40",
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text>{ele.structure?.date.start}</Text>
+              <Text style={{ marginHorizontal: 4 }}>-</Text>
+              {ele.structure?.date.present ? (
+                <Text>Present</Text>
+              ) : (
+                <Text>{ele.structure?.date.end}</Text>
+              )}
+            </View>
+            {ele.structure?.location && <Text>{ele.structure.location}</Text>}
+          </View>
+          <Text style={{ fontSize: 12 }}>{ele.structure?.accomplishments}</Text>
+        </View>
+      ))}
+    </View>
+  );
+}
+function CertificationSection({
+  id,
+  sectionData,
+  styleData,
+}: {
+  id: string;
+  sectionData: {
+    id: string;
+    text: string;
+    structure?: {
+      title: string;
+      issuer: string;
+      date: { start: string; end: string; present: boolean };
+      url: string;
+    };
+  }[];
+  styleData: StyleMapping;
+}) {
+  return (
+    <View style={{ flexDirection: "column", marginVertical: 8 }}>
+      <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+        {sectionData[0].structure.title}
+      </Text>
+      {sectionData.map((ele) => (
+        <View
+          key={`${id}-${ele.id}`}
+          id={`${id}-${ele.id}`}
+          style={{
+            paddingHorizontal: 8,
+            paddingVertical: 4,
+            borderRadius: 8,
+            overflow: "hidden",
+            ...styleData[`${id}-${ele.id}`],
+          }}
+        >
+          <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+            {ele.structure?.title}
+          </Text>
+          <Text style={{ fontSize: 14 }}>{ele.structure?.issuer}</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginVertical: 2,
+              fontSize: 12,
+              color: "#3a5a40", // secant3 color
+            }}
+          >
+            <Text>{ele.structure?.date.start}</Text>
+            <Text style={{ marginHorizontal: 4 }}>-</Text>
+            {ele.structure?.date.present ? (
+              <Text>Present</Text>
+            ) : (
+              <Text>{ele.structure?.date.end}</Text>
+            )}
+          </View>
+          <Link
+            href={ele.structure.url}
+            style={{ fontSize: 12, color: "#3a5a40" }}
+          >
+            Certification URL
+          </Link>
+        </View>
+      ))}
+    </View>
+  );
+}
 function Header({
   headerData,
   styleData,
@@ -216,7 +427,6 @@ function Header({
         data={headerData.City}
         headerType="h3"
       />
-      <View style={styles.hr} />
       <Edit
         style={styleData["description"]}
         id="description"
@@ -243,14 +453,29 @@ function NormalTemplate({ templateData }: { templateData: TemplateData }) {
               {ele.title}
             </Text>
             <View style={styles.hr} />
-            {ele.title === "Skills" ? (
+            {ele.title === "Skills" && (
               <SkillsSection
                 id={ele.id}
                 sectionData={ele.details}
                 styleData={templateData.style}
               />
-            ) : (
-              <Section
+            )}
+            {ele.title === "Experience" && (
+              <ExperienceSection
+                id={ele.id}
+                sectionData={ele.details}
+                styleData={templateData.style}
+              />
+            )}
+            {ele.title === "Certification" && (
+              <CertificationSection
+                id={ele.id}
+                sectionData={ele.details}
+                styleData={templateData.style}
+              />
+            )}
+            {ele.title === "Education" && (
+              <EducationSection
                 id={ele.id}
                 sectionData={ele.details}
                 styleData={templateData.style}

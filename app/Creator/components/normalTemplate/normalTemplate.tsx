@@ -5,6 +5,7 @@ import Section from "./components/section";
 import SkillsSection from "./components/skills";
 import Experience from "./components/experience";
 import Certification from "./components/Certification";
+import Education from "./components/Education";
 
 function Header({
   headerData,
@@ -85,7 +86,7 @@ function Header({
 
 function NormalTemplate({ templateData }: { templateData: templateType }) {
   return (
-    <div className="card templateDocument">
+    <div className="card templateDocument h-full w-full">
       <div className="container">
         <Header
           headerData={{
@@ -131,6 +132,14 @@ function NormalTemplate({ templateData }: { templateData: templateType }) {
               )}
               {ele.title == "Certification" && (
                 <Certification
+                  id={ele.id}
+                  sectionData={ele.details}
+                  styleData={templateData.style}
+                  key={ele.id}
+                />
+              )}
+              {ele.title == "Education" && (
+                <Education
                   id={ele.id}
                   sectionData={ele.details}
                   styleData={templateData.style}

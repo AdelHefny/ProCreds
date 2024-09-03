@@ -29,9 +29,24 @@ export const templates: templateType[] = [
           details: [
             {
               id: "1-1",
-              text: "Bachelor of Science in Computer Science - University of City",
+              text: "",
+              structure: {
+                institution: "University of City",
+                degree: "Bachelor of Science in Computer Science",
+                date: { start: "10/2021", end: "10/2025", present: false },
+                location: "City",
+              },
             },
-            { id: "1-2", text: "Graduated: May 2022" },
+            {
+              id: "1-2",
+              text: "",
+              structure: {
+                institution: "University of City",
+                degree: "Bachelor",
+                date: { start: "", end: "5/2022", present: false },
+                location: "City",
+              },
+            },
           ],
         },
         {
@@ -134,9 +149,24 @@ export const templates: templateType[] = [
           details: [
             {
               id: "1-1",
-              text: "Bachelor of Science in Computer Science - University of City",
+              text: "",
+              structure: {
+                institution: "University of City",
+                degree: "Bachelor of Science in Computer Science",
+                date: { start: "10/2021", end: "10/2025", present: false },
+                location: "City",
+              },
             },
-            { id: "1-2", text: "Graduated: May 2022" },
+            {
+              id: "1-2",
+              text: "",
+              structure: {
+                institution: "University of City",
+                degree: "Bachelor",
+                date: { start: "", end: "5/2022", present: false },
+                location: "City",
+              },
+            },
           ],
         },
         {

@@ -9,6 +9,7 @@ import "./checkbox.css";
 import ExperienceSection from "./sections/experience";
 import SkillsEditSection from "./sections/skills";
 import CertificateSection from "./sections/certificate";
+import EducationSection from "./sections/education";
 function HeaderEdit() {
   const [templateState, setter] = useContext(TemplateContext);
   const [history, setHistory] = useContext(HistoryContext);
@@ -165,6 +166,16 @@ function HeaderEdit() {
             templateState.content.sections[EditSelect - 1].title ===
               "Certification" && (
               <CertificateSection
+                EditSelect={EditSelect}
+                wordsCont={wordsCont}
+                wordsContSetter={wordsContSetter}
+              />
+            )}
+          {EditSelect !== 0 &&
+            templateState.content.sections.length >= EditSelect &&
+            templateState.content.sections[EditSelect - 1].title ===
+              "Education" && (
+              <EducationSection
                 EditSelect={EditSelect}
                 wordsCont={wordsCont}
                 wordsContSetter={wordsContSetter}

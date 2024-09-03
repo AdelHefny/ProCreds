@@ -1,10 +1,11 @@
+import React, { useContext, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { cloneDeep } from "lodash";
 import TabContext from "@/app/Creator/contexts/tabContext";
 import { HistoryContext } from "@/app/historyContext";
 import { useBtnBubbleEffect } from "@/app/hooks";
-import { TemplateContext, templateType } from "@/app/templateContext";
-import { motion } from "framer-motion";
-import { cloneDeep } from "lodash";
-import { useContext, useRef, useState } from "react";
+import { TemplateContext } from "@/app/templateContext";
+import "../checkbox.css";
 
 function SkillsEditSection({
   wordsCont,
@@ -30,15 +31,15 @@ function SkillsEditSection({
   } = useBtnBubbleEffect(addBtn);
 
   const handleAddSkill = () => {
-    if (skill.length == 0) {
+    if (skill.length === 0) {
       return;
     }
     const newTemplateState = cloneDeep(templateState);
 
-    newTemplateState.content.sections.forEach((ele, ind) => {
+    newTemplateState.content.sections.forEach((ele) => {
       if (ele.title === "Skills") {
         ele.details.push({
-          id: ind + `-${ele.details.length + 1}`,
+          id: `${ele.details.length + 1}-${Date.now()}`,
           text: skill,
         });
       }
@@ -65,13 +66,42 @@ function SkillsEditSection({
     }
 
     setter(newTemplateState);
+    setSkill(""); // Clear input after adding
   };
+
+  const handleEditSkill = (id: string, newText: string) => {
+    const newTemplateState = cloneDeep(templateState);
+
+    newTemplateState.content.sections.forEach((ele) => {
+      if (ele.title === "Skills") {
+        const skill = ele.details.find((detail) => detail.id === id);
+        if (skill) {
+          skill.text = newText;
+        }
+      }
+    });
+
+    setter(newTemplateState);
+  };
+
+  const handleDeleteSkill = (id: string) => {
+    const newTemplateState = cloneDeep(templateState);
+
+    newTemplateState.content.sections.forEach((ele) => {
+      if (ele.title === "Skills") {
+        ele.details = ele.details.filter((detail) => detail.id !== id);
+      }
+    });
+
+    setter(newTemplateState);
+  };
+
   return (
     <motion.section
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="flex flex-col justify-center items-center w-full space-y-4 px-4"
+      className="skillsSec flex flex-col justify-start items-center w-full space-y-4 px-4 max-h-80 overflow-y-scroll"
     >
       <fieldset className="flex flex-row items-center space-x-3">
         <label htmlFor="skill" className="font-bold">
@@ -92,7 +122,7 @@ function SkillsEditSection({
       <motion.button
         ref={addBtn}
         onClick={handleAddSkill}
-        className="selectEle w-[5rem] h-[5rem] flex justify-center items-center rounded-full text-main"
+        className="selectEle min-w-[5rem] min-h-[5rem] flex justify-center items-center rounded-full text-main"
         animate={
           isResetting ? { x: 0, y: 0 } : { x: btnTranslateX, y: btnTranslateY }
         }
@@ -117,6 +147,27 @@ function SkillsEditSection({
           Add
         </motion.span>
       </motion.button>
+
+      <div className="w-full">
+        {templateState.content.sections
+          .find((section) => section.title === "Skills")
+          ?.details.map((skill) => (
+            <div key={skill.id} className="flex items-center space-x-2 mb-2">
+              <input
+                type="text"
+                value={skill.text}
+                onChange={(e) => handleEditSkill(skill.id, e.target.value)}
+                className="flex-1 px-4 py-1 border border-gray-300 rounded"
+              />
+              <button
+                onClick={() => handleDeleteSkill(skill.id)}
+                className="ml-2 text-red-500 hover:text-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          ))}
+      </div>
     </motion.section>
   );
 }

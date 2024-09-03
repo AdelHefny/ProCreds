@@ -1,5 +1,5 @@
 import { StyleMapping } from "@/app/templateContext";
-import { EditLi } from "./editComponenets";
+import Link from "next/link";
 function Certification({
   id,
   sectionData,
@@ -38,7 +38,10 @@ function Certification({
               <h3>{ele.structure.date.end}</h3>
             )}
           </div>
-          <p className="text-sm">{ele.structure.url}</p>
+
+          <Link className="text-sm" target="_blank" href={ele.structure.url}>
+            Certification URL
+          </Link>
         </li>
       ))}
     </ul>
