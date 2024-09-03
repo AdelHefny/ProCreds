@@ -4,6 +4,7 @@ import { Edit, EditLi } from "./components/editComponenets";
 import Section from "./components/section";
 import SkillsSection from "./components/skills";
 import Experience from "./components/experience";
+import Certification from "./components/Certification";
 
 function Header({
   headerData,
@@ -122,6 +123,14 @@ function NormalTemplate({ templateData }: { templateData: templateType }) {
               )}
               {ele.title == "Experience" && (
                 <Experience
+                  id={ele.id}
+                  sectionData={ele.details}
+                  styleData={templateData.style}
+                  key={ele.id}
+                />
+              )}
+              {ele.title == "Certification" && (
+                <Certification
                   id={ele.id}
                   sectionData={ele.details}
                   styleData={templateData.style}
