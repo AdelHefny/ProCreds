@@ -10,11 +10,9 @@ import "../checkbox.css";
 function EducationSection({
   wordsCont,
   wordsContSetter,
-  EditSelect,
 }: {
   wordsCont: number;
   wordsContSetter: (value: number, plus: boolean) => void;
-  EditSelect: number;
 }) {
   const [templateState, setter] = useContext(TemplateContext);
   const [history, setHistory] = useContext(HistoryContext);
@@ -321,8 +319,9 @@ function EducationSection({
       </motion.button>
       {/* Add the education added here and way to edit them */}
       <ul className="w-full space-y-4">
-        {templateState.content.sections[EditSelect - 1].details.map(
-          (education) => (
+        {templateState.content.sections
+          .find((section) => section.title === "Education")
+          ?.details.map((education) => (
             <li
               key={education.id}
               className="relative flex justify-between items-center p-2 border-b border-gray-300"
@@ -353,8 +352,7 @@ function EducationSection({
                 </button>
               </div>
             </li>
-          )
-        )}
+          ))}
       </ul>
     </motion.section>
   );

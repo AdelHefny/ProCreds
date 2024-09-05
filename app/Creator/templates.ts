@@ -4,6 +4,7 @@ export const templates: templateType[] = [
     templateId: 0,
     name: "normal",
     content: {
+      photo: { enabled: false, alt: "", data: "", id: "" },
       header: {
         firstName: "John",
         lastName: "Doe",
@@ -124,6 +125,7 @@ export const templates: templateType[] = [
     templateId: 1,
     name: "fancy",
     content: {
+      photo: { enabled: false, alt: "", data: "", id: "" },
       header: {
         firstName: "John",
         lastName: "Doe",
@@ -244,6 +246,7 @@ export const templates: templateType[] = [
     templateId: 2,
     name: "Blank",
     content: {
+      photo: { enabled: false, alt: "", data: "", id: "" },
       header: {
         firstName: "",
         lastName: "",

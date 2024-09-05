@@ -197,3 +197,35 @@
   cursor: pointer;
   background-color: #89976e; /* Scrollbar color */
 }
+.file-input-wrapper input[type="file"] {
+  display: none;
+}
+.file-input-wrapper {
+  max-width: 100%;
+  overflow: hidden;
+}
+.custom-file-upload {
+  display: inline-block;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.file-upload-text {
+  margin-left: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+.custom-file-upload.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+input[type="file"]:disabled + .custom-file-upload {
+  pointer-events: none;
+}

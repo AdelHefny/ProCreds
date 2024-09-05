@@ -9,11 +9,9 @@ import "../checkbox.css";
 function ExperienceSection({
   wordsCont,
   wordsContSetter,
-  EditSelect,
 }: {
   wordsCont: number;
   wordsContSetter: (value: number, plus: boolean) => void;
-  EditSelect: number;
 }) {
   const [templateState, setter] = useContext(TemplateContext);
   const [history, setHistory] = useContext(HistoryContext);
@@ -340,8 +338,9 @@ function ExperienceSection({
       </motion.button>
       {/* add the Exoerience added here and way to edit them */}
       <ul className="w-full space-y-4">
-        {templateState.content.sections[EditSelect - 1].details.map(
-          (experience) => (
+        {templateState.content.sections
+          .find((section) => section.title === "Experience")
+          ?.details.map((experience) => (
             <li
               key={experience.id}
               className="relative flex justify-between items-center p-2 border-b border-gray-300"
@@ -372,8 +371,7 @@ function ExperienceSection({
                 </button>
               </div>
             </li>
-          )
-        )}
+          ))}
       </ul>
     </motion.section>
   );

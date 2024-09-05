@@ -45,6 +45,9 @@ export default function PdfEditor({
     edit: false,
     who: "",
   });
+  useEffect(() => {
+    console.log(templateState);
+  }, [templateState]);
   const [showOptions, setShowOptions] = useState(false);
   const edit_mode_setter = (edit: boolean, who: string) => {
     setEditMode(() => {
@@ -125,17 +128,35 @@ export default function PdfEditor({
   };
 
   const handleDownloadPdf = async () => {
-    console.log(pathname);
-    console.log(
-      "https://localhost:3000/Creator/pdf?" +
-        new URLSearchParams(JSON.stringify(templateState)).toString()
-    );
-    const anchor = document.createElement("a");
-    anchor.href =
-      "http://localhost:3000/Creator/pdf?" +
-      new URLSearchParams(JSON.stringify(templateState)).toString();
-    anchor.target = "_blank";
-    anchor.click();
+    try {
+      const response = await fetch("/Creator/pdf", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(templateState), // Send templateState in the body
+      });
+
+      // Check if the response is OK
+      if (response.ok) {
+        // Create a blob from the response
+        const blob = await response.blob();
+
+        // Create a URL for the blob and trigger the download
+        const url = window.URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = "template.pdf"; // Default filename
+        document.body.appendChild(anchor);
+        anchor.click();
+        document.body.removeChild(anchor);
+        window.URL.revokeObjectURL(url); // Clean up the URL object
+      } else {
+        console.error("Failed to download PDF");
+      }
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+    }
   };
 
   useEffect(() => {

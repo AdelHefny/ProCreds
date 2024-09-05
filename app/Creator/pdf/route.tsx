@@ -42,32 +42,33 @@ const convertStyles = (cssStyles: {
 
   return styles;
 };
-export async function GET(request: Request, { params }: { params: string }) {
-  const url = new URL(request.url);
-  const queryString = url.search.slice(1); // Remove the "?" at the start
+export async function POST(request: Request) {
+  try {
+    // Parse the JSON body
+    const templateState: templateType = await request.json();
 
-  // Decode the query string to retrieve the JSON string
-  const decodedString = decodeURIComponent(queryString);
+    // Generate the PDF stream
+    const stream = await ReactPDF.renderToStream(
+      <NormalTemplate
+        templateData={{
+          content: {
+            header: templateState.content.header,
+            sections: templateState.content.sections,
+            photo: templateState.content.photo,
+          },
+          style: convertStyles(templateState.style),
+        }}
+      />
+    );
 
-  // Parse the JSON string to get the templateState object
-  const templateState: templateType = JSON.parse(
-    decodedString.slice(0, decodedString.length - 1)
-  );
-
-  const stream = await ReactPDF.renderToStream(
-    <NormalTemplate
-      templateData={{
-        content: {
-          header: templateState.content.header,
-          sections: templateState.content.sections,
-        },
-        style: convertStyles(templateState.style),
-      }}
-    />
-  );
-  return new NextResponse(stream as unknown as ReadableStream, {
-    headers: {
-      "Content-Type": "application/pdf",
-    },
-  });
+    // Return the response with the PDF stream
+    return new NextResponse(stream as unknown as ReadableStream, {
+      headers: {
+        "Content-Type": "application/pdf",
+      },
+    });
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+    return new NextResponse("Error generating PDF", { status: 500 });
+  }
 }

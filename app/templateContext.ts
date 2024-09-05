@@ -4,6 +4,12 @@ import {
   SetStateAction,
   createContext,
 } from "react";
+interface ImageData {
+  id: string;
+  data: string | ArrayBuffer; // base64 encoded image or URL
+  alt: string;
+  enabled: boolean;
+}
 
 export type StyleMapping = {
   [key: string]: CSSProperties;
@@ -31,6 +37,7 @@ export type templateType = {
         structure?: any;
       }[];
     }[];
+    photo: ImageData;
   };
   style: StyleMapping;
   saved: boolean;
@@ -53,6 +60,7 @@ export const TemplateContext = createContext<
         description: "",
       },
       sections: [],
+      photo: { enabled: false, data: "", alt: "", id: "" },
     },
     style: {},
     saved: false,

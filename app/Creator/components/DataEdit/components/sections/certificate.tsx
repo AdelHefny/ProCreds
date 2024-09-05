@@ -10,11 +10,9 @@ import "../checkbox.css";
 function CertificateSection({
   wordsCont,
   wordsContSetter,
-  EditSelect,
 }: {
   wordsCont: number;
   wordsContSetter: (value: number, plus: boolean) => void;
-  EditSelect: number;
 }) {
   const [templateState, setter] = useContext(TemplateContext);
   const [, setHistory] = useContext(HistoryContext);
@@ -319,9 +317,7 @@ function CertificateSection({
       </motion.button>
 
       <motion.section
-        className={`w-full space-y-2 ${
-          EditSelect == 2 ? "pb-10" : "pb-0"
-        } flex flex-col justify-start items-center `}
+        className={`w-full space-y-2 flex flex-col justify-start items-center `}
       >
         <div className="w-full flex flex-col justify-start items-start space-y-2">
           <h2 className="relative font-bold">Certificates</h2>

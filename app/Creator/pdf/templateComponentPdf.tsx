@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Link,
   Styles,
+  Image,
   Font,
 } from "@react-pdf/renderer";
 Font.register({
@@ -28,6 +29,12 @@ interface HeaderContent {
   City: string;
   description: string;
 }
+interface ImageData {
+  id: string;
+  data: string | ArrayBuffer; // base64 encoded image or URL
+  alt: string;
+  enabled: boolean;
+}
 
 interface SectionData {
   id: string;
@@ -39,6 +46,7 @@ interface TemplateData {
   content: {
     header: HeaderContent;
     sections: SectionData[];
+    photo: ImageData;
   };
   style: StyleMapping;
 }
@@ -56,15 +64,18 @@ const styles = StyleSheet.create({
   h1: {
     fontSize: 24,
     color: "black",
+    maxLines: 1,
     marginTop: 0,
   },
   h2: {
     fontSize: 20,
+    maxLines: 1,
     color: "black",
   },
   h3: {
     fontSize: 18,
     color: "black",
+    maxLines: 1,
   },
   section: {
     marginBottom: 10,
@@ -131,31 +142,9 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 12,
+    marginBottom: 96,
   },
 });
-
-function Section({
-  id,
-  sectionData,
-  styleData,
-}: {
-  id: string;
-  sectionData: { id: string; text: string }[];
-  styleData: StyleMapping;
-}) {
-  return (
-    <View>
-      {sectionData.map((ele) => (
-        <EditLi
-          key={`${id}-${ele.id}`}
-          data={ele.text}
-          style={styleData[`${id}-${ele.id}`]}
-          id={`${id}-${ele.id}`}
-        />
-      ))}
-    </View>
-  );
-}
 
 function SkillsSection({
   id,
@@ -325,9 +314,6 @@ function CertificationSection({
 }) {
   return (
     <View style={{ flexDirection: "column", marginVertical: 8 }}>
-      <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-        {sectionData[0].structure.title}
-      </Text>
       {sectionData.map((ele) => (
         <View
           key={`${id}-${ele.id}`}
@@ -381,58 +367,54 @@ function Header({
 }) {
   return (
     <View
-      style={[styles.container, { alignItems: "center", marginBottom: 10 }]}
+      style={{
+        ...styles.container,
+        alignItems: "center",
+        justifyContent: "flex-start",
+        overflow: "hidden",
+        marginLeft: 20,
+        width: "100%",
+      }}
     >
-      <View style={{ flexDirection: "row" }}>
-        <Edit
-          style={{ ...styleData["firstName"], ...styles.h1 } as Styles}
-          id="firstName"
-          data={headerData.firstName}
-          headerType="h1"
-        />
-        <Edit
-          style={
-            {
-              ...styles.h1,
-              ...styleData["lastName"],
-              ...{ marginLeft: 5 },
-            } as Styles
-          }
-          id="lastName"
-          data={headerData.lastName}
-          headerType="h1"
-        />
+      <View style={{ flexDirection: "row", justifyContent: "center" }}>
+        <Text
+          style={{
+            ...styles.h1,
+            ...styleData["firstName"],
+            ...{ maxWidth: "50%", textAlign: "left" },
+          }}
+        >
+          {headerData.firstName}
+        </Text>
+        <Text
+          style={{
+            ...styles.h1,
+            ...styleData["lastName"],
+            ...{ maxWidth: "50%", textAlign: "left" },
+            marginLeft: 5,
+          }}
+        >
+          {headerData.lastName}
+        </Text>
       </View>
-      <Edit
-        style={{ ...styles.h3, ...styleData["jobTitle"] } as Styles}
-        id="jobTitle"
-        data={headerData.jobTitle}
-        headerType="h3"
-      />
-      <Edit
-        style={{ ...styles.h3, ...styleData["email"] } as Styles}
-        id="email"
-        data={headerData.email}
-        headerType="h3"
-      />
-      <Edit
-        style={{ ...styles.h3, ...styleData["phone"] } as Styles}
-        id="phone"
-        data={headerData.Phone}
-        headerType="h3"
-      />
-      <Edit
-        style={{ ...styles.h3, ...styleData["city"] } as Styles}
-        id="city"
-        data={headerData.City}
-        headerType="h3"
-      />
-      <Edit
-        style={styleData["description"]}
-        id="description"
-        data={headerData.description}
-        headerType="p"
-      />
+      <Text
+        style={{ ...styles.h3, ...styleData["jobTitle"], textAlign: "center" }}
+      >
+        {headerData.jobTitle}
+      </Text>
+      <Text
+        style={{ ...styles.h3, ...styleData["email"], textAlign: "center" }}
+      >
+        {headerData.email}
+      </Text>
+      <Text
+        style={{ ...styles.h3, ...styleData["phone"], textAlign: "center" }}
+      >
+        {headerData.Phone}
+      </Text>
+      <Text style={{ ...styles.h3, ...styleData["city"], textAlign: "center" }}>
+        {headerData.City}
+      </Text>
     </View>
   );
 }
@@ -441,10 +423,38 @@ function NormalTemplate({ templateData }: { templateData: TemplateData }) {
   return (
     <Document>
       <Page style={styles.page}>
-        <Header
-          headerData={templateData.content.header}
-          styleData={templateData.style}
-        />
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+        >
+          {templateData.content.photo.enabled && (
+            <Image
+              src={templateData.content.photo.data as string}
+              style={{
+                width: 150,
+                height: 150,
+                borderRadius: 9999,
+                minWidth: 150,
+                minHeight: 150,
+                objectFit: "cover",
+              }}
+            />
+          )}
+          <View style={{ marginLeft: 20 }}>
+            {" "}
+            {/* Adjust the margin as needed */}
+            <Header
+              headerData={templateData.content.header}
+              styleData={templateData.style}
+            />
+          </View>
+        </View>
+        <Text style={templateData.style["description"]}>
+          {templateData.content.header.description}
+        </Text>
         {templateData.content.sections.map((ele) => (
           <View key={ele.id} style={styles.section}>
             <Text
@@ -516,7 +526,7 @@ function EditLi({
   style: Styles;
 }) {
   return (
-    <Text id={id} style={style}>
+    <Text id={id} style={{ ...style, ...{ textAlign: "center" } }}>
       {data}
     </Text>
   );

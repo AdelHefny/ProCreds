@@ -10,13 +10,13 @@ import ExperienceSection from "./sections/experience";
 import SkillsEditSection from "./sections/skills";
 import CertificateSection from "./sections/certificate";
 import EducationSection from "./sections/education";
+import EditSelectContext from "@/app/Creator/contexts/EditSelectContext";
 function HeaderEdit() {
   const [templateState, setter] = useContext(TemplateContext);
   const [history, setHistory] = useContext(HistoryContext);
   const [currTab] = useContext(TabContext);
   const [wordsCont, setWordsCont] = useState(0);
-  const [EditSelect, setEditSelect] = useState(0);
-
+  const [EditSelect, setEditSelect] = useContext(EditSelectContext);
   const wordsContSetter = (value, plus) => {
     if (plus) {
       setWordsCont((prev) => prev + 1);
@@ -25,15 +25,9 @@ function HeaderEdit() {
     }
   };
 
-  useEffect(() => {
-    if (EditSelect >= templateState.content.sections.length + 1) {
-      setEditSelect(() => Math.max(templateState.content.sections.length, 0));
-    }
-  }, [history, templateState]);
-
   return (
-    <section className="relative w-[29rem] h-[22rem]  transition-colo bg-secant p-4 rounded-xl flex flex-row">
-      <section>
+    <section className="relative w-[29rem] h-[26rem]  transition-colo bg-secant p-4 rounded-xl flex flex-row justify-between">
+      <section className="w-max">
         <ul className="flex flex-col font-serif space-y-2">
           <li>
             <button
@@ -63,7 +57,7 @@ function HeaderEdit() {
           ))}
         </ul>
       </section>
-      <section className="w-full">
+      <section className="w-[90%]">
         <AnimatePresence>
           {EditSelect === 0 && (
             <motion.form
@@ -72,11 +66,86 @@ function HeaderEdit() {
               exit={{ opacity: 0 }}
               className="flex flex-col justify-center space-y-4 px-4"
             >
+              <fieldset className="flex flex-row justify-start items-center space-x-4">
+                <div className="flex flex-row justify-start items-center space-x-2">
+                  <div className="checkbox-wrapper-20">
+                    <input
+                      type="checkbox"
+                      id="check-20"
+                      checked={templateState.content.photo.enabled}
+                      onChange={(e) =>
+                        setter((prev) => ({
+                          ...prev,
+                          content: {
+                            ...prev.content,
+                            photo: {
+                              ...prev.content.photo,
+                              enabled: e.target.checked,
+                            },
+                          },
+                        }))
+                      }
+                    />
+                    <label
+                      htmlFor="check-20"
+                      style={{ width: "20px", height: "20px" }}
+                    >
+                      <svg viewBox="0,0,50,50">
+                        <path d="M5 30 L 20 45 L 45 5"></path>
+                      </svg>
+                    </label>
+                  </div>
+                  <label htmlFor="check-20" className="font-bold font-serif">
+                    Photo
+                  </label>
+                </div>
+                <div className="file-input-wrapper">
+                  <label
+                    htmlFor="profile-image-upload"
+                    className={`custom-file-upload ${
+                      !templateState.content.photo.enabled ? "disabled" : ""
+                    }`}
+                  >
+                    <span className="file-upload-btn selectEle rounded-xl px-3 py-1 text-white">
+                      Choose File
+                    </span>
+                    <span className="file-upload-text">No file chosen</span>
+                  </label>
+                  <input
+                    id="profile-image-upload"
+                    type="file"
+                    disabled={!templateState.content.photo.enabled}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      const reader = new FileReader();
+                      reader.onload = (e) => {
+                        const imageData = e.target.result;
+                        setter((prev) => ({
+                          ...prev,
+                          content: {
+                            ...prev.content,
+                            photo: {
+                              ...prev.content.photo,
+                              data: imageData,
+                            },
+                          },
+                        }));
+                      };
+                      reader.readAsDataURL(file);
+                      if (file) {
+                        document.querySelector(
+                          ".file-upload-text"
+                        ).textContent = file.name;
+                      }
+                    }}
+                  />
+                </div>
+              </fieldset>
               {Object.keys(templateState.content.header).map((ele, index) => {
                 const str = ele as keyof typeof templateState.content.header;
                 return (
                   <fieldset
-                    className="flex flex-row items-center justify-between w-80"
+                    className="flex flex-row items-center justify-between w-full"
                     key={index}
                   >
                     <label className="font-bold font-serif" htmlFor={`${ele}`}>
@@ -156,7 +225,6 @@ function HeaderEdit() {
             templateState.content.sections[EditSelect - 1].title ===
               "Experience" && (
               <ExperienceSection
-                EditSelect={EditSelect}
                 wordsCont={wordsCont}
                 wordsContSetter={wordsContSetter}
               />
@@ -166,7 +234,6 @@ function HeaderEdit() {
             templateState.content.sections[EditSelect - 1].title ===
               "Certification" && (
               <CertificateSection
-                EditSelect={EditSelect}
                 wordsCont={wordsCont}
                 wordsContSetter={wordsContSetter}
               />
@@ -176,7 +243,6 @@ function HeaderEdit() {
             templateState.content.sections[EditSelect - 1].title ===
               "Education" && (
               <EducationSection
-                EditSelect={EditSelect}
                 wordsCont={wordsCont}
                 wordsContSetter={wordsContSetter}
               />

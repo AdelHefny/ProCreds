@@ -7,6 +7,7 @@ import PdfEditor from "./components/pdfEditor/pdfEditor";
 import NormalTemplate from "./components/normalTemplate/normalTemplate.tsx";
 import { HistoryContext } from "../historyContext.ts";
 import SelectedContext from "./contexts/selectedContext.tsx";
+import EditSelectContext from "./contexts/EditSelectContext.ts";
 
 const templatesvariants: Variants = {
   hidden: {
@@ -68,9 +69,18 @@ function Creator() {
   const [templateState, setter] = useContext(TemplateContext);
   const [history, setHistory] = useContext(HistoryContext);
   const [selectedElement, setSelectedElement] = useState("");
+  const [EditSelect, setEditSelect] = useState(0);
+
+  const editSelectSetter = (selection) => {
+    setEditSelect(selection);
+  };
   const handleUndo = useCallback(() => {
-    if (history.undoStack[history.undoStack.length - 1] != undefined)
+    if (history.undoStack[history.undoStack.length - 1] != undefined) {
+      const len =
+        history.undoStack[history.undoStack.length - 1].content.sections.length;
+      setEditSelect(() => Math.max(len, 0));
       setter(() => history.undoStack[history.undoStack.length - 1]);
+    }
     setHistory((prev) => {
       if (prev.undoStack.length > 1) {
         const newUndoStack = [...prev.undoStack];
@@ -183,16 +193,18 @@ function Creator() {
             </AnimatePresence>
           </motion.section>
         ) : (
-          <motion.section
-            key="pdf-editor"
-            variants={editorVarients}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            className="flex flex-row h-screen relative"
-          >
-            <PdfEditor handleUndo={handleUndo} handleRedo={handleRedo} />
-          </motion.section>
+          <EditSelectContext.Provider value={[EditSelect, editSelectSetter]}>
+            <motion.section
+              key="pdf-editor"
+              variants={editorVarients}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="flex flex-row h-screen relative"
+            >
+              <PdfEditor handleUndo={handleUndo} handleRedo={handleRedo} />
+            </motion.section>
+          </EditSelectContext.Provider>
         )}
       </AnimatePresence>
     </SelectedContext.Provider>

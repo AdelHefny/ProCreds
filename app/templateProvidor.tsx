@@ -12,6 +12,7 @@ export default function TemplateProvidor({
     templateId: -1,
     name: "",
     content: {
+      photo: { enabled: false, data: "", alt: "", id: "" },
       header: {
         firstName: "",
         lastName: "",
