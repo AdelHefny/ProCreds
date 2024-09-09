@@ -19,27 +19,34 @@ function Certification({
   styleData: StyleMapping;
 }) {
   return (
-    <ul className="flex flex-col my-2">
+    <ul className="flex flex-col my-[0.5em]">
       {sectionData.map((ele) => (
         <li
-          className="overflow-hidden px-1 rounded-lg"
+          className="overflow-hidden px-[0.25em] rounded-lg"
           key={`${id}-${ele.id}`}
           style={styleData[`${id}-${ele.id}`]}
           id={`${id}-${ele.id}`}
         >
-          <h1 className="font-bold">{ele.structure.title}</h1>
-          <h3>{ele.structure.issuer}</h3>
-          <div className="flex flex-row items-center space-x-1 text-secant3 text-xs">
-            <h3>{ele.structure.date.start}</h3>
+          <h1 id={`${id}-${ele.id}-title`} className="font-bold">
+            {ele.structure.title}
+          </h1>
+          <h3 id={`${id}-${ele.id}-issuer`}>{ele.structure.issuer}</h3>
+          <div className="flex flex-row items-center space-x-[0.25em] text-secant3 text-xs">
+            <h3 id={`${id}-${ele.id}-start`}>{ele.structure.date.start}</h3>
             <span className="text-black">-</span>
             {ele.structure.date.present ? (
-              <h3>Present</h3>
+              <h3 id={`${id}-${ele.id}-Present`}>Present</h3>
             ) : (
-              <h3>{ele.structure.date.end}</h3>
+              <h3 id={`${id}-${ele.id}-end`}>{ele.structure.date.end}</h3>
             )}
           </div>
 
-          <Link className="text-sm" target="_blank" href={ele.structure.url}>
+          <Link
+            className="text-sm"
+            target="_blank"
+            href={ele.structure.url}
+            id={`${id}-${ele.id}-url`}
+          >
             Certification URL
           </Link>
         </li>

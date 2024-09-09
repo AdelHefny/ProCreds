@@ -45,9 +45,6 @@ export default function PdfEditor({
     edit: false,
     who: "",
   });
-  useEffect(() => {
-    console.log(templateState);
-  }, [templateState]);
   const [showOptions, setShowOptions] = useState(false);
   const edit_mode_setter = (edit: boolean, who: string) => {
     setEditMode(() => {
@@ -208,6 +205,11 @@ export default function PdfEditor({
         clickPosition.current = null;
         content.current?.removeEventListener("mousemove", mouseMoveHandler);
       });
+      console.log(
+        content.current.querySelectorAll(
+          ".card h2,.card h3,.card h1,.card p,.card hr ,.card li"
+        )
+      );
       content.current
         .querySelectorAll(
           ".card h2,.card h3,.card h1,.card p,.card hr ,.card li"
@@ -381,6 +383,7 @@ export default function PdfEditor({
         <EditModeContext.Provider value={[editMode, edit_mode_setter]}>
           <motion.div
             className={`bg-white content w-96 h-[34rem] document`}
+            style={{ fontSize: 10 }}
             ref={contentDiv}
             role="document"
             aria-live="polite"

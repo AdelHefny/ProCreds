@@ -1,5 +1,4 @@
 import type { Config } from "tailwindcss";
-
 const config: Config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -22,6 +21,12 @@ const config: Config = {
         "300": "#b1b1b1",
         "500": "#7f7f7f",
         "700": "#4d4d4d",
+      },
+    },
+    variants: {
+      extend: {
+        width: ["em", "vh", "vw", "%"],
+        height: ["em", "vh", "vw", "%"],
       },
     },
     extend: {

@@ -11,6 +11,7 @@ import SkillsEditSection from "./sections/skills";
 import CertificateSection from "./sections/certificate";
 import EducationSection from "./sections/education";
 import EditSelectContext from "@/app/Creator/contexts/EditSelectContext";
+import ProjectSection from "./sections/projects";
 function HeaderEdit() {
   const [templateState, setter] = useContext(TemplateContext);
   const [history, setHistory] = useContext(HistoryContext);
@@ -26,7 +27,7 @@ function HeaderEdit() {
   };
 
   return (
-    <section className="relative w-[29rem] h-[26rem]  transition-colo bg-secant p-4 rounded-xl flex flex-row justify-between">
+    <section className="relative w-[29rem] h-[26rem] bg-secant p-4 rounded-xl flex flex-row justify-between">
       <section className="w-max">
         <ul className="flex flex-col font-serif space-y-2">
           <li>
@@ -243,6 +244,15 @@ function HeaderEdit() {
             templateState.content.sections[EditSelect - 1].title ===
               "Education" && (
               <EducationSection
+                wordsCont={wordsCont}
+                wordsContSetter={wordsContSetter}
+              />
+            )}
+          {EditSelect !== 0 &&
+            templateState.content.sections.length >= EditSelect &&
+            templateState.content.sections[EditSelect - 1].title ===
+              "Projects" && (
+              <ProjectSection
                 wordsCont={wordsCont}
                 wordsContSetter={wordsContSetter}
               />

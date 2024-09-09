@@ -22,8 +22,13 @@ function DataEdit({
 }) {
   const [currTab] = useContext(TabContext);
   return (
-    <>
-      <div className="absolute left-0 z-40">
+    <div
+      className="cursor-default"
+      onMouseDownCapture={(e) => {
+        e.stopPropagation();
+      }}
+    >
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 z-40">
         <div className="relative">
           <TabSection markerRef={markerRef} styleTab={styleTab} />
         </div>
@@ -57,7 +62,7 @@ function DataEdit({
           <HeaderEdit />
         </section>
       </div>
-    </>
+    </div>
   );
 }
 

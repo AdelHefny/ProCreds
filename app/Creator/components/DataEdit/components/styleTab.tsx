@@ -2,7 +2,7 @@
 
 import SelectedContext from "@/app/Creator/contexts/selectedContext";
 import { TemplateContext } from "@/app/templateContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 function StyleTab() {
   const [selectedElement] = useContext(SelectedContext);
@@ -13,8 +13,8 @@ function StyleTab() {
     : null;
 
   return (
-    <section>
-      <h1>style</h1>
+    <section className="relative w-[29rem] z-50  transition- bg-secant p-4 rounded-xl">
+      <h1 className="font-serif font-bold text-lg">Style</h1>
       {selectedElement === "" && (
         <div className="bg-secant3 p-5 rounded-full">
           <h1 className="text-interactive">
@@ -24,12 +24,12 @@ function StyleTab() {
       )}
       {selectedElement !== "" && (
         <section>
-          <form>
-            <div className="flex flex-row items-center space-x-2 ">
+          <form className="flex flex-col space-y-4">
+            <div className="flex flex-row justify-between items-center">
               <label htmlFor="color-input">Color</label>
               <input
                 type="color"
-                className="p-1 h-10 w-14 block bg-main cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700"
+                className="p-1 h-10 w-14 block bg-transparent cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700"
                 value={selectedStyle ? selectedStyle.color : "#000000"}
                 onChange={(value) => {
                   setter((prev) => {
@@ -49,13 +49,14 @@ function StyleTab() {
                 title="Choose your color"
               />
             </div>
-            <div className="flex flex-row items-center space-x-2 ">
+            <div className="flex flex-row items-center justify-between space-x-2 ">
               <label htmlFor="font-size-input">Font size</label>
               <input
                 type="number"
                 size={2}
                 name="font-size"
                 id="font-size-input"
+                className="rounded-lg px-2 py-1"
                 value={selectedStyle ? selectedStyle.fontSize : 11}
                 onChange={(value) => {
                   setter((prev) => {

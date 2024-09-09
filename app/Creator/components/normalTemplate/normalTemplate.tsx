@@ -1,12 +1,12 @@
 import { StyleMapping, templateType } from "@/app/templateContext";
 import "./normalTemplate.css";
 import { Edit, EditLi } from "./components/editComponenets";
-import Section from "./components/section";
 import SkillsSection from "./components/skills";
 import Experience from "./components/experience";
 import Certification from "./components/Certification";
 import Education from "./components/Education";
 import Image from "next/image";
+import Projects from "./components/projects";
 
 function Header({
   headerData,
@@ -25,7 +25,7 @@ function Header({
 }) {
   return (
     <header className="header w-full flex items-center justify-start flex-col overflow-hidden">
-      <div className="flex flex-row justify-center space-x-1 max-w-full text-left">
+      <div className="flex flex-row justify-center space-x-[0.25em] max-w-full text-left">
         <Edit
           className="text-lg fontbold break-words text-start max-w-1/2 "
           style={styleData["firstName"]}
@@ -76,9 +76,9 @@ function Header({
 
 function NormalTemplate({ templateData }: { templateData: templateType }) {
   return (
-    <div className="card templateDocument h-full w-full">
+    <div className="card templateDocument h-full w-full select-none">
       <div className="container">
-        <div className="flex flex-row justify-start space-x-5 items-start h-full">
+        <div className="flex flex-row justify-start space-x-[1.25em] items-start h-full">
           {templateData.content.photo.enabled && (
             <Image
               src={(templateData.content.photo.data as string) || ""}
@@ -122,7 +122,7 @@ function NormalTemplate({ templateData }: { templateData: templateType }) {
               </h1>
               <hr
                 id={`${ele.id}-hr`}
-                className="block h-px w-16 border-0 border-t border-secant3 p-0"
+                className="block h-px w-[4em] border-0 border-t border-secant3 p-0"
               />
               {ele.title == "Skills" && (
                 <SkillsSection
@@ -156,8 +156,8 @@ function NormalTemplate({ templateData }: { templateData: templateType }) {
                   key={ele.id}
                 />
               )}
-              {ele.title == "Custom" && (
-                <Section
+              {ele.title == "Projects" && (
+                <Projects
                   id={ele.id}
                   sectionData={ele.details}
                   styleData={templateData.style}

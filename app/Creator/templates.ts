@@ -112,8 +112,30 @@ export const templates: templateType[] = [
           id: "4",
           title: "Projects",
           details: [
-            { id: "4-1", text: "E-commerce website using React and Node.js" },
-            { id: "4-2", text: "Mobile app development using React Native" },
+            {
+              id: "4-1",
+              text: "E-commerce website using React and Node.js",
+              structure: {
+                name: "E-commerce website",
+                description:
+                  "A full-stack e-commerce website built using React and Node.js.",
+                date: { start: "2023-01", end: "2023-06", ongoing: false },
+                accomplishments:
+                  "Implemented user authentication, payment gateway, and responsive design.",
+              },
+            },
+            {
+              id: "4-2",
+              text: "Mobile app development using React Native",
+              structure: {
+                name: "Mobile app development",
+                description:
+                  "A cross-platform mobile app developed using React Native.",
+                date: { start: "2023-07", end: "", ongoing: true },
+                accomplishments:
+                  "Developed the app's core features, integrated with various APIs, and ensured high performance.",
+              },
+            },
           ],
         },
       ],
@@ -233,8 +255,30 @@ export const templates: templateType[] = [
           id: "4",
           title: "Projects",
           details: [
-            { id: "4-1", text: "E-commerce website using React and Node.js" },
-            { id: "4-2", text: "Mobile app development using React Native" },
+            {
+              id: "4-1",
+              text: "E-commerce website using React and Node.js",
+              structure: {
+                name: "E-commerce website",
+                description:
+                  "A full-stack e-commerce website built using React and Node.js.",
+                date: { start: "2023-01", end: "2023-06", ongoing: false },
+                accomplishments:
+                  "Implemented user authentication, payment gateway, and responsive design.",
+              },
+            },
+            {
+              id: "4-2",
+              text: "Mobile app development using React Native",
+              structure: {
+                name: "Mobile app development",
+                description:
+                  "A cross-platform mobile app developed using React Native.",
+                date: { start: "2023-07", end: "", ongoing: true },
+                accomplishments:
+                  "Developed the app's core features, integrated with various APIs, and ensured high performance.",
+              },
+            },
           ],
         },
       ],

@@ -52,13 +52,22 @@ function LayoutTab() {
     );
     setShowOptions(false);
   };
-
+  const handleDeleteSection = (section) => {
+    setter((prev) => ({
+      ...prev,
+      content: {
+        ...prev.content,
+        sections: prev.content.sections.filter((sec) => sec.id !== section.id),
+      },
+    }));
+  };
   return (
-    <section className="relative bg-secant p-4 rounded-3xl h-36 w-48 flex flex-col justify-between items-center">
-      <section className="flex justify-center items-center">
+    <section className="relative w-[20rem] bg-secant p-4 rounded-xl flex flex-col justify-start items-center">
+      <h3 className="text-start w-full font-serif font-bold">Add Sections</h3>
+      <section className="flex flex-col w-full justify-center items-center">
         <motion.button
           onClick={() => setShowOptions(!showOptions)}
-          className="h-[5rem] rounded-full w-[5rem] cursor-pointer outline-none text-white flex justify-center items-center selectEle"
+          className="h-[5rem] rounded-full w-[5rem] cursor-pointer outline-none text-main flex justify-center items-center selectEle"
           ref={addBtn}
           animate={
             isResetting
@@ -86,7 +95,7 @@ function LayoutTab() {
             Add
           </motion.span>
         </motion.button>
-        {showOptions && (
+        {showOptions && sectionsList.length ? (
           <ul className="absolute top-full mt-2  rounded-lg bg-secant2 text-white text-center shadow-lg p-2">
             {sectionsList.map((section) => (
               <li
@@ -97,14 +106,26 @@ function LayoutTab() {
                 {section}
               </li>
             ))}
-            <li
-              onClick={() => handleAddSection("Custom")}
-              className="cursor-pointer hover:bg-secant3 p-1"
-            >
-              Custom
-            </li>
           </ul>
+        ) : (
+          ""
         )}
+      </section>
+      <section className="w-full flex flex-col items-center space-y-2">
+        {template.content.sections.map((section) => (
+          <div
+            key={section.id}
+            className="flex flex-row justify-between items-center w-full"
+          >
+            <p>{section.title}</p>
+            <button
+              className="bg-gradient-to-tr from-secant to-secant2 h-10 text-sm py-4 px-6 flex items-center justify-cente rounded-full text-main"
+              onClick={() => handleDeleteSection(section)}
+            >
+              Delete
+            </button>
+          </div>
+        ))}
       </section>
     </section>
   );
