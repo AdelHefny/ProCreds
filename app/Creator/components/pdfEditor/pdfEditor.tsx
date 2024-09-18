@@ -103,8 +103,8 @@ export default function PdfEditor({
     }
   };
   const touchMoveHandler = (e: TouchEvent) => {
+    e.preventDefault();
     if (e.touches.length === 2 && lastDistance.current !== null) {
-      e.preventDefault();
       const newDistance = getDistance(e.touches[0], e.touches[1]);
       const distanceDiff = newDistance - lastDistance.current;
 
@@ -204,6 +204,7 @@ export default function PdfEditor({
         {
           event: "touchstart",
           handler: (e: TouchEvent) => {
+            e.preventDefault();
             if (e.touches.length === 2) {
               lastDistance.current = getDistance(e.touches[0], e.touches[1]);
             }

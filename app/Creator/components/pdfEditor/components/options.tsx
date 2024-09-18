@@ -62,6 +62,7 @@ function Options({
 
       // Remove the translate from the cloned node
       (clonedNode as HTMLElement).style.translate = "none";
+      (clonedNode as HTMLElement).style.scale = "1";
       (clonedNode as HTMLElement).style.left = "-9999px"; // Move it off-screen so the user doesn't see it
 
       // Append the cloned node to the body for processing

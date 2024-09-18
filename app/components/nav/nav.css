@@ -4,6 +4,7 @@
   }
   100% {
     transform: rotateZ(360deg);
+    color: rgba(2, 2, 2, 0.2);
   }
 }
 

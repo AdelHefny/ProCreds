@@ -1,11 +1,13 @@
 import { Font } from "@react-pdf/renderer";
 import {
   motion,
-  useMotionValueEvent,
+  useAnimation,
+  useInView,
   useScroll,
   useTransform,
 } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import Reveal from "./Reveal";
 function ContinueSteps() {
   const path = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -21,7 +23,7 @@ function ContinueSteps() {
   const l3 = useTransform(scrollYProgress, [0.7, 0.9], [0, 100]);
   const c3 = useTransform(scrollYProgress, [0.9, 1], [0, 100]);
   return (
-    <div className="relative w-full h-[400vh]">
+    <div className="relative w-full h-[225vh]">
       <section className="sticky lg:left-1/2 top-[4.75rem] w-full lg:max-w-[50%] flex flex-col items-center justify-center">
         <div className="flex flex-row items-center justify-center w-full">
           <div className="flex flex-row items-center justify-center translate-x-2">
@@ -134,20 +136,115 @@ function ContinueSteps() {
           </div>
         </div>
       </section>
-      <section className="flex lg:w-1/2 w-full mt-20 lg:mt-0 flex-col items-center justify-center">
-        <div className="px-10 lg:px-0 lg:w-1/2 w-full">
-          <h1 className="font-extrabold text-xl flex items-center justify-center flex-row space-x-2">
-            <span className="w-8 h-8 flex rounded-full bg-secant2 text-main items-center justify-center font-bold">
-              1
-            </span>
-            <span>Start by choosing a Template</span>
-          </h1>
-          <p className="mt-4">
-            Our professional resume templates are designed in strict accordance
-            with industry standards and best practices.
-          </p>
-        </div>
-      </section>
+      <div className="flex lg:w-1/2 w-full mt-20 lg:mt-0 flex-col items-center justify-center">
+        <Reveal>
+          <section className="px-10 lg:px-5 w-full text-xl h-[75vh] flex flex-col items-center justify-center">
+            <h1 className="font-extrabold text-xl flex items-center justify-center flex-row space-x-2">
+              <span className="w-8 h-8 flex rounded-full bg-secant2 text-main items-center justify-center font-bold">
+                1
+              </span>
+              <motion.span
+                style={{
+                  color: "#344e4133",
+                  backgroundClip: "text",
+                  backgroundImage: `linear-gradient(to right,#344e41,#344e41)`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: useTransform(c, (value) => `${value}% 100%`),
+                }}
+              >
+                Start by choosing a Template
+              </motion.span>
+            </h1>
+            <p className="mt-12 text-lg line leading-relaxed">
+              <motion.span
+                style={{
+                  color: "#344e4166",
+                  backgroundClip: "text",
+                  backgroundImage: `linear-gradient(to right,#344e41,#344e41)`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: useTransform(l1, (value) => `${value}% 100%`),
+                }}
+              >
+                Our professional resume templates are designed in strict
+                accordance with industry standards and best practices, ensuring
+                that your resume stands out from the competition, you can choose
+                the suitble sections to add to you resume when you choose the
+                template you customize the look of your resume to match your
+                personal style and preferences.
+              </motion.span>
+            </p>
+          </section>
+        </Reveal>
+        <Reveal>
+          <section className="px-10 lg:px-5 w-full text-xl h-[75vh] flex flex-col items-center justify-center">
+            <h1 className="font-extrabold text-xl flex items-center justify-center flex-row space-x-2">
+              <span className="w-8 h-8 flex rounded-full bg-secant2 text-main items-center justify-center font-bold">
+                2
+              </span>
+              <motion.span
+                style={{
+                  color: "#344e4133",
+                  backgroundClip: "text",
+                  backgroundImage: `linear-gradient(to right,#344e41,#344e41)`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: useTransform(c1, (value) => `${value}% 100%`),
+                }}
+              >
+                Edit the template as you want
+              </motion.span>
+            </h1>
+            <p className="mt-12 text-lg line leading-relaxed">
+              <motion.span
+                style={{
+                  color: "#344e4166",
+                  backgroundClip: "text",
+                  backgroundImage: `linear-gradient(to right,#344e41,#344e41)`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: useTransform(l2, (value) => `${value}% 100%`),
+                }}
+              >
+                Feel free to edit the template as you wish to tailor it to your
+                specific needs and preferences.
+              </motion.span>
+            </p>
+          </section>
+        </Reveal>
+        <Reveal>
+          <section className="px-10 lg:px-5 w-full text-xl h-[75vh] flex flex-col items-center justify-center">
+            <h1 className="font-extrabold text-xl flex items-center justify-center flex-row space-x-2">
+              <span className="w-8 h-8 flex rounded-full bg-secant2 text-main items-center justify-center font-bold">
+                3
+              </span>
+              <motion.span
+                style={{
+                  color: "#344e4133",
+                  backgroundClip: "text",
+                  backgroundImage: `linear-gradient(to right,#344e41,#344e41)`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: useTransform(c2, (value) => `${value}% 100%`),
+                }}
+              >
+                Submit job applications with your resume.
+              </motion.span>
+            </h1>
+            <p className="mt-12 text-lg line leading-relaxed">
+              <motion.span
+                style={{
+                  color: "#344e4166",
+                  backgroundClip: "text",
+                  backgroundImage: `linear-gradient(to right,#344e41,#344e41)`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: useTransform(l3, (value) => `${value}% 100%`),
+                }}
+              >
+                Utilize your completed resume to apply for various job
+                opportunities and showcase your qualifications and experience to
+                potential employers.
+              </motion.span>
+            </p>
+          </section>
+        </Reveal>
+      </div>
       <svg
         className="absolute lg:left-1/2  top-0 -left-[9999px] mx-auto h-full"
         viewBox="0 0 36 8192"
