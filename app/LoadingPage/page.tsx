@@ -1,4 +1,4 @@
-import Loading from "../Creator/loading";
+import Loading from "./loading";
 
 function LoadingPage() {
   return <Loading />;

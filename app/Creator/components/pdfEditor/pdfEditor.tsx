@@ -20,6 +20,7 @@ import TabContext from "../../contexts/tabContext";
 import SelectedContext from "../../contexts/selectedContext";
 import EditModeContext from "../../contexts/editModeContext";
 import { redirect, usePathname } from "next/navigation";
+import Options from "./components/options";
 
 export default function PdfEditor({
   handleRedo,
@@ -45,7 +46,6 @@ export default function PdfEditor({
     edit: false,
     who: "",
   });
-  const [showOptions, setShowOptions] = useState(false);
   const edit_mode_setter = (edit: boolean, who: string) => {
     setEditMode(() => {
       return { edit, who };
@@ -71,7 +71,12 @@ export default function PdfEditor({
   };
 
   const mouseMoveHandler = (e: MouseEvent) => {
-    if (contentDiv.current && clickPosition.current) {
+    if (
+      contentDiv.current &&
+      clickPosition.current &&
+      clickPosition.current.x != -1 &&
+      clickPosition.current.y != -1
+    ) {
       const offsetX = e.clientX - clickPosition.current.x;
       const offsetY = e.clientY - clickPosition.current.y;
       const currentTranslate = contentDiv.current.style.translate;
@@ -124,38 +129,6 @@ export default function PdfEditor({
     });
   };
 
-  const handleDownloadPdf = async () => {
-    try {
-      const response = await fetch("/Creator/pdf", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(templateState), // Send templateState in the body
-      });
-
-      // Check if the response is OK
-      if (response.ok) {
-        // Create a blob from the response
-        const blob = await response.blob();
-
-        // Create a URL for the blob and trigger the download
-        const url = window.URL.createObjectURL(blob);
-        const anchor = document.createElement("a");
-        anchor.href = url;
-        anchor.download = "template.pdf"; // Default filename
-        document.body.appendChild(anchor);
-        anchor.click();
-        document.body.removeChild(anchor);
-        window.URL.revokeObjectURL(url); // Clean up the URL object
-      } else {
-        console.error("Failed to download PDF");
-      }
-    } catch (error) {
-      console.error("Error downloading PDF:", error);
-    }
-  };
-
   useEffect(() => {
     if (initialLoad) {
       setInitialLoad(false);
@@ -192,24 +165,17 @@ export default function PdfEditor({
       });
       content.current.addEventListener("mousedown", (e) => {
         clickPosition.current = { x: e.clientX, y: e.clientY };
-        content.current?.addEventListener("mousemove", mouseMoveHandler);
         setSelectedElement("");
       });
 
+      content.current?.addEventListener("mousemove", mouseMoveHandler);
       content.current.addEventListener("mouseleave", (e) => {
         e.preventDefault();
-        clickPosition.current = null;
-        content.current?.removeEventListener("mousemove", mouseMoveHandler);
+        clickPosition.current = { x: -1, y: -1 };
       });
       content.current.addEventListener("mouseup", () => {
-        clickPosition.current = null;
-        content.current?.removeEventListener("mousemove", mouseMoveHandler);
+        clickPosition.current = { x: -1, y: -1 };
       });
-      console.log(
-        content.current.querySelectorAll(
-          ".card h2,.card h3,.card h1,.card p,.card hr ,.card li"
-        )
-      );
       content.current
         .querySelectorAll(
           ".card h2,.card h3,.card h1,.card p,.card hr ,.card li"
@@ -231,14 +197,18 @@ export default function PdfEditor({
     }
     return () => {
       if (content.current && contextMenuEle.current) {
+        content.current?.removeEventListener("mousemove", mouseMoveHandler);
         content.current.removeEventListener("wheel", handleWheel);
         content.current.removeEventListener("mousedown", (e) => {
           clickPosition.current = { x: e.clientX, y: e.clientY };
-          content.current?.addEventListener("mousemove", mouseMoveHandler);
           setSelectedElement("");
         });
+        content.current.removeEventListener("mouseleave", (e) => {
+          e.preventDefault();
+          clickPosition.current = { x: -1, y: -1 };
+        });
         content.current.removeEventListener("mouseup", () => {
-          content.current?.removeEventListener("mousemove", mouseMoveHandler);
+          clickPosition.current = { x: -1, y: -1 };
         });
         content.current
           .querySelectorAll(
@@ -279,39 +249,9 @@ export default function PdfEditor({
         tabIndex={0}
         aria-label="PDF Editor"
       >
+        <Options templateComponent={contentDiv} />
         <DataEdit markerRef={marker} styleTab={styleTab} />
-        <div
-          className="absolute top-5 right-3 w-5 h-7 text-secant3 flex items-end justify-end z-30"
-          aria-label="Options"
-        >
-          <button
-            onClick={() => {
-              setShowOptions((prev) => !prev);
-            }}
-            className="flex justify-center items-center hover:text-secant transition-colors duration-150 ease-in-out"
-          >
-            <FontAwesomeIcon icon={faEllipsisV as IconProp} className="h-7" />
-          </button>
-          <AnimatePresence>
-            {showOptions && (
-              <motion.ul
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="absolute bg-secant top-full translate-y-1/3 w-32 flex items-center justify-center font-bold py-2 rounded-xl"
-              >
-                <li className="">
-                  <button
-                    onClick={handleDownloadPdf}
-                    className="hover:text-main transition-colors duration-150 ease-in-out rounded-2xl w-28 py-2 hover:bg-secant3"
-                  >
-                    Download
-                  </button>
-                </li>
-              </motion.ul>
-            )}
-          </AnimatePresence>
-        </div>
+
         <div
           className="absolute bottom-0 text-secant3 right-0 flex items-center justify-center space-x-1 z-30"
           aria-label="Zoom Controls"

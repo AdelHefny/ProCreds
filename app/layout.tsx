@@ -15,11 +15,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-main text-secant2 ">
+      <body className="bg-main text-secant2 overflow-x-hidden">
         <Nav />
         <HistoryProvidor>
           <TemplateProvidor>
-            <main className="overflow-hidden">{children}</main>
+            <main className="">{children}</main>
           </TemplateProvidor>
         </HistoryProvidor>
       </body>

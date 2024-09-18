@@ -5,6 +5,8 @@ import Link from "next/link";
 import Steps from "./components/steps";
 import TemplatesCarusel from "./components/templatesCarusel";
 import "./animGradient.css";
+import ContinueSteps from "./components/continueSteps";
+import Footer from "./components/Footer";
 export default function Home() {
   return (
     <AnimatePresence mode="wait">
@@ -48,7 +50,8 @@ export default function Home() {
           </Link>
         </section>
         <Steps />
-        <TemplatesCarusel />
+        <ContinueSteps />
+        <Footer />
       </motion.div>
     </AnimatePresence>
   );

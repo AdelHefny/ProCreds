@@ -18,6 +18,7 @@ function Projects({
   }[];
   styleData: StyleMapping;
 }) {
+  
   return (
     <section className="my-[0.25em]">
       <ul className="flex flex-col">
