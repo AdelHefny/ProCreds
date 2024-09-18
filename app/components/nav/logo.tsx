@@ -8,7 +8,7 @@ function Logo() {
       href={"#"}
       className="text-interactive font-extrabold font-mono flex flex-row"
     >
-      <div className="logo">
+      <div className="logo flex items-center justify-center">
         <LogoExportar />
       </div>
       <div className="relative before:content-[''] before:bg-secant2 before:h-[90%] before:w-px before:absolute before:left-1 after:top-0 flex flex-col pl-3 items-center justify-center">

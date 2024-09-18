@@ -41,7 +41,7 @@ export default function PdfEditor({
   const [selectedElement, setSelectedElement] = useContext(SelectedContext);
   const [isSaving, setIsSaving] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
-  const pathname = usePathname();
+  const lastDistance = useRef<number | null>(null);
   const [editMode, setEditMode] = useState({
     edit: false,
     who: "",
@@ -79,6 +79,13 @@ export default function PdfEditor({
     ) {
       const offsetX = e.clientX - clickPosition.current.x;
       const offsetY = e.clientY - clickPosition.current.y;
+      updatePosition(offsetX, offsetY);
+
+      clickPosition.current = { x: e.clientX, y: e.clientY };
+    }
+  };
+  const updatePosition = (offsetX: number, offsetY: number) => {
+    if (contentDiv.current) {
       const currentTranslate = contentDiv.current.style.translate;
       const translateMatch = currentTranslate.split(" ");
       let translateX = 0;
@@ -93,11 +100,42 @@ export default function PdfEditor({
       const newY = translateY + offsetY;
 
       contentDiv.current.style.translate = `${newX}px ${newY}px`;
-
-      clickPosition.current = { x: e.clientX, y: e.clientY };
     }
   };
+  const touchMoveHandler = (e: TouchEvent) => {
+    if (e.touches.length === 2 && lastDistance.current !== null) {
+      e.preventDefault();
+      const newDistance = getDistance(e.touches[0], e.touches[1]);
+      const distanceDiff = newDistance - lastDistance.current;
 
+      const zoomFactor = distanceDiff * 0.01;
+
+      updateZoom(zoomFactor);
+      lastDistance.current = newDistance;
+    }
+    if (
+      contentDiv.current &&
+      clickPosition.current &&
+      clickPosition.current.x !== -1 &&
+      clickPosition.current.y !== -1
+    ) {
+      const touch = e.touches[0];
+      const offsetX = touch.clientX - clickPosition.current.x;
+      const offsetY = touch.clientY - clickPosition.current.y;
+      updatePosition(offsetX, offsetY);
+      clickPosition.current = { x: touch.clientX, y: touch.clientY };
+    }
+  };
+  const updateZoom = (zoomChange: number) => {
+    if (contentDiv.current) {
+      const currentScale =
+        contentDiv.current.style.scale === ""
+          ? 1
+          : parseFloat(contentDiv.current.style.scale);
+      const newScale = Math.max(0.1, Math.min(3, currentScale + zoomChange));
+      contentDiv.current.style.scale = `${newScale}`;
+    }
+  };
   const handleWheel = (e: {
     ctrlKey: any;
     preventDefault: () => void;
@@ -105,18 +143,7 @@ export default function PdfEditor({
   }) => {
     if (e.ctrlKey && content.current) {
       e.preventDefault();
-      const scaleValue = Math.max(
-        0.1,
-        Math.min(
-          3,
-          +(contentDiv.current.style.scale == ""
-            ? 1
-            : contentDiv.current.style.scale) + (e.deltaY > 0 ? -0.05 : 0.05)
-        )
-      );
-      if (contentDiv.current) {
-        contentDiv.current.style.scale = `${scaleValue}`;
-      }
+      updateZoom(e.deltaY > 0 ? -0.05 : 0.05);
     }
   };
 
@@ -128,7 +155,12 @@ export default function PdfEditor({
       return (e.target as Element).id;
     });
   };
-
+  const getDistance = (touch1: Touch, touch2: Touch) => {
+    return Math.hypot(
+      touch1.clientX - touch2.clientX,
+      touch1.clientY - touch2.clientY
+    );
+  };
   useEffect(() => {
     if (initialLoad) {
       setInitialLoad(false);
@@ -160,79 +192,94 @@ export default function PdfEditor({
 
   useEffect(() => {
     if (content.current && contextMenuEle.current) {
-      content.current.addEventListener("wheel", handleWheel, {
-        passive: false,
-      });
-      content.current.addEventListener("mousedown", (e) => {
-        clickPosition.current = { x: e.clientX, y: e.clientY };
-        setSelectedElement("");
+      const eventListeners = [
+        { event: "wheel", handler: handleWheel, options: { passive: false } },
+        {
+          event: "mousedown",
+          handler: (e: MouseEvent) => {
+            clickPosition.current = { x: e.clientX, y: e.clientY };
+            setSelectedElement("");
+          },
+        },
+        {
+          event: "touchstart",
+          handler: (e: TouchEvent) => {
+            if (e.touches.length === 2) {
+              lastDistance.current = getDistance(e.touches[0], e.touches[1]);
+            }
+            const touch = e.touches[0];
+            clickPosition.current = { x: touch.clientX, y: touch.clientY };
+            setSelectedElement("");
+          },
+        },
+        { event: "mousemove", handler: mouseMoveHandler },
+        { event: "touchmove", handler: touchMoveHandler },
+        {
+          event: "mouseleave",
+          handler: (e: MouseEvent) => {
+            e.preventDefault();
+            clickPosition.current = { x: -1, y: -1 };
+          },
+        },
+        {
+          event: "touchend",
+          handler: () => {
+            lastDistance.current = null;
+            clickPosition.current = { x: -1, y: -1 };
+          },
+        },
+        {
+          event: "mouseup",
+          handler: () => {
+            clickPosition.current = { x: -1, y: -1 };
+          },
+        },
+      ];
+
+      eventListeners.forEach(({ event, handler, options }) => {
+        content.current?.addEventListener(
+          event,
+          handler as EventListener,
+          options
+        );
       });
 
-      content.current?.addEventListener("mousemove", mouseMoveHandler);
-      content.current.addEventListener("mouseleave", (e) => {
-        e.preventDefault();
-        clickPosition.current = { x: -1, y: -1 };
+      const elementSelectors =
+        ".card h2,.card h3,.card h1,.card p,.card hr,.card li";
+      content.current.querySelectorAll(elementSelectors).forEach((ele) => {
+        (ele as HTMLElement).addEventListener("click", settingSelected);
+        (ele as HTMLElement).addEventListener("contextmenu", showMenu);
+        (ele as HTMLElement).addEventListener("mousedown", (e) =>
+          e.preventDefault()
+        );
+        (ele as HTMLElement).addEventListener("touchstart", (e) =>
+          e.preventDefault()
+        );
       });
-      content.current.addEventListener("mouseup", () => {
-        clickPosition.current = { x: -1, y: -1 };
-      });
-      content.current
-        .querySelectorAll(
-          ".card h2,.card h3,.card h1,.card p,.card hr ,.card li"
-        )
-        .forEach((ele) => {
-          (ele as HTMLParagraphElement).addEventListener(
-            "click",
-            settingSelected
-          );
-          (ele as HTMLParagraphElement).addEventListener(
-            "contextmenu",
-            showMenu
-          );
-          (ele as HTMLParagraphElement).addEventListener("mousedown", (e) => {
-            e.preventDefault();
-          });
-        });
+
       contextMenuEle.current.addEventListener("mouseleave", hideMenu);
+      contextMenuEle.current.addEventListener("touchend", hideMenu);
+
+      return () => {
+        eventListeners.forEach(({ event, handler }) => {
+          content.current?.removeEventListener(event, handler as EventListener);
+        });
+
+        content.current?.querySelectorAll(elementSelectors).forEach((ele) => {
+          (ele as HTMLElement).removeEventListener("click", settingSelected);
+          (ele as HTMLElement).removeEventListener("contextmenu", showMenu);
+          (ele as HTMLElement).removeEventListener("mousedown", (e) =>
+            e.preventDefault()
+          );
+          (ele as HTMLElement).removeEventListener("touchstart", (e) =>
+            e.preventDefault()
+          );
+        });
+
+        contextMenuEle.current?.removeEventListener("mouseleave", hideMenu);
+        contextMenuEle.current?.removeEventListener("touchend", hideMenu);
+      };
     }
-    return () => {
-      if (content.current && contextMenuEle.current) {
-        content.current?.removeEventListener("mousemove", mouseMoveHandler);
-        content.current.removeEventListener("wheel", handleWheel);
-        content.current.removeEventListener("mousedown", (e) => {
-          clickPosition.current = { x: e.clientX, y: e.clientY };
-          setSelectedElement("");
-        });
-        content.current.removeEventListener("mouseleave", (e) => {
-          e.preventDefault();
-          clickPosition.current = { x: -1, y: -1 };
-        });
-        content.current.removeEventListener("mouseup", () => {
-          clickPosition.current = { x: -1, y: -1 };
-        });
-        content.current
-          .querySelectorAll(
-            ".card h2,.card h3,.card h1,.card p,.card hr ,.card li"
-          )
-          .forEach((ele) => {
-            (ele as HTMLParagraphElement).removeEventListener(
-              "click",
-              settingSelected
-            );
-            (ele as HTMLParagraphElement).removeEventListener(
-              "contextmenu",
-              showMenu
-            );
-            (ele as HTMLParagraphElement).removeEventListener(
-              "mousedown",
-              (e) => {
-                e.preventDefault();
-              }
-            );
-          });
-        contextMenuEle.current.removeEventListener("mouseleave", hideMenu);
-      }
-    };
   }, [editMode]);
 
   return (

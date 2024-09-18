@@ -1,3 +1,4 @@
+import { Font } from "@react-pdf/renderer";
 import {
   motion,
   useMotionValueEvent,
@@ -21,11 +22,11 @@ function ContinueSteps() {
   const c3 = useTransform(scrollYProgress, [0.9, 1], [0, 100]);
   return (
     <div className="relative w-full h-[400vh]">
-      <section className="sticky lg:left-1/2 top-[4.75rem] w-full lg:w-1/2 flex flex-col items-center justify-center">
+      <section className="sticky lg:left-1/2 top-[4.75rem] w-full lg:max-w-[50%] flex flex-col items-center justify-center">
         <div className="flex flex-row items-center justify-center w-full">
           <div className="flex flex-row items-center justify-center translate-x-2">
             <motion.div
-              className="lg:w-14 lg:h-14 w-12 h-12 translate-x-1 transition rounded-full flex items-center justify-center text-main text-lg font-bold"
+              className="lg:w-16 lg:h-16 sm:w-12 sm:h-12 w-8 h-8 translate-x-1 transition rounded-full flex items-center justify-center text-main text-lg font-bold"
               style={{
                 background: useTransform(
                   c,
@@ -37,13 +38,13 @@ function ContinueSteps() {
                   c,
                   (value) => `${value == 100 ? "1.2" : "1"}`
                 ),
-                transition: "transform 150ms cubic-bezier(.47,1.64,.41,.8);",
+                transition: "transform 350ms cubic-bezier(.47,1.64,.41,.8);",
               }}
             >
               <h1>1</h1>
             </motion.div>
             <motion.div
-              className="lg:w-36 w-28 lg:h-5 h-4 bg-secant2"
+              className="lg:w-28 sm:w-24 w-20 lg:h-4 sm:h-3 h-2 bg-secant2"
               style={{
                 background: useTransform(
                   l1,
@@ -53,7 +54,7 @@ function ContinueSteps() {
               }}
             ></motion.div>
             <motion.div
-              className="lg:w-14 lg:h-14 w-12 h-12 rounded-full -translate-x-1 flex items-center justify-center text-main text-lg font-bold"
+              className="lg:w-16 lg:h-16 sm:w-12 sm:h-12 w-8 h-8 rounded-full -translate-x-1 flex items-center justify-center text-main text-lg font-bold"
               style={{
                 background: useTransform(
                   c1,
@@ -65,7 +66,7 @@ function ContinueSteps() {
                   c1,
                   (value) => `${value == 100 ? "1.2" : "1"}`
                 ),
-                transition: "all 150ms cubic-bezier(.47,1.64,.41,.8);",
+                transition: "transform 350ms cubic-bezier(.47,1.64,.41,.8);",
               }}
             >
               <h1>2</h1>
@@ -73,7 +74,7 @@ function ContinueSteps() {
           </div>
           <div className="flex flex-row items-center justify-center">
             <motion.div
-              className="lg:w-36 w-28 lg:h-5 h-4 bg-secant2"
+              className="lg:w-28 sm:w-24 w-20 lg:h-4 sm:h-3 h-2 bg-secant2"
               style={{
                 background: useTransform(
                   l2,
@@ -85,7 +86,7 @@ function ContinueSteps() {
           </div>
           <div className="flex flex-row items-center justify-center -translate-x-2">
             <motion.div
-              className="lg:w-14 lg:h-14 w-12 h-12 rounded-full -translate-x-1 flex items-center justify-center text-main text-lg font-bold"
+              className="lg:w-16 lg:h-16 sm:w-12 sm:h-12 w-8 h-8 rounded-full -translate-x-1 flex items-center justify-center text-main text-lg font-bold"
               style={{
                 background: useTransform(
                   c2,
@@ -97,13 +98,13 @@ function ContinueSteps() {
                   c2,
                   (value) => `${value == 100 ? "1.2" : "1"}`
                 ),
-                transition: "transform 150ms cubic-bezier(.47,1.64,.41,.8);",
+                transition: "transform 350ms cubic-bezier(.47,1.64,.41,.8);",
               }}
             >
               <h1>3</h1>
             </motion.div>
             <motion.div
-              className="lg:w-36 w-28 lg:h-5 h-4 bg-secant2"
+              className="lg:w-28 sm:w-24 w-20 lg:h-4 sm:h-3 h-2 bg-secant2"
               style={{
                 background: useTransform(
                   l3,
@@ -113,7 +114,7 @@ function ContinueSteps() {
               }}
             ></motion.div>
             <motion.div
-              className="lg:w-14 lg:h-14 w-12 h-12 rounded-full -translate-x-1 flex items-center justify-center text-main text-lg font-bold"
+              className="lg:w-16 lg:h-16 sm:w-12 sm:h-12 w-8 h-8 rounded-full -translate-x-1 flex items-center justify-center text-main text-lg font-bold"
               style={{
                 background: useTransform(
                   c3,
@@ -125,7 +126,7 @@ function ContinueSteps() {
                   c3,
                   (value) => `${value == 100 ? "1.2" : "1"}`
                 ),
-                transition: "transform 150ms cubic-bezier(.47,1.64,.41,.8);",
+                transition: "transform 350ms cubic-bezier(.47,1.64,.41,.8);",
               }}
             >
               <h1>4</h1>
@@ -133,8 +134,22 @@ function ContinueSteps() {
           </div>
         </div>
       </section>
+      <section className="flex lg:w-1/2 w-full mt-20 lg:mt-0 flex-col items-center justify-center">
+        <div className="px-10 lg:px-0 lg:w-1/2 w-full">
+          <h1 className="font-extrabold text-xl flex items-center justify-center flex-row space-x-2">
+            <span className="w-8 h-8 flex rounded-full bg-secant2 text-main items-center justify-center font-bold">
+              1
+            </span>
+            <span>Start by choosing a Template</span>
+          </h1>
+          <p className="mt-4">
+            Our professional resume templates are designed in strict accordance
+            with industry standards and best practices.
+          </p>
+        </div>
+      </section>
       <svg
-        className="absolute md:left-1/2  top-0 -left-[9999px] mx-auto h-full"
+        className="absolute lg:left-1/2  top-0 -left-[9999px] mx-auto h-full"
         viewBox="0 0 36 8192"
         width="36"
         height="100%"

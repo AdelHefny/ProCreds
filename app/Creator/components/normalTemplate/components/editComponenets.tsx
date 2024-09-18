@@ -36,6 +36,11 @@ function Edit({ id, data, headerType, style, className = "" }: coProps) {
   };
 
   useEffect(() => {
+    if (inputTag.current) {
+      inputTag.current.addEventListener("focusout", () => {
+        edit_mode_setter(false, "");
+      });
+    }
     if (editMode.edit && editMode.who === id && inputTag.current) {
       inputTag.current.focus();
       const handleKeyDown = (event: KeyboardEvent) => {
