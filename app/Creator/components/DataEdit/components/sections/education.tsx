@@ -147,7 +147,7 @@ function EducationSection({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       ref={EduSection}
-      className="EduSection flex flex-col justify-start items-center w-full space-y-4 px-4 max-h-80 overflow-y-scroll"
+      className="EduSection flex flex-col justify-start items-center w-full space-y-4 px-4 h-full overflow-y-scroll"
     >
       <fieldset className="flex flex-col space-y-2 w-full items-start">
         <h1 className="relative font-bold">Add data</h1>
@@ -318,42 +318,48 @@ function EducationSection({
         </motion.span>
       </motion.button>
       {/* Add the education added here and way to edit them */}
-      <ul className="w-full space-y-4">
-        {templateState.content.sections
-          .find((section) => section.title === "Education")
-          ?.details.map((education) => (
-            <li
-              key={education.id}
-              className="relative flex justify-between items-center p-2 border-b border-gray-300"
-            >
-              <div className="flex flex-col">
-                <span className="font-bold">
-                  {education.structure.institution}
-                </span>
-                <span className="text-sm text-gray-500">
-                  {education.structure.degree}
-                </span>
-                <span className="text-sm text-gray-500">
-                  {education.structure.location}
-                </span>
-              </div>
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => handleEditClick(education.id)}
-                  className="text-blue-500"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDeleteClick(education.id)}
-                  className="text-red-500"
-                >
-                  Delete
-                </button>
-              </div>
-            </li>
-          ))}
-      </ul>
+      <div className="w-full flex flex-col justify-start items-start space-y-2">
+        <h2 className="relative font-bold">Your eductations</h2>
+        {templateState.content.sections.find(
+          (section) => section.title === "Education"
+        ).details.length == 0 && <h1>Empty</h1>}
+        <ul className="w-full space-y-4">
+          {templateState.content.sections
+            .find((section) => section.title === "Education")
+            ?.details.map((education) => (
+              <li
+                key={education.id}
+                className="relative flex justify-between items-center p-2 border-b border-gray-300"
+              >
+                <div className="flex flex-col">
+                  <span className="font-bold">
+                    {education.structure.institution}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    {education.structure.degree}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    {education.structure.location}
+                  </span>
+                </div>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => handleEditClick(education.id)}
+                    className="text-blue-500"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeleteClick(education.id)}
+                    className="text-red-500"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </li>
+            ))}
+        </ul>
+      </div>
     </motion.section>
   );
 }

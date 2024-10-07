@@ -166,13 +166,22 @@ export default function PdfEditor({
       setInitialLoad(false);
       return;
     }
-    setIsSaving(true);
-    const intervalId = setInterval(() => {
-      localStorage.setItem("templateState", JSON.stringify(templateState));
-      setIsSaving(false);
-    }, 3000);
+    if (templateState.templateId !== -1) {
+      setIsSaving(true);
+      const intervalId = setTimeout(() => {
+        const savedTemplates = JSON.parse(
+          localStorage.getItem("templates") || "[]"
+        );
+        const updatedTemplates = savedTemplates.filter(
+          (ele) => ele.templateId !== templateState.templateId
+        );
+        updatedTemplates.push(templateState);
+        localStorage.setItem("templates", JSON.stringify(updatedTemplates));
+        setIsSaving(false);
+      }, 3000);
 
-    return () => clearInterval(intervalId);
+      return () => clearTimeout(intervalId);
+    }
   }, [templateState]);
 
   useEffect(() => {
@@ -291,6 +300,7 @@ export default function PdfEditor({
         marker={marker}
         styleTab={styleTab}
       />
+      <DataEdit markerRef={marker} styleTab={styleTab} />
       <section
         className="bg-secant2 overflow-hidden bg-opacity-70 h-full flex items-center justify-center relative w-full editor cursor-grab"
         ref={content}
@@ -298,14 +308,13 @@ export default function PdfEditor({
         aria-label="PDF Editor"
       >
         <Options templateComponent={contentDiv} />
-        <DataEdit markerRef={marker} styleTab={styleTab} />
 
         <div
           className="absolute bottom-0 text-secant3 right-0 flex items-center justify-center space-x-1 z-30"
           aria-label="Zoom Controls"
         >
           <button
-            className="bg-amber-500 w-12 h-5 rounded-md text-sm hover:text-secant transition-colors duration-150 ease-in-out"
+            className="w-12 h-5 rounded-md text-sm hover:text-secant transition-colors duration-150 ease-in-out"
             onClick={() => {
               let scaleValue = Math.min(
                 2,
@@ -322,7 +331,7 @@ export default function PdfEditor({
             <FontAwesomeIcon icon={faPlus as IconProp} />
           </button>
           <button
-            className="bg-amber-500 w-12 h-5 rounded-md text-sm hover:text-secant transition-colors duration-150 ease-in-out"
+            className="w-12 h-5 rounded-md text-sm hover:text-secant transition-colors duration-150 ease-in-out"
             onClick={() => {
               let scaleValue = Math.max(
                 0.1,
@@ -354,14 +363,14 @@ export default function PdfEditor({
             )}
           </div>
           <button
-            className="bg-amber-500 w-12  h-5 rounded-md text-sm hover:text-secant transition-colors duration-150 ease-in-out"
+            className="w-12  h-5 rounded-md text-sm hover:text-secant transition-colors duration-150 ease-in-out"
             onClick={handleUndo}
             aria-label="Undo"
           >
             <FontAwesomeIcon icon={faUndo as IconProp} />
           </button>
           <button
-            className="bg-amber-500 w-12 h-5 rounded-md text-sm hover:text-secant transition-colors duration-150 ease-in-out"
+            className="w-12 h-5 rounded-md text-sm hover:text-secant transition-colors duration-150 ease-in-out"
             onClick={handleRedo}
             aria-label="Redo"
           >
@@ -376,10 +385,10 @@ export default function PdfEditor({
             role="document"
             aria-live="polite"
           >
-            {templateState.templateId == 0 && (
+            {templateState.templateType == "normal" && (
               <NormalTemplate templateData={templateState} />
             )}
-            {templateState.templateId == 1 && (
+            {templateState.templateType == "fancy" && (
               <NormalTemplate templateData={templateState} />
             )}
           </motion.div>

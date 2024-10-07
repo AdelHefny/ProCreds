@@ -8,6 +8,7 @@ import NormalTemplate from "./components/normalTemplate/normalTemplate.tsx";
 import { HistoryContext } from "../historyContext.ts";
 import SelectedContext from "./contexts/selectedContext.tsx";
 import EditSelectContext from "./contexts/EditSelectContext.ts";
+import LoadTemplateModal from "./components/loadTemplateModal.tsx";
 
 const templatesvariants: Variants = {
   hidden: {
@@ -70,7 +71,27 @@ function Creator() {
   const [history, setHistory] = useContext(HistoryContext);
   const [selectedElement, setSelectedElement] = useState("");
   const [EditSelect, setEditSelect] = useState(0);
+  const [newTemplateSelect, setNewTemplateSelect] = useState(false);
+  const loadTemplateModalRef = useRef<HTMLDialogElement>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [storedTemplates, setStoredTemplates] = useState([]);
 
+  // Load templates from localStorage on mount
+  useEffect(() => {
+    const savedTemplates = localStorage.getItem("templates");
+    if (savedTemplates) {
+      setStoredTemplates(JSON.parse(savedTemplates));
+    }
+  }, []);
+
+  const handleCloseModel = () => {
+    setIsModalOpen(() => false);
+    loadTemplateModalRef.current?.close();
+  };
+  const handleLoadTemplate = () => {
+    setIsModalOpen(() => true);
+    loadTemplateModalRef.current?.showModal();
+  };
   const editSelectSetter = (selection) => {
     setEditSelect(selection);
   };
@@ -147,52 +168,145 @@ function Creator() {
   return (
     <SelectedContext.Provider value={[selectedElement, setSelectedElement]}>
       <AnimatePresence mode="wait">
-        {templateState.templateId == -1 ? (
-          <motion.section
-            key="template-selection"
-            variants={templatesvariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            className="flex flex-col min-h-screen sm:flex-row items-center sm:space-x-6 justify-center h-full mt-24 overflow-hidden"
-          >
-            <AnimatePresence mode="wait">
-              {templates.map((ele) => {
-                return (
-                  <motion.div
-                    key={ele.name}
-                    className="sm:w-64 w-[90%] h-96 cursor-pointer flex flex-col items-center justify-center"
-                    onClick={() => {
-                      setHistory((prev) => {
-                        return {
-                          redoStack: [],
-                          undoStack: [
-                            { ...templateState, templateId: ele.templateId },
-                          ],
-                        };
-                      });
-                      setter((prev: templateType) => {
-                        return {
-                          ...prev,
-                          templateId: ele.templateId,
-                        };
-                      });
-                    }}
-                    variants={templatesChildrenvariants}
-                  >
-                    <h3>{ele.name}</h3>
-                    {ele.templateId == 0 && (
-                      <NormalTemplate templateData={ele} />
-                    )}
-                    {ele.templateId == 1 && (
-                      <NormalTemplate templateData={ele} />
-                    )}
-                  </motion.div>
-                );
-              })}
-            </AnimatePresence>
-          </motion.section>
-        ) : (
+        {templateState.templateId == -1 && (
+          <div className="flex flex-col items-center justify-center h-screen">
+            {newTemplateSelect && (
+              <motion.section
+                key="template-selection"
+                variants={templatesvariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="flex flex-col min-h-screen sm:flex-row items-center sm:space-x-6 justify-center h-full mt-24 overflow-hidden"
+              >
+                <AnimatePresence mode="wait">
+                  {templates.map((ele) => {
+                    return (
+                      <motion.div
+                        key={ele.name}
+                        className="sm:w-64 w-[90%] h-96 cursor-pointer flex flex-col items-center justify-center"
+                        onClick={() => {
+                          const currDate = new Date(Date.now());
+                          const DateCreated = currDate.toLocaleDateString(
+                            "en-US",
+                            {
+                              year: "numeric",
+                              month: "2-digit",
+                              day: "2-digit",
+                            }
+                          );
+                          console.log(new Date(Date.now()).getFullYear());
+                          console.log(new Date(Date.now()).getDate());
+                          console.log(new Date(Date.now()).getMonth());
+                          let val = 0;
+                          if (storedTemplates.length == 0) {
+                            console.log(val);
+                            val = 1;
+                          } else {
+                            val =
+                              storedTemplates[storedTemplates.length - 1]
+                                .templateId + 1;
+                          }
+                          localStorage.setItem(
+                            "templates",
+                            JSON.stringify([
+                              ...storedTemplates,
+                              {
+                                ...templateState,
+                                dateCreated: DateCreated,
+                                templateType: ele.templateType,
+                                templateId: val,
+                                name: "template" + val,
+                              },
+                            ])
+                          );
+                          setHistory((prev) => {
+                            return {
+                              redoStack: [],
+                              undoStack: [
+                                {
+                                  ...templateState,
+                                  dateCreated: DateCreated,
+                                  templateType: ele.templateType,
+                                  templateId: val,
+                                  name: "template" + val,
+                                },
+                              ],
+                            };
+                          });
+                          setter((prev: templateType) => {
+                            return {
+                              ...prev,
+                              dateCreated: DateCreated,
+                              templateType: ele.templateType,
+                              templateId: val,
+                              name: "template" + val,
+                            };
+                          });
+                          setStoredTemplates((prev) => [
+                            ...prev,
+                            {
+                              ...templateState,
+                              dateCreated: DateCreated,
+                              templateType: ele.templateType,
+                              templateId: val,
+                              name: "template" + val,
+                            },
+                          ]);
+                          setNewTemplateSelect(false);
+                        }}
+                        variants={templatesChildrenvariants}
+                      >
+                        <h3>{ele.name}</h3>
+                        {ele.templateType == "normal" && (
+                          <NormalTemplate templateData={ele} />
+                        )}
+                        {ele.templateType == "fancy" && (
+                          <NormalTemplate templateData={ele} />
+                        )}
+                      </motion.div>
+                    );
+                  })}
+                </AnimatePresence>
+              </motion.section>
+            )}
+            {!newTemplateSelect && (
+              <motion.section
+                initial={{
+                  opacity: storedTemplates.length - 1,
+                  scale: 0.8,
+                  x: 100,
+                }}
+                animate={{ opacity: 1, scale: 1, x: 0 }}
+                exit={{ opacity: 0, scale: 0.8, x: 100 }}
+                transition={{ duration: 0.3 }}
+                className="w-56 h-64 font-bold text-lg shadow-lg rounded-2xl flex flex-col items-center justify-center space-y-4 border-secant3 border-2"
+              >
+                <button
+                  onClick={() => {
+                    setNewTemplateSelect(true);
+                  }}
+                  className="hover:bg-secant3 hover:text-white transition-colors duration-150 rounded-2xl p-1 px-4"
+                >
+                  New Template
+                </button>
+                <button
+                  onClick={handleLoadTemplate}
+                  className="bg-secant3 text-white hover:text-secant transition-colors duration-150 rounded-2xl p-1 px-4 hover:bg-secant2"
+                >
+                  Load Template
+                </button>
+              </motion.section>
+            )}
+
+            <LoadTemplateModal
+              isModalOpen={isModalOpen}
+              handleCloseModal={handleCloseModel}
+              dialogRef={loadTemplateModalRef}
+            />
+          </div>
+        )}
+        {templateState.templateId != -1 && (
           <EditSelectContext.Provider value={[EditSelect, editSelectSetter]}>
             <motion.section
               key="pdf-editor"

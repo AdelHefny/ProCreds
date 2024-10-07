@@ -145,7 +145,7 @@ function CertificateSection({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       ref={CertSection}
-      className="CertSection flex flex-col justify-start items-center w-full space-y-4 px-4 max-h-80 overflow-y-scroll"
+      className="CertSection flex flex-col justify-start items-center w-full space-y-4 px-4 h-full overflow-y-scroll"
     >
       <fieldset className="flex flex-col space-y-2 w-full items-start ">
         <h1 className="relative font-bold">Add Certificate</h1>
@@ -320,7 +320,10 @@ function CertificateSection({
         className={`w-full space-y-2 flex flex-col justify-start items-center `}
       >
         <div className="w-full flex flex-col justify-start items-start space-y-2">
-          <h2 className="relative font-bold">Certificates</h2>
+          <h2 className="relative font-bold">Your certificates</h2>
+          {templateState.content.sections.find(
+            (section) => section.title === "Certification"
+          ).details.length == 0 && <h1>Empty</h1>}
           {templateState.content.sections
             .find((section) => section.title === "Certification")
             ?.details.map((detail) => (

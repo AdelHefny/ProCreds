@@ -64,3 +64,38 @@
   transition: 150ms ease-in-out all 300ms;
   z-index: -3;
 }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer components {
+  .custom-radio {
+    @apply appearance-none cursor-pointer text-[length:inherit] transition-all duration-300;
+    --s: 1em;
+    --c: #009688;
+    height: var(--s);
+    width: var(--s);
+    border: calc(var(--s) / 8) solid #939393;
+    padding: calc(var(--s) / 8);
+    border-radius: 50%;
+    outline-offset: calc(var(--s) / 10);
+    background-image: radial-gradient(
+      farthest-side,
+      var(--c) 94%,
+      transparent 0
+    );
+    background-position: 50%;
+    background-size: 0 0;
+    background-repeat: no-repeat;
+  }
+
+  .custom-radio:checked {
+    @apply border-[color:var(--c)];
+    background-size: 100% 100%;
+  }
+
+  .custom-radio:disabled {
+    @apply opacity-50 cursor-not-allowed;
+    background-image: linear-gradient(#939393 0 0);
+    background-size: 100% 20%;
+  }
+}

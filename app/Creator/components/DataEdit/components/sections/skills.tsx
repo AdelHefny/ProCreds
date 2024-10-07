@@ -101,7 +101,7 @@ function SkillsEditSection({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="skillsSec flex flex-col justify-start items-center w-full space-y-4 px-4 max-h-80 overflow-y-scroll"
+      className="skillsSec flex flex-col justify-start items-center w-full space-y-4 px-2 h-full overflow-y-scroll"
     >
       <fieldset className="flex flex-row items-center space-x-3">
         <label htmlFor="skill" className="font-bold">
@@ -149,6 +149,7 @@ function SkillsEditSection({
       </motion.button>
 
       <div className="w-full">
+        <h1 className="font-bold text-lg px-4 py-2">Skills</h1>
         {templateState.content.sections
           .find((section) => section.title === "Skills")
           ?.details.map((skill) => (

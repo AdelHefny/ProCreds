@@ -144,7 +144,7 @@ function ExperienceSection({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       ref={ExpSection}
-      className="ExpSection flex flex-col justify-start items-center w-full space-y-4 px-4 max-h-80 overflow-y-scroll"
+      className="ExpSection flex flex-col justify-start items-center w-full space-y-4 px-2 h-full overflow-y-scroll"
     >
       <fieldset className="flex flex-col space-y-2 w-full items-start ">
         <h1 className="relative font-bold">Add data</h1>
@@ -337,42 +337,48 @@ function ExperienceSection({
         </motion.span>
       </motion.button>
       {/* add the Exoerience added here and way to edit them */}
-      <ul className="w-full space-y-4">
-        {templateState.content.sections
-          .find((section) => section.title === "Experience")
-          ?.details.map((experience) => (
-            <li
-              key={experience.id}
-              className="relative flex justify-between items-center p-2 border-b border-gray-300"
-            >
-              <div className="flex flex-col">
-                <span className="font-bold">
-                  {experience.structure.postion}
-                </span>
-                <span className="text-sm text-gray-500">
-                  {experience.structure.company}
-                </span>
-                <span className="text-sm text-gray-500">
-                  {experience.structure.location}
-                </span>
-              </div>
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => handleEditClick(experience.id)}
-                  className="text-blue-500"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDeleteClick(experience.id)}
-                  className="text-red-500"
-                >
-                  Delete
-                </button>
-              </div>
-            </li>
-          ))}
-      </ul>
+      <div className="w-full flex flex-col justify-start items-start space-y-2">
+        <h2 className="relative font-bold">Your experiences</h2>
+        <ul className="w-full space-y-4">
+          {templateState.content.sections.find(
+            (section) => section.title === "Experience"
+          )?.details.length == 0 && <h1>Empty</h1>}
+          {templateState.content.sections
+            .find((section) => section.title === "Experience")
+            ?.details.map((experience) => (
+              <li
+                key={experience.id}
+                className="relative flex justify-between items-center p-2 border-b border-gray-300"
+              >
+                <div className="flex flex-col">
+                  <span className="font-bold">
+                    {experience.structure.postion}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    {experience.structure.company}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    {experience.structure.location}
+                  </span>
+                </div>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => handleEditClick(experience.id)}
+                    className="text-blue-500"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeleteClick(experience.id)}
+                    className="text-red-500"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </li>
+            ))}
+        </ul>
+      </div>
     </motion.section>
   );
 }

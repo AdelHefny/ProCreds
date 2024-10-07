@@ -143,7 +143,7 @@ function ProjectSection({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       ref={ProjSection}
-      className="ProjSection flex flex-col justify-start items-center w-full space-y-4 px-4 max-h-80 overflow-y-scroll"
+      className="ProjSection flex flex-col justify-start items-center w-full space-y-4 px-2 h-full overflow-y-scroll"
     >
       <fieldset className="flex flex-col space-y-2 w-full items-start">
         <h1 className="relative font-bold">Add Project</h1>
@@ -315,43 +315,49 @@ function ProjectSection({
         </motion.span>
       </motion.button>
       {/* List added projects and allow editing */}
-      <ul className="w-full space-y-4">
-        {templateState.content.sections
-          .find((section) => section.title === "Projects")
-          ?.details.map((project) => (
-            <li
-              key={project.id}
-              className="relative flex justify-between items-center p-2 border-b border-gray-300"
-            >
-              <div className="flex flex-col">
-                <span className="font-bold">{project.structure.name}</span>
-                <span className="text-sm text-gray-500">
-                  {project.structure.description}
-                </span>
-                <span className="text-sm text-gray-500">
-                  {project.structure.date.start} -{" "}
-                  {project.structure.date.ongoing
-                    ? "Ongoing"
-                    : project.structure.date.end}
-                </span>
-              </div>
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => handleEditClick(project.id)}
-                  className="text-blue-500"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDeleteClick(project.id)}
-                  className="text-red-500"
-                >
-                  Delete
-                </button>
-              </div>
-            </li>
-          ))}
-      </ul>
+      <div className="w-full flex flex-col justify-start items-start space-y-2">
+        <h2 className="relative font-bold">Your Projects</h2>
+        {templateState.content.sections.find(
+          (section) => section.title === "Projects"
+        ).details.length == 0 && <h1>Empty</h1>}
+        <ul className="w-full space-y-4">
+          {templateState.content.sections
+            .find((section) => section.title === "Projects")
+            ?.details.map((project) => (
+              <li
+                key={project.id}
+                className="relative flex justify-between items-center p-2 border-b border-gray-300"
+              >
+                <div className="flex flex-col">
+                  <span className="font-bold">{project.structure.name}</span>
+                  <span className="text-sm text-gray-500">
+                    {project.structure.description}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    {project.structure.date.start} -{" "}
+                    {project.structure.date.ongoing
+                      ? "Ongoing"
+                      : project.structure.date.end}
+                  </span>
+                </div>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => handleEditClick(project.id)}
+                    className="text-blue-500"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeleteClick(project.id)}
+                    className="text-red-500"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </li>
+            ))}
+        </ul>
+      </div>
     </motion.section>
   );
 }

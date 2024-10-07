@@ -10,6 +10,8 @@ export default function TemplateProvidor({
 }) {
   const [template, setTemplate] = useState<templateType>({
     templateId: -1,
+    templateType: "normal",
+    dateCreated: "",
     name: "",
     content: {
       photo: { enabled: false, data: "", alt: "", id: "" },
@@ -29,7 +31,7 @@ export default function TemplateProvidor({
   });
   return (
     <TemplateContext.Provider value={[template, setTemplate]}>
-      <AnimatePresence mode="wait">{children}</AnimatePresence>
+      {children}
     </TemplateContext.Provider>
   );
 }

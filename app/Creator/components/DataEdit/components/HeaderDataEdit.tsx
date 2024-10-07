@@ -58,7 +58,7 @@ function HeaderEdit() {
           ))}
         </ul>
       </section>
-      <section className="w-[90%]">
+      <section className="w-[82%] h-full">
         <AnimatePresence>
           {EditSelect === 0 && (
             <motion.form

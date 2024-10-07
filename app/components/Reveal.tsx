@@ -5,7 +5,7 @@ function Reveal({ children }) {
   const section = useRef(null);
   const isInView = useInView(section, {
     once: true,
-    margin: "-500px",
+    margin: "-100px",
   });
   const firstSectionControl = useAnimation();
 

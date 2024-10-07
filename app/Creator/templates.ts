@@ -2,7 +2,9 @@ import { templateType } from "../templateContext";
 export const templates: templateType[] = [
   {
     templateId: 0,
-    name: "normal",
+    templateType: "normal",
+    dateCreated: "",
+    name: "template1",
     content: {
       photo: { enabled: false, alt: "", data: "", id: "" },
       header: {
@@ -145,7 +147,9 @@ export const templates: templateType[] = [
   },
   {
     templateId: 1,
-    name: "fancy",
+    dateCreated: "",
+    templateType: "fancy",
+    name: "template2",
     content: {
       photo: { enabled: false, alt: "", data: "", id: "" },
       header: {
@@ -288,7 +292,9 @@ export const templates: templateType[] = [
   },
   {
     templateId: 2,
-    name: "Blank",
+    dateCreated: "",
+    templateType: "Blank",
+    name: "",
     content: {
       photo: { enabled: false, alt: "", data: "", id: "" },
       header: {
