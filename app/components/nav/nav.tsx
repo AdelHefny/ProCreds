@@ -7,7 +7,7 @@ function Nav() {
     <motion.nav
       initial={{ y: "-140%", x: "-50%" }}
       animate={{ y: 0 }}
-      className="flex sm:space-x-6 space-x-3 items-center text-xs sm:text-md justify-between px-7 fixed top-2 rounded-full bg-secant bg-opacity-60 backdrop-blur-md left-1/2 sm:w-[28rem] w-[85%] h-16 z-40"
+      className="flex sm:space-x-6 space-x-3 items-center text-xs sm:text-base justify-between px-7 fixed top-2 rounded-full bg-secant bg-opacity-60 backdrop-blur-md left-1/2 sm:w-[28rem] w-[85%] h-16 z-40"
     >
       <Logo />
       <ul className="flex items-center justify-center space-x-2">

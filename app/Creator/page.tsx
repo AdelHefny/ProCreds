@@ -9,14 +9,14 @@ import { HistoryContext } from "../historyContext.ts";
 import SelectedContext from "./contexts/selectedContext.tsx";
 import EditSelectContext from "./contexts/EditSelectContext.ts";
 import LoadTemplateModal from "./components/loadTemplateModal.tsx";
+import "./creator.css";
+import TemplateCard from "./components/templateCard.tsx";
 
 const templatesvariants: Variants = {
   hidden: {
-    x: 0,
     opacity: 1,
   },
   visible: {
-    x: 100,
     opacity: 1,
     transition: {
       staggerChildren: 0.4,
@@ -44,28 +44,6 @@ const editorVarients: Variants = {
   },
 };
 
-const templatesChildrenvariants: Variants = {
-  hidden: {
-    x: "100vw",
-    rotateZ: -30,
-  },
-  visible: {
-    x: 0,
-    rotateZ: 0,
-    transition: {
-      type: "tween",
-      duration: 0.5,
-    },
-  },
-  exit: {
-    x: "-100vw",
-    rotateZ: -30,
-    transition: {
-      type: "tween",
-      duration: 0.5,
-    },
-  },
-};
 function Creator() {
   const [templateState, setter] = useContext(TemplateContext);
   const [history, setHistory] = useContext(HistoryContext);
@@ -171,20 +149,20 @@ function Creator() {
         {templateState.templateId == -1 && (
           <div className="flex flex-col items-center justify-center h-screen">
             {newTemplateSelect && (
-              <motion.section
-                key="template-selection"
-                variants={templatesvariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                className="flex flex-col min-h-screen sm:flex-row items-center sm:space-x-6 justify-center h-full mt-24 overflow-hidden"
-              >
-                <AnimatePresence mode="wait">
-                  {templates.map((ele) => {
-                    return (
-                      <motion.div
-                        key={ele.name}
-                        className="sm:w-64 w-[90%] h-96 cursor-pointer flex flex-col items-center justify-center"
+              <div className="flex flex-col items-center justify-center space-y-2 mt-16">
+                <h1 className="font-bold text-lg">Select a Template</h1>
+                <motion.section
+                  key="template-selection"
+                  variants={templatesvariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className="flex flex-col sm:flex-row items-center space-y-6 sm:space-y-0 sm:space-x-6 sm:justify-center pt-[7rem] sm:pt-0 h-full w-full sm:overflow-hidden"
+                >
+                  <AnimatePresence mode="wait">
+                    {templates.map((ele) => (
+                      <section
+                        className="flex flex-col items-center justify-center space-y-2 relative"
                         onClick={() => {
                           const currDate = new Date(Date.now());
                           const DateCreated = currDate.toLocaleDateString(
@@ -195,17 +173,14 @@ function Creator() {
                               day: "2-digit",
                             }
                           );
-                          console.log(new Date(Date.now()).getFullYear());
-                          console.log(new Date(Date.now()).getDate());
-                          console.log(new Date(Date.now()).getMonth());
                           let val = 0;
                           if (storedTemplates.length == 0) {
                             console.log(val);
                             val = 1;
                           } else {
-                            val =
-                              storedTemplates[storedTemplates.length - 1]
-                                .templateId + 1;
+                            storedTemplates.map((ele) => {
+                              val = Math.max(ele.templateId + 1);
+                            });
                           }
                           localStorage.setItem(
                             "templates",
@@ -255,25 +230,18 @@ function Creator() {
                           ]);
                           setNewTemplateSelect(false);
                         }}
-                        variants={templatesChildrenvariants}
                       >
-                        <h3>{ele.name}</h3>
-                        {ele.templateType == "normal" && (
-                          <NormalTemplate templateData={ele} />
-                        )}
-                        {ele.templateType == "fancy" && (
-                          <NormalTemplate templateData={ele} />
-                        )}
-                      </motion.div>
-                    );
-                  })}
-                </AnimatePresence>
-              </motion.section>
+                        <TemplateCard template={ele} key={ele.templateId} />
+                      </section>
+                    ))}
+                  </AnimatePresence>
+                </motion.section>
+              </div>
             )}
             {!newTemplateSelect && (
               <motion.section
                 initial={{
-                  opacity: storedTemplates.length - 1,
+                  opacity: 0,
                   scale: 0.8,
                   x: 100,
                 }}

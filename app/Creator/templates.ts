@@ -13,7 +13,9 @@ export const templates: templateType[] = [
         email: "john@example.com",
         City: "Cityville",
         Phone: "(123) 456-7890",
-        description: "work",
+        description: `
+Here's a possible random description for the resume:
+John Doe is a versatile software developer with a strong foundation in Computer Science, holding a Bachelor's degree from the University of City. With expertise in full-stack development, John has hands-on experience in building scalable web and mobile applications using cutting-edge technologies like React, Node.js, Python, and SQL.`,
         jobTitle: "Software Developer",
       },
       sections: [
@@ -158,7 +160,10 @@ export const templates: templateType[] = [
         email: "john@example.com",
         City: "Cityville",
         Phone: "(123) 456-7890",
-        description: "work",
+        description: `
+Here's a possible random description for the resume:
+
+John Doe is a versatile software developer with a strong foundation in Computer Science, holding a Bachelor's degree from the University of City. With expertise in full-stack development, John has hands-on experience in building scalable web and mobile applications using cutting-edge technologies like React, Node.js, Python, and SQL.`,
         jobTitle: "Software Developer",
       },
       sections: [
@@ -286,27 +291,6 @@ export const templates: templateType[] = [
           ],
         },
       ],
-    },
-    style: {},
-    saved: false,
-  },
-  {
-    templateId: 2,
-    dateCreated: "",
-    templateType: "Blank",
-    name: "",
-    content: {
-      photo: { enabled: false, alt: "", data: "", id: "" },
-      header: {
-        firstName: "",
-        lastName: "",
-        email: "",
-        City: "",
-        Phone: "",
-        description: "",
-        jobTitle: "",
-      },
-      sections: [],
     },
     style: {},
     saved: false,
