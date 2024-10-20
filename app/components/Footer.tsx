@@ -1,3 +1,4 @@
+"use client";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,6 +8,7 @@ import {
   faInstagram,
   faLinkedin,
 } from "@fortawesome/free-brands-svg-icons";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 function Footer() {
   const ref = useRef(null);
@@ -34,28 +36,28 @@ function Footer() {
             aria-label="Facebook"
             className="hover:text-blue-500"
           >
-            <FontAwesomeIcon icon={faFacebookF} size="2x" />
+            <FontAwesomeIcon icon={faFacebookF as IconProp} size="2x" />
           </a>
           <a
             href="https://twitter.com"
             aria-label="Twitter"
             className="hover:text-blue-400"
           >
-            <FontAwesomeIcon icon={faTwitter} size="2x" />
+            <FontAwesomeIcon icon={faTwitter as IconProp} size="2x" />
           </a>
           <a
             href="https://instagram.com"
             aria-label="Instagram"
             className="hover:text-pink-500"
           >
-            <FontAwesomeIcon icon={faInstagram} size="2x" />
+            <FontAwesomeIcon icon={faInstagram as IconProp} size="2x" />
           </a>
           <a
             href="https://www.linkedin.com/in/adel-hefny-75b6601bb/"
             aria-label="LinkedIn"
             className="hover:text-blue-700"
           >
-            <FontAwesomeIcon icon={faLinkedin} size="2x" />
+            <FontAwesomeIcon icon={faLinkedin as IconProp} size="2x" />
           </a>
         </div>
         <p className="text-sm text-gray-400">

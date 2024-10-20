@@ -119,7 +119,7 @@ function Options({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute bg-secant top-full translate-y-1/3 w-40 space-y-1 flex flex-col items-center justify-center font-bold py-2 rounded-xl"
+              className="absolute bg-secant -top-1/2 translate-y-1/3 w-40 space-y-1 flex flex-col items-center justify-center font-bold py-2 rounded-xl"
             >
               <li>
                 <button

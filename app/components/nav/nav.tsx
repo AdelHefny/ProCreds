@@ -18,7 +18,7 @@ function Nav() {
           <Link href={"/Creator"}>Create</Link>
         </li>
         <li className="relative font-bold after:absolute after:content-[''] after:w-0 after:h-[2px] after:bg-secant2 hover:after:w-full after:bottom-0 after:right-0 after:transition-all after:duration-500 hover:after:left-0 ">
-          <Link href={"/"}>Contacts</Link>
+          <Link href={"/contacts"}>Contacts</Link>
         </li>
       </ul>
     </motion.nav>
