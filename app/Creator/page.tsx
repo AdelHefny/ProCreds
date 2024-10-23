@@ -179,7 +179,7 @@ function Creator() {
                             val = 1;
                           } else {
                             storedTemplates.map((ele) => {
-                              val = Math.max(ele.templateId + 1);
+                              val = Math.max(ele.templateId + 1, val);
                             });
                           }
                           localStorage.setItem(
@@ -256,13 +256,13 @@ function Creator() {
                   }}
                   className="hover:bg-secant3 hover:text-white transition-colors duration-150 rounded-2xl p-1 px-4"
                 >
-                  New Template
+                  New Resume
                 </button>
                 <button
                   onClick={handleLoadTemplate}
                   className="bg-secant3 text-white hover:text-secant transition-colors duration-150 rounded-2xl p-1 px-4 hover:bg-secant2"
                 >
-                  Load Template
+                  Load Resume
                 </button>
               </motion.section>
             )}

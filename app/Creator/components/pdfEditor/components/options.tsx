@@ -16,6 +16,7 @@ import {
 } from "react";
 import { toJpeg } from "html-to-image";
 import LoadTemplateModal from "../../loadTemplateModal";
+import { emptyTemplate } from "@/app/templateProvidor";
 
 function Options({
   templateComponent,
@@ -127,6 +128,16 @@ function Options({
                   className="hover:text-main flex flex-row justify-center items-center space-x-2 transition-colors duration-150 ease-in-out rounded-2xl w-36 py-2 hover:bg-secant3"
                 >
                   <h1>Load</h1>
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => {
+                    setter(emptyTemplate);
+                  }}
+                  className="hover:text-main flex flex-row justify-center items-center space-x-2 transition-colors duration-150 ease-in-out rounded-2xl w-36 py-2 hover:bg-secant3"
+                >
+                  <h1>New Resume</h1>
                 </button>
               </li>
               <li>

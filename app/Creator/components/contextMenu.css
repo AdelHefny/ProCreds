@@ -99,3 +99,23 @@
     background-size: 100% 20%;
   }
 }
+
+.loadMenuList::-webkit-scrollbar-track {
+  background: #3a5a40; /* Background color for the scrollbar track */
+}
+
+/* Styles the scrollbar itself */
+.loadMenuList::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+/* Styles the scrollbar thumb (the draggable part) */
+.loadMenuList::-webkit-scrollbar-thumb {
+  background-color: #a3b18a; /* Scrollbar color */
+}
+
+/* Changes the scrollbar thumb color on hover */
+.loadMenuList::-webkit-scrollbar-thumb:hover {
+  cursor: pointer;
+  background-color: #89976e; /* Scrollbar color */
+}

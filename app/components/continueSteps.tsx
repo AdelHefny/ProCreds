@@ -243,7 +243,7 @@ function ContinueSteps() {
         >
           <ReactPlayer
             url={
-              "https://www.youtube.com/embed/i4re8JafXco?si=RDNIrbTM4RtJaPzH"
+              "https://www.youtube.com/embed/n4zlGbrK8Zk?si=ur4pZzdXoUvYYQQ3"
             }
             width="100%"
             height="100%"
@@ -262,7 +262,7 @@ function ContinueSteps() {
         >
           <ReactPlayer
             url={
-              "https://www.youtube.com/embed/i4re8JafXco?si=RDNIrbTM4RtJaPzH"
+              "https://www.youtube.com/embed/QlRVnXQMekU?si=V1eL9dTvB5MKGIA0"
             }
             width="100%"
             height="100%"

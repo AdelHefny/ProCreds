@@ -64,17 +64,20 @@ function LoadTemplateModal({
   };
 
   return (
-    <dialog ref={dialogRef} className="w-96 h-96 bg-transparent cursor-default">
+    <dialog
+      ref={dialogRef}
+      className="w-96 h-[26rem] bg-transparent cursor-default"
+    >
       {isModalOpen && (
         <motion.section
           initial={{ opacity: 0, scale: 0.5, y: -100 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.5, y: -100 }}
-          className="flex flex-col justify-between w-[96%] h-[93%] p-4 rounded-2xl shadow-lg bg-main"
+          className="flex flex-col justify-between w-[96%] h-[94%] p-4 rounded-2xl shadow-lg bg-main"
         >
-          <div>
-            <h1 className="font-bold">Select a template</h1>
-            <ul className="py-2 flex flex-col justify-start items-center space-y-2 w-full">
+          <div className="h-[85%]">
+            <h1 className="font-bold py-2">Select a template</h1>
+            <ul className="py-2 pr-4 h-[90%] flex flex-col justify-start items-center space-y-2 w-full overflow-y-scroll loadMenuList">
               {storedTemplates.map((template: any) => (
                 <li
                   className="w-full hover:bg-white hover:border-secant3 border-2 border-transparent items-center cursor-pointer p-2 rounded-2xl flex flex-row justify-between"
@@ -97,7 +100,7 @@ function LoadTemplateModal({
               ))}
             </ul>
           </div>
-          <div className="flex flex-row justify-start items-center space-x-2 font-bold w-full">
+          <div className="flex flex-row justify-start items-center space-x-2 font-bold w-full py-2">
             <button
               className="bg-secant3 text-white hover:text-secant transition-colors duration-150 rounded-2xl p-1 px-4 hover:bg-secant2"
               onClick={handleLoadTemplate}
