@@ -4,7 +4,6 @@ import { AnimatePresence, Variants, motion } from "framer-motion";
 import { TemplateContext, templateType } from "../providors/templateContext.ts";
 import { templates } from "./templates";
 import PdfEditor from "./components/pdfEditor/pdfEditor";
-import NormalTemplate from "./components/normalTemplate/normalTemplate.tsx";
 import { HistoryContext } from "../providors/historyContext.ts";
 import SelectedContext from "./contexts/selectedContext.tsx";
 import EditSelectContext from "./contexts/EditSelectContext.ts";
@@ -17,10 +16,7 @@ import {
   doc,
   DocumentData,
   DocumentReference,
-  query,
-  serverTimestamp,
   Timestamp,
-  where,
 } from "firebase/firestore";
 import { colRef } from "../firebase/config.ts";
 

@@ -1,11 +1,10 @@
 "use client";
 import { useContext, useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import "./pdfEditor.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
-  faEllipsisV,
   faMinus,
   faPlus,
   faRedo,
@@ -19,7 +18,6 @@ import DataEdit from "../DataEdit/DataEdit";
 import TabContext from "../../contexts/tabContext";
 import SelectedContext from "../../contexts/selectedContext";
 import EditModeContext from "../../contexts/editModeContext";
-import { redirect, usePathname } from "next/navigation";
 import Options from "./components/options";
 import { AuthContext } from "@/app/providors/authProvidor";
 import {
@@ -33,7 +31,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { colRef } from "@/app/firebase/config";
+import { colRef, db } from "@/app/firebase/config";
 
 export default function PdfEditor({
   handleRedo,
@@ -195,12 +193,14 @@ export default function PdfEditor({
 
         if (!querySnapshot.empty) {
           querySnapshot.forEach((doc) => documentSetter(doc.ref));
+          console.log("fetched");
         } else {
           const docRef = await addDoc(colRef, {
             ...templateState,
             uid: user.uid,
           });
           documentSetter(docRef);
+          console.log("added");
         }
       } else {
         documentSetter(doc(colRef));

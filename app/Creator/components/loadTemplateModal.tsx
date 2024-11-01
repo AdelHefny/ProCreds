@@ -4,7 +4,7 @@ import "./contextMenu.css";
 import { TemplateContext, templateType } from "@/app/providors/templateContext";
 import { AuthContext } from "@/app/providors/authProvidor";
 import { colRef } from "@/app/firebase/config";
-import { DocumentData, getDocs, query, where } from "firebase/firestore";
+import { getDocs, query, where } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloud } from "@fortawesome/fontawesome-free-solid";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
@@ -30,7 +30,7 @@ function LoadTemplateModal({
     { template: templateType; isCloud: boolean }[]
   >([]);
   const { user } = useContext(AuthContext);
-  const [selectedTemplateId, setSelectedTemplateId] = useState<number | null>(
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(
     null
   );
   const [, setter] = useContext(TemplateContext);
@@ -43,25 +43,62 @@ function LoadTemplateModal({
       if (user) {
         const q = query(colRef, where("uid", "==", user.uid));
         const querySnapshot = await getDocs(q);
+
         querySnapshot.forEach((doc) => {
-          cloudeTemplates.push({ template: doc.data(), isCloud: true });
+          let templateData = doc.data();
+          let baseName = templateData.name;
+          let newName = baseName;
+          let count = 1;
+
+          // Increment the name until it is unique within cloudTemplates
+          while (
+            cloudeTemplates.find(
+              (existingTemplate) => existingTemplate.template.name === newName
+            ) !== undefined
+          ) {
+            newName = `${baseName}${count}`;
+            count++;
+          }
+
+          // Assign the unique name
+          templateData.name = newName;
+          cloudeTemplates.push({ template: templateData, isCloud: true });
         });
       }
+
       const savedTemplates = JSON.parse(
         localStorage.getItem("templates")
       ) as templateType[];
 
       savedTemplates.map((ele) => {
+        // Check if there's a template with the same ID in `cloudTemplates`
         if (
           cloudeTemplates.find((elee) => {
-            return elee.template.id == ele.id;
+            return elee.template.id === ele.id;
           }) == undefined
         ) {
+          let baseName = ele.name; // Original name to use as the base
+          let newName = baseName;
+          let count = 1;
+
+          // Increment the name until it is unique
+          while (
+            cloudeTemplates.find((elee) => elee.template.name === newName) !==
+            undefined
+          ) {
+            newName = `${baseName}${count}`;
+            count++;
+          }
+
+          // Assign the unique name
+          ele.name = newName;
           savedTemplatesObj.push({ template: ele, isCloud: false });
         }
       });
+
       if (savedTemplates || cloudeTemplates) {
         const data = [...cloudeTemplates, ...savedTemplatesObj];
+        console.log(data);
         setStoredTemplates(data);
       }
     };
@@ -90,14 +127,14 @@ function LoadTemplateModal({
     };
   }, [dialogRef, isModalOpen, handleCloseModal]);
 
-  const handleRadioChange = (templateId: number) => {
+  const handleRadioChange = (templateId: string) => {
     setSelectedTemplateId(templateId);
   };
 
   const handleLoadTemplate = () => {
     if (selectedTemplateId) {
       const selectedTemplate = storedTemplates.find(
-        (template) => template.template.templateId === selectedTemplateId
+        (template) => template.template.id === selectedTemplateId
       );
       if (selectedTemplate.template) {
         handleCloseModal();
@@ -124,18 +161,14 @@ function LoadTemplateModal({
               {storedTemplates.map((template) => (
                 <li
                   className="w-full hover:bg-white hover:border-secant3 border-2 border-transparent items-center cursor-pointer p-2 rounded-2xl flex flex-row justify-between"
-                  key={template.template.templateId}
-                  onClick={() =>
-                    handleRadioChange(template.template.templateId)
-                  }
+                  key={template.template.id}
+                  onClick={() => handleRadioChange(template.template.id)}
                 >
                   <label className="inline-flex items-center gap-2.5 my-1.25 cursor-pointer">
                     <input
                       type="radio"
                       className="custom-radio"
-                      checked={
-                        selectedTemplateId === template.template.templateId
-                      }
+                      checked={selectedTemplateId === template.template.id}
                       onChange={() => {}}
                     />
                     <h1 className="font-bold ">{template.template.name}</h1>

@@ -4,7 +4,7 @@ export const templates: templateType[] = [
     templateId: 0,
     templateType: "normal",
     dateCreated: new Date(Date.now()).getTime(),
-    id: "",
+    id: "1",
     uid: "",
     name: "template1",
     content: {
@@ -152,7 +152,7 @@ John Doe is a versatile software developer with a strong foundation in Computer 
   {
     templateId: 1,
     dateCreated: new Date(Date.now()).getTime(),
-    id: "",
+    id: "2",
     uid: "",
     templateType: "fancy",
     name: "template2",
