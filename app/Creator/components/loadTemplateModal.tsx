@@ -39,68 +39,56 @@ function LoadTemplateModal({
     const settingData = async () => {
       const savedTemplatesObj: { template: templateType; isCloud: boolean }[] =
         [];
-      const cloudeTemplates: { template: any; isCloud: boolean }[] = [];
+      const cloudTemplates: { template: any; isCloud: boolean }[] = [];
+      // More robust unique naming
+      const generateUniqueName = (
+        baseName: string,
+        existingTemplates: any[]
+      ) => {
+        let newName = baseName;
+        let count = 1;
+        while (
+          existingTemplates.some(
+            (existingTemplate) => existingTemplate.template.name === newName
+          )
+        ) {
+          newName = `${baseName} (${count})`;
+          count++;
+        }
+        return newName;
+      };
       if (user) {
         const q = query(colRef, where("uid", "==", user.uid));
         const querySnapshot = await getDocs(q);
 
         querySnapshot.forEach((doc) => {
           let templateData = doc.data();
-          let baseName = templateData.name;
-          let newName = baseName;
-          let count = 1;
 
-          // Increment the name until it is unique within cloudTemplates
-          while (
-            cloudeTemplates.find(
-              (existingTemplate) => existingTemplate.template.name === newName
-            ) !== undefined
-          ) {
-            newName = `${baseName}${count}`;
-            count++;
-          }
-
-          // Assign the unique name
-          templateData.name = newName;
-          cloudeTemplates.push({ template: templateData, isCloud: true });
+          templateData.name = generateUniqueName(
+            templateData.name,
+            cloudTemplates
+          );
+          cloudTemplates.push({ template: templateData, isCloud: true });
         });
       }
 
+      // Similar logic for local templates
       const savedTemplates = JSON.parse(
-        localStorage.getItem("templates")
+        localStorage.getItem("templates") || "[]"
       ) as templateType[];
 
-      savedTemplates.map((ele) => {
-        // Check if there's a template with the same ID in `cloudTemplates`
-        if (
-          cloudeTemplates.find((elee) => {
-            return elee.template.id === ele.id;
-          }) == undefined
-        ) {
-          let baseName = ele.name; // Original name to use as the base
-          let newName = baseName;
-          let count = 1;
-
-          // Increment the name until it is unique
-          while (
-            cloudeTemplates.find((elee) => elee.template.name === newName) !==
-            undefined
-          ) {
-            newName = `${baseName}${count}`;
-            count++;
-          }
-
-          // Assign the unique name
-          ele.name = newName;
+      savedTemplates.forEach((ele) => {
+        // Avoid duplicates with cloud templates
+        if (!cloudTemplates.some((elee) => elee.template.id === ele.id)) {
+          ele.name = generateUniqueName(ele.name, [
+            ...cloudTemplates,
+            ...savedTemplatesObj,
+          ]);
           savedTemplatesObj.push({ template: ele, isCloud: false });
         }
       });
 
-      if (savedTemplates || cloudeTemplates) {
-        const data = [...cloudeTemplates, ...savedTemplatesObj];
-        console.log(data);
-        setStoredTemplates(data);
-      }
+      setStoredTemplates([...cloudTemplates, ...savedTemplatesObj]);
     };
     settingData();
   }, [isModalOpen]);

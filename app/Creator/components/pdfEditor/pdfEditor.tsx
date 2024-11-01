@@ -183,32 +183,38 @@ export default function PdfEditor({
 
   useEffect(() => {
     const fetchOrAddDocument = async () => {
-      if (user) {
-        const q = query(
-          colRef,
-          where("uid", "==", user.uid),
-          where("id", "==", templateState.id)
-        );
-        const querySnapshot = await getDocs(q);
+      try {
+        if (user) {
+          console.log(templateState.id);
+          const q = query(
+            colRef,
+            where("uid", "==", user.uid),
+            where("id", "==", templateState.id)
+          );
+          const querySnapshot = await getDocs(q);
 
-        if (!querySnapshot.empty) {
-          querySnapshot.forEach((doc) => documentSetter(doc.ref));
-          console.log("fetched");
+          if (!querySnapshot.empty) {
+            const docRef = querySnapshot.docs[0].ref;
+            documentSetter(docRef);
+          } else {
+            const docRef = await addDoc(colRef, {
+              ...templateState,
+              uid: user.uid,
+            });
+            documentSetter(docRef);
+          }
         } else {
-          const docRef = await addDoc(colRef, {
-            ...templateState,
-            uid: user.uid,
-          });
-          documentSetter(docRef);
-          console.log("added");
+          // Clear document reference when user logs out
+          documentSetter(undefined);
         }
-      } else {
-        documentSetter(doc(colRef));
+      } catch (error) {
+        console.error("Error fetching/adding document:", error);
+        // Handle error appropriately
       }
     };
 
     fetchOrAddDocument();
-  }, [user]);
+  }, [user, templateState.id]);
 
   useEffect(() => {
     if (initialLoad) {
@@ -218,6 +224,7 @@ export default function PdfEditor({
     if (templateState.templateId !== -1) {
       setIsSaving(true);
       const intervalId = setTimeout(async () => {
+        console.log(documentRef);
         if (user && documentRef) {
           await updateDoc(documentRef, templateState);
           setIsSaving(false);
