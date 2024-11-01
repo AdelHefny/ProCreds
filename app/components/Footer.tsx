@@ -33,6 +33,7 @@ function Footer() {
         <div className="flex justify-center space-x-6 mb-6">
           <a
             href="https://facebook.com"
+            target="_blank"
             aria-label="Facebook"
             className="hover:text-blue-500"
           >
@@ -40,6 +41,7 @@ function Footer() {
           </a>
           <a
             href="https://twitter.com"
+            target="_blank"
             aria-label="Twitter"
             className="hover:text-blue-400"
           >
@@ -47,6 +49,7 @@ function Footer() {
           </a>
           <a
             href="https://instagram.com"
+            target="_blank"
             aria-label="Instagram"
             className="hover:text-pink-500"
           >
@@ -54,6 +57,7 @@ function Footer() {
           </a>
           <a
             href="https://www.linkedin.com/in/adel-hefny-75b6601bb/"
+            target="_blank"
             aria-label="LinkedIn"
             className="hover:text-blue-700"
           >

@@ -31,7 +31,6 @@ function ContinueSteps() {
 
   // Update videoIndex whenever the MotionValue updates
   useMotionValueEvent(currentVideo, "change", (latest) => {
-    console.log(latest);
     setVideoIndex(Math.round(latest));
   });
   return (
@@ -53,7 +52,7 @@ function ContinueSteps() {
                     l1,
                     (value) => `${value == 100 ? "1.2" : "1"}`
                   ),
-                  transition: "transform 350ms cubic-bezier(.47,1.64,.41,.8);",
+                  transition: "transform 350ms cubic-bezier(.47,1.64,.41,.8)",
                 }}
               >
                 <h1>1</h1>
@@ -106,7 +105,7 @@ function ContinueSteps() {
                     l2,
                     (value) => `${value == 100 ? "1.2" : "1"}`
                   ),
-                  transition: "transform 350ms cubic-bezier(.47,1.64,.41,.8);",
+                  transition: "transform 350ms cubic-bezier(.47,1.64,.41,.8)",
                 }}
               >
                 <h1>2</h1>
@@ -155,7 +154,7 @@ function ContinueSteps() {
                     l3,
                     (value) => `${value == 100 ? "1.2" : "1"}`
                   ),
-                  transition: "transform 350ms cubic-bezier(.47,1.64,.41,.8);",
+                  transition: "transform 350ms cubic-bezier(.47,1.64,.41,.8)",
                 }}
               >
                 <h1>3</h1>

@@ -2,9 +2,9 @@ import React, { useContext, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { cloneDeep } from "lodash";
 import TabContext from "@/app/Creator/contexts/tabContext";
-import { HistoryContext } from "@/app/historyContext";
+import { HistoryContext } from "@/app/providors/historyContext";
 import { useBtnBubbleEffect } from "@/app/hooks";
-import { TemplateContext } from "@/app/templateContext";
+import { TemplateContext } from "@/app/providors/templateContext";
 import "../checkbox.css";
 
 function SkillsEditSection({

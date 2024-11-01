@@ -1,5 +1,5 @@
 import { CSSProperties, MouseEvent, RefObject, useContext } from "react";
-import { TemplateContext } from "@/app/templateContext";
+import { TemplateContext } from "@/app/providors/templateContext";
 import "./contextMenu.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/fontawesome-free-solid";

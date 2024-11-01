@@ -1,4 +1,4 @@
-import { TemplateContext, templateType } from "@/app/templateContext";
+import { TemplateContext, templateType } from "@/app/providors/templateContext";
 import { CSSProperties, useContext, useEffect, useRef } from "react";
 import EditModeContext from "../../../contexts/editModeContext";
 type coPropsLi = {
