@@ -1,4 +1,4 @@
-import { templateType } from "@/app/providors/templateContext";
+import { templateType } from "@/app/templateContext";
 import ReactPDF, { Styles } from "@react-pdf/renderer";
 import { NextResponse } from "next/server";
 import NormalTemplate from "./templateComponentPdf";

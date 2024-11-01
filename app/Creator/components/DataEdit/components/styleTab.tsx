@@ -1,7 +1,7 @@
 "use client";
 
 import SelectedContext from "@/app/Creator/contexts/selectedContext";
-import { TemplateContext } from "@/app/providors/templateContext";
+import { TemplateContext } from "@/app/templateContext";
 import { useContext, useEffect } from "react";
 
 function StyleTab() {

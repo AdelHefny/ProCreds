@@ -1,4 +1,4 @@
-import { templateType } from "../providors/templateContext";
+import { templateType } from "../templateContext";
 export const templates: templateType[] = [
   {
     templateId: 0,
@@ -6,6 +6,7 @@ export const templates: templateType[] = [
     dateCreated: new Date(Date.now()).getTime(),
     id: "1",
     uid: "",
+    dateCreated: "",
     name: "template1",
     content: {
       photo: { enabled: false, alt: "", data: "", id: "" },
@@ -154,6 +155,7 @@ John Doe is a versatile software developer with a strong foundation in Computer 
     dateCreated: new Date(Date.now()).getTime(),
     id: "2",
     uid: "",
+    dateCreated: "",
     templateType: "fancy",
     name: "template2",
     content: {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, Variants } from "framer-motion";
-import { templateType } from "@/app/providors/templateContext";
+import { templateType } from "@/app/templateContext";
 import NormalTemplate from "./normalTemplate/normalTemplate";
 
 const templatesChildrenvariants: Variants = {

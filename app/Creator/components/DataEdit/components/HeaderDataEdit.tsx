@@ -1,7 +1,7 @@
 import { cloneDeep } from "lodash";
 import TabContext from "@/app/Creator/contexts/tabContext";
-import { HistoryContext } from "@/app/providors/historyContext";
-import { TemplateContext } from "@/app/providors/templateContext";
+import { HistoryContext } from "@/app/historyContext";
+import { TemplateContext } from "@/app/templateContext";
 import { AnimatePresence } from "framer-motion";
 import { useContext, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";

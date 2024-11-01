@@ -18,10 +18,8 @@ export type StyleMapping = {
 export type templateType = {
   templateId: number;
   templateType: string;
-  id: string;
-  uid: string;
   name: string;
-  dateCreated: number;
+  dateCreated: string;
   content: {
     header: {
       firstName: string;
@@ -52,11 +50,9 @@ export const TemplateContext = createContext<
 >([
   {
     templateId: -1,
-    id: "",
-    uid: "",
     templateType: "normal",
     name: "",
-    dateCreated: new Date(Date.now()).getTime(),
+    dateCreated: "",
     content: {
       header: {
         jobTitle: "",

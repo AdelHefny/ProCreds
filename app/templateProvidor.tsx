@@ -6,9 +6,7 @@ import { AnimatePresence } from "framer-motion";
 export const emptyTemplate: templateType = {
   templateId: -1,
   templateType: "normal",
-  uid: "",
-  id: "",
-  dateCreated: new Date(Date.now()).getTime(),
+  dateCreated: "",
   name: "",
   content: {
     photo: { enabled: false, data: "", alt: "", id: "" },

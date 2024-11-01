@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import "./checkbox.css";
 import { motion } from "framer-motion";
-import { TemplateContext, templateType } from "@/app/providors/templateContext";
+import { TemplateContext, templateType } from "@/app/templateContext";
 import { useBtnBubbleEffect } from "@/app/hooks";
 const avSections = [
   "Experience",

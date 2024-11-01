@@ -1,4 +1,4 @@
-import { TemplateContext } from "@/app/providors/templateContext";
+import { TemplateContext } from "@/app/templateContext";
 import {
   faEllipsisV,
   faFileImage,
@@ -16,7 +16,7 @@ import {
 } from "react";
 import { toJpeg } from "html-to-image";
 import LoadTemplateModal from "../../loadTemplateModal";
-import { emptyTemplate } from "@/app/providors/templateProvidor";
+import { emptyTemplate } from "@/app/templateProvidor";
 
 function Options({
   templateComponent,

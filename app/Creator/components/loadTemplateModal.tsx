@@ -124,9 +124,9 @@ function LoadTemplateModal({
       const selectedTemplate = storedTemplates.find(
         (template) => template.template.id === selectedTemplateId
       );
-      if (selectedTemplate.template) {
+      if (selectedTemplate) {
         handleCloseModal();
-        setter(selectedTemplate.template);
+        setter(selectedTemplate);
       }
     }
   };
@@ -146,7 +146,7 @@ function LoadTemplateModal({
           <div className="h-[85%]">
             <h1 className="font-bold py-2">Select a template</h1>
             <ul className="py-2 pr-4 h-[90%] flex flex-col justify-start items-center space-y-2 w-full overflow-y-scroll loadMenuList">
-              {storedTemplates.map((template) => (
+              {storedTemplates.map((template: any) => (
                 <li
                   className="w-full hover:bg-white hover:border-secant3 border-2 border-transparent items-center cursor-pointer p-2 rounded-2xl flex flex-row justify-between"
                   key={template.template.id}
@@ -159,16 +159,10 @@ function LoadTemplateModal({
                       checked={selectedTemplateId === template.template.id}
                       onChange={() => {}}
                     />
-                    <h1 className="font-bold ">{template.template.name}</h1>
                   </label>
-                  {template.isCloud && (
-                    <FontAwesomeIcon
-                      className="text-secant3"
-                      icon={faCloud as IconProp}
-                    />
-                  )}
+                  <h1 className="font-bold ">{template.name}</h1>
                   <h1 className="text-gray-300 text-sm">
-                    {formatDate(template.template.dateCreated)}
+                    {template.dateCreated}
                   </h1>
                 </li>
               ))}

@@ -1,4 +1,4 @@
-import { StyleMapping, templateType } from "@/app/providors/templateContext";
+import { StyleMapping, templateType } from "@/app/templateContext";
 import "./normalTemplate.css";
 import { Edit, EditLi } from "./components/editComponenets";
 import SkillsSection from "./components/skills";
