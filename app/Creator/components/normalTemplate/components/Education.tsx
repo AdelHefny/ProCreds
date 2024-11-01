@@ -1,4 +1,4 @@
-import { StyleMapping } from "@/app/templateContext";
+import { StyleMapping } from "@/app/providors/templateContext";
 
 function Education({
   id,

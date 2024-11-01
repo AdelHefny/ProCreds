@@ -1,4 +1,4 @@
-import { StyleMapping } from "@/app/templateContext";
+import { StyleMapping } from "@/app/providors/templateContext";
 import { Edit, EditLi } from "./editComponenets";
 
 function SkillsSection({

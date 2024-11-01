@@ -1,7 +1,7 @@
 import TabContext from "@/app/Creator/contexts/tabContext";
-import { HistoryContext } from "@/app/historyContext";
+import { HistoryContext } from "@/app/providors/historyContext";
 import { useBtnBubbleEffect } from "@/app/hooks";
-import { TemplateContext, templateType } from "@/app/templateContext";
+import { TemplateContext, templateType } from "@/app/providors/templateContext";
 import { motion } from "framer-motion";
 import { cloneDeep } from "lodash";
 import { useContext, useRef, useState } from "react";

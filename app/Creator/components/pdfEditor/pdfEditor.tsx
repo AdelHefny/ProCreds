@@ -11,7 +11,7 @@ import {
   faRedo,
   faUndo,
 } from "@fortawesome/fontawesome-free-solid";
-import { TemplateContext } from "@/app/templateContext";
+import { TemplateContext } from "@/app/providors/templateContext";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import ContextMenu from "../contextMenu";
 import NormalTemplate from "../normalTemplate/normalTemplate";
@@ -21,13 +21,32 @@ import SelectedContext from "../../contexts/selectedContext";
 import EditModeContext from "../../contexts/editModeContext";
 import { redirect, usePathname } from "next/navigation";
 import Options from "./components/options";
+import { AuthContext } from "@/app/providors/authProvidor";
+import {
+  addDoc,
+  doc,
+  DocumentData,
+  DocumentReference,
+  getDoc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { colRef } from "@/app/firebase/config";
 
 export default function PdfEditor({
   handleRedo,
   handleUndo,
+  documentRef,
+  documentSetter,
 }: {
   handleUndo: () => void;
   handleRedo: () => void;
+  documentRef: DocumentReference<DocumentData, DocumentData>;
+  documentSetter: (
+    docRef: DocumentReference<DocumentData, DocumentData>
+  ) => void;
 }) {
   const content = useRef<HTMLDivElement>(null);
   const [templateState] = useContext(TemplateContext);
@@ -46,6 +65,8 @@ export default function PdfEditor({
     edit: false,
     who: "",
   });
+  const { user } = useContext(AuthContext);
+
   const edit_mode_setter = (edit: boolean, who: string) => {
     setEditMode(() => {
       return { edit, who };
@@ -161,6 +182,34 @@ export default function PdfEditor({
       touch1.clientY - touch2.clientY
     );
   };
+
+  useEffect(() => {
+    const fetchOrAddDocument = async () => {
+      if (user) {
+        const q = query(
+          colRef,
+          where("uid", "==", user.uid),
+          where("id", "==", templateState.id)
+        );
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          querySnapshot.forEach((doc) => documentSetter(doc.ref));
+        } else {
+          const docRef = await addDoc(colRef, {
+            ...templateState,
+            uid: user.uid,
+          });
+          documentSetter(docRef);
+        }
+      } else {
+        documentSetter(doc(colRef));
+      }
+    };
+
+    fetchOrAddDocument();
+  }, [user]);
+
   useEffect(() => {
     if (initialLoad) {
       setInitialLoad(false);
@@ -168,7 +217,12 @@ export default function PdfEditor({
     }
     if (templateState.templateId !== -1) {
       setIsSaving(true);
-      const intervalId = setTimeout(() => {
+      const intervalId = setTimeout(async () => {
+        if (user && documentRef) {
+          await updateDoc(documentRef, templateState);
+          setIsSaving(false);
+          return;
+        }
         const savedTemplates = JSON.parse(
           localStorage.getItem("templates") || "[]"
         );

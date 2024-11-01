@@ -1,10 +1,10 @@
 "use client";
-import { TemplateContext, templateType } from "@/app/templateContext";
+import { TemplateContext, templateType } from "@/app/providors/templateContext";
 import { RefObject, useContext, useState } from "react";
 import "./DataEdit.css";
 import StyleTab from "./components/styleTab";
 import TabSection from "./components/tabSection";
-import { HistoryContext } from "@/app/historyContext";
+import { HistoryContext } from "@/app/providors/historyContext";
 import TabContext from "../../contexts/tabContext";
 import HeaderEdit from "./components/HeaderDataEdit";
 import LayoutTab from "./components/layoutTab";

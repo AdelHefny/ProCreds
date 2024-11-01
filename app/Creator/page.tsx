@@ -1,16 +1,29 @@
 "use client";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { AnimatePresence, Variants, motion } from "framer-motion";
-import { TemplateContext, templateType } from "../templateContext";
+import { TemplateContext, templateType } from "../providors/templateContext.ts";
 import { templates } from "./templates";
 import PdfEditor from "./components/pdfEditor/pdfEditor";
 import NormalTemplate from "./components/normalTemplate/normalTemplate.tsx";
-import { HistoryContext } from "../historyContext.ts";
+import { HistoryContext } from "../providors/historyContext.ts";
 import SelectedContext from "./contexts/selectedContext.tsx";
 import EditSelectContext from "./contexts/EditSelectContext.ts";
 import LoadTemplateModal from "./components/loadTemplateModal.tsx";
 import "./creator.css";
 import TemplateCard from "./components/templateCard.tsx";
+import { AuthContext } from "../providors/authProvidor.tsx";
+import {
+  addDoc,
+  doc,
+  DocumentData,
+  DocumentReference,
+  query,
+  serverTimestamp,
+  Timestamp,
+  where,
+} from "firebase/firestore";
+import { colRef } from "../firebase/config.ts";
+import { createContext } from "vm";
 
 const templatesvariants: Variants = {
   hidden: {
@@ -44,6 +57,7 @@ const editorVarients: Variants = {
   },
 };
 
+export const documentContext = createContext();
 function Creator() {
   const [templateState, setter] = useContext(TemplateContext);
   const [history, setHistory] = useContext(HistoryContext);
@@ -53,7 +67,9 @@ function Creator() {
   const loadTemplateModalRef = useRef<HTMLDialogElement>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [storedTemplates, setStoredTemplates] = useState([]);
-
+  const { user } = useContext(AuthContext);
+  const [documentReference, setDocumentReference] =
+    useState<DocumentReference<DocumentData, DocumentData>>();
   // Load templates from localStorage on mount
   useEffect(() => {
     const savedTemplates = localStorage.getItem("templates");
@@ -62,10 +78,17 @@ function Creator() {
     }
   }, []);
 
+  const documentSetter = (
+    docRef: DocumentReference<DocumentData, DocumentData>
+  ) => {
+    setDocumentReference(docRef);
+  };
+
   const handleCloseModel = () => {
     setIsModalOpen(() => false);
     loadTemplateModalRef.current?.close();
   };
+
   const handleLoadTemplate = () => {
     setIsModalOpen(() => true);
     loadTemplateModalRef.current?.showModal();
@@ -165,70 +188,50 @@ function Creator() {
                         className="flex flex-col items-center justify-center space-y-2 relative"
                         onClick={() => {
                           const currDate = new Date(Date.now());
-                          const DateCreated = currDate.toLocaleDateString(
-                            "en-US",
-                            {
-                              year: "numeric",
-                              month: "2-digit",
-                              day: "2-digit",
-                            }
-                          );
                           let val = 0;
                           if (storedTemplates.length == 0) {
-                            console.log(val);
                             val = 1;
                           } else {
-                            storedTemplates.map((ele) => {
+                            storedTemplates.map((ele: templateType) => {
                               val = Math.max(ele.templateId + 1, val);
                             });
                           }
+                          const currTemplate: templateType = {
+                            ...templateState,
+                            dateCreated: currDate.getTime(),
+                            uid: user?.uid,
+                            id: doc(colRef).id,
+                            templateType: ele.templateType,
+                            templateId: val,
+                            name: "template" + val,
+                          };
+                          setter(() => {
+                            return currTemplate;
+                          });
+                          setStoredTemplates((prev) => [...prev, currTemplate]);
+                          setNewTemplateSelect(false);
+                          if (user) {
+                            const currTime = Timestamp.now();
+                            addDoc(colRef, {
+                              ...currTemplate,
+                              uid: user.uid,
+                              dateCreated: currTime,
+                            }).then((docRef) => {
+                              setDocumentReference(docRef);
+                            });
+                            return;
+                          }
+
                           localStorage.setItem(
                             "templates",
-                            JSON.stringify([
-                              ...storedTemplates,
-                              {
-                                ...templateState,
-                                dateCreated: DateCreated,
-                                templateType: ele.templateType,
-                                templateId: val,
-                                name: "template" + val,
-                              },
-                            ])
+                            JSON.stringify([...storedTemplates, currTemplate])
                           );
                           setHistory((prev) => {
                             return {
                               redoStack: [],
-                              undoStack: [
-                                {
-                                  ...templateState,
-                                  dateCreated: DateCreated,
-                                  templateType: ele.templateType,
-                                  templateId: val,
-                                  name: "template" + val,
-                                },
-                              ],
+                              undoStack: [currTemplate],
                             };
                           });
-                          setter((prev: templateType) => {
-                            return {
-                              ...prev,
-                              dateCreated: DateCreated,
-                              templateType: ele.templateType,
-                              templateId: val,
-                              name: "template" + val,
-                            };
-                          });
-                          setStoredTemplates((prev) => [
-                            ...prev,
-                            {
-                              ...templateState,
-                              dateCreated: DateCreated,
-                              templateType: ele.templateType,
-                              templateId: val,
-                              name: "template" + val,
-                            },
-                          ]);
-                          setNewTemplateSelect(false);
                         }}
                       >
                         <TemplateCard template={ele} key={ele.templateId} />
@@ -284,7 +287,12 @@ function Creator() {
               exit="exit"
               className="flex flex-row h-screen relative"
             >
-              <PdfEditor handleUndo={handleUndo} handleRedo={handleRedo} />
+              <PdfEditor
+                handleUndo={handleUndo}
+                handleRedo={handleRedo}
+                documentRef={documentReference}
+                documentSetter={documentSetter}
+              />
             </motion.section>
           </EditSelectContext.Provider>
         )}

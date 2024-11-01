@@ -1,4 +1,4 @@
-import { StyleMapping } from "@/app/templateContext";
+import { StyleMapping } from "@/app/providors/templateContext";
 
 function Projects({
   id,
@@ -18,7 +18,6 @@ function Projects({
   }[];
   styleData: StyleMapping;
 }) {
-  
   return (
     <section className="my-[0.25em]">
       <ul className="flex flex-col">
