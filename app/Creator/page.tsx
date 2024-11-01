@@ -23,7 +23,6 @@ import {
   where,
 } from "firebase/firestore";
 import { colRef } from "../firebase/config.ts";
-import { createContext } from "vm";
 
 const templatesvariants: Variants = {
   hidden: {
@@ -57,7 +56,6 @@ const editorVarients: Variants = {
   },
 };
 
-export const documentContext = createContext();
 function Creator() {
   const [templateState, setter] = useContext(TemplateContext);
   const [history, setHistory] = useContext(HistoryContext);
