@@ -6,7 +6,7 @@ function Logo() {
   return (
     <Link
       href={"#"}
-      className="text-interactive font-extrabold font-mono flex flex-row"
+      className="text-interactive font-extrabold font-mono flex flex-row min-w-max"
     >
       <div className="logo flex items-center justify-center">
         <LogoExportar />
