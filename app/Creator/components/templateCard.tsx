@@ -48,7 +48,7 @@ function TemplateCard({ template }: { template: templateType }) {
         onHoverEnd={() => {
           setisHovered(false);
         }}
-        className="w-96 h-[30rem] cursor-pointer flex flex-col items-center justify-center text-[0.55rem] border-secant3 border-2 rounded-xl shadow-md shadow-secant3"
+        className="w-96 h-[30rem] cursor-pointer flex flex-col items-center justify-center text-[0.55rem] border-secant3 border-2 rounded-xl shadow-md shadow-secant3 overflow-hidden"
       >
         {template.templateType == "normal" && (
           <NormalTemplate templateData={template} />

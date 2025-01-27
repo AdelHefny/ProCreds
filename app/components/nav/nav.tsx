@@ -17,9 +17,8 @@ function Nav() {
   const [isLoginModolOpen, setIsLoginModolOpen] = useState(false);
   const [isSignupModolOpen, setIsSignupLoginModolOpen] = useState(false);
   const { loading, user } = useContext(AuthContext);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleMenu = () => setIsOpen(!isOpen);
 
   const handleLoginModol = () => {
     setIsLoginModolOpen(() => true);
@@ -125,7 +124,7 @@ function Nav() {
           )}
         </ul>
         {/* Dropdown Menu for Small Screens */}
-        {isMenuOpen && (
+        {isOpen && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}

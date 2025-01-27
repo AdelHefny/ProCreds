@@ -166,7 +166,7 @@ function Creator() {
         {templateState.templateId == -1 && (
           <div className="flex flex-col items-center justify-center h-screen">
             {newTemplateSelect && (
-              <div className="flex flex-col items-center justify-center space-y-2 mt-16">
+              <div className="flex flex-col md:items-center md:justify-center overflow-scroll w-full h-full space-y-2 md:mt-16 mt-16">
                 <h1 className="font-bold text-lg">Select a Template</h1>
                 <motion.section
                   key="template-selection"
@@ -174,12 +174,12 @@ function Creator() {
                   initial="hidden"
                   animate="visible"
                   exit="exit"
-                  className="flex flex-col sm:flex-row items-center space-y-6 sm:space-y-0 sm:space-x-6 sm:justify-center pt-[7rem] sm:pt-0 h-full w-full sm:overflow-hidden"
+                  className="flex flex-col md:flex-row md:items-center space-y-6 md:space-y-0 md:space-x-6 md:justify-center md:pt-0"
                 >
                   <AnimatePresence mode="wait">
                     {templates.map((ele) => (
                       <section
-                        className="flex flex-col items-center justify-center space-y-2 relative"
+                        className="flex flex-col items-center justify-center space-y-2 relative h-max"
                         onClick={() => {
                           const currDate = new Date(Date.now());
                           let val = 0;
