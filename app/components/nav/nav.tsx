@@ -57,7 +57,7 @@ function Nav() {
       <motion.nav
         initial={{ y: "-140%", x: "-50%" }}
         animate={{ y: 0 }}
-        className="flex flex-row md:space-x-6 space-x-0 py-2 md:py-0 items-center text-xs md:text-base justify-between px-7 fixed top-2 rounded-full bg-secant bg-opacity-60 backdrop-blur-md md:left-1/2 left-1/2 md:w-max w-[65%] md:h-16 h-max z-40"
+        className="flex flex-row md:space-x-6 space-x-4 py-2 md:py-0 items-center text-xs md:text-base justify-between px-7 fixed top-2 rounded-full bg-secant bg-opacity-60 backdrop-blur-md md:left-1/2 left-1/2 md:w-max md:min-w-0 min-w-[65%] w-max md:h-16 h-[10%] z-40"
       >
         <Logo />
 

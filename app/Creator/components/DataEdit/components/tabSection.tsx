@@ -14,7 +14,7 @@ function TabSection({
 }) {
   const sectionBtn = useRef<HTMLButtonElement>(null);
   const layoutBtn = useRef<HTMLButtonElement>(null);
-  const [currTab, setCurrTab] = useContext(TabContext);
+  const [, setCurrTab] = useContext(TabContext);
 
   useEffect(() => {
     sectionBtn.current?.click();

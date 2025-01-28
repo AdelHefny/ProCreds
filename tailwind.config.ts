@@ -33,6 +33,9 @@ const config: Config = {
           height: ["em", "vh", "vw", "%"],
         },
       },
+      spacing: {
+        "from-nav": "calc(10% + 1rem)",
+      },
     },
   },
   plugins: [],

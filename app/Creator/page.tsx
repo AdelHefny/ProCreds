@@ -174,7 +174,7 @@ function Creator() {
                   initial="hidden"
                   animate="visible"
                   exit="exit"
-                  className="flex flex-col md:flex-row md:items-center space-y-6 md:space-y-0 md:space-x-6 md:justify-center md:pt-0"
+                  className="flex flex-col md:flex-row md:items-center space-y-6 md:space-y-0 md:space-x-6 md:justify-center md:pt-0 w-full"
                 >
                   <AnimatePresence mode="wait">
                     {templates.map((ele) => (

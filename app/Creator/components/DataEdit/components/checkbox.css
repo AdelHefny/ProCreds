@@ -203,6 +203,7 @@
 }
 .ProjSection::-webkit-scrollbar-track {
   background: #3a5a40; /* Background color for the scrollbar track */
+  height: 100%;
 }
 
 /* Styles the scrollbar itself */

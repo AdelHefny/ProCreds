@@ -3,7 +3,7 @@ import TabContext from "@/app/Creator/contexts/tabContext";
 import { HistoryContext } from "@/app/providors/historyContext";
 import { TemplateContext } from "@/app/providors/templateContext";
 import { AnimatePresence } from "framer-motion";
-import { useContext, useEffect, useRef, useState } from "react";
+import { RefObject, useContext, useState } from "react";
 import { motion } from "framer-motion";
 import "./checkbox.css";
 import ExperienceSection from "./sections/experience";
@@ -12,10 +12,20 @@ import CertificateSection from "./sections/certificate";
 import EducationSection from "./sections/education";
 import EditSelectContext from "@/app/Creator/contexts/EditSelectContext";
 import ProjectSection from "./sections/projects";
-function HeaderEdit() {
+import DropdownMenu from "./dropDownMenu";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faX } from "@fortawesome/free-solid-svg-icons";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+function HeaderEdit({
+  markerRef,
+  sectionBtn,
+}: {
+  markerRef: RefObject<HTMLDivElement>;
+  sectionBtn: RefObject<HTMLButtonElement>;
+}) {
   const [templateState, setter] = useContext(TemplateContext);
   const [history, setHistory] = useContext(HistoryContext);
-  const [currTab] = useContext(TabContext);
+  const [currTab, setCurrTab] = useContext(TabContext);
   const [wordsCont, setWordsCont] = useState(0);
   const [EditSelect, setEditSelect] = useContext(EditSelectContext);
   const wordsContSetter = (value, plus) => {
@@ -27,8 +37,33 @@ function HeaderEdit() {
   };
 
   return (
-    <section className="relative w-[29rem] h-[26rem] bg-secant p-4 rounded-xl flex flex-row justify-between">
-      <section className="w-max">
+    <section className="relative sm:w-[29rem] w-full sm:h-[26rem] h-full bg-secant p-4 rounded-xl flex sm:flex-row flex-col justify-between">
+      <div className="absolute top-4 right-4 cursor-pointer z-40 sm:hidden">
+        <button
+          onClick={() => {
+            setCurrTab((prev) => {
+              if (prev == 0) {
+                if (markerRef.current) {
+                  markerRef.current.style.height = "0px";
+                }
+                return 3;
+              } else {
+                if (markerRef.current) {
+                  markerRef.current.style.height =
+                    sectionBtn.current.offsetHeight + "px";
+                  markerRef.current.style.top =
+                    sectionBtn.current.offsetTop + "px";
+                }
+                return 0;
+              }
+            });
+          }}
+        >
+          <FontAwesomeIcon icon={faX as IconProp} size="xl" />
+        </button>
+      </div>
+      <DropdownMenu />
+      <section className="w-max sm:block hidden">
         <ul className="flex flex-col font-serif space-y-2">
           <li>
             <button
@@ -58,7 +93,7 @@ function HeaderEdit() {
           ))}
         </ul>
       </section>
-      <section className="w-[82%] h-full">
+      <section className="sm:w-[82%] w-full h-[88%] sm:h-fit">
         <AnimatePresence>
           {EditSelect === 0 && (
             <motion.form
@@ -146,15 +181,15 @@ function HeaderEdit() {
                 const str = ele as keyof typeof templateState.content.header;
                 return (
                   <fieldset
-                    className="flex flex-row items-center justify-between w-full"
+                    className="flex flex-row items-center justify-between "
                     key={index}
                   >
                     <label className="font-bold font-serif" htmlFor={`${ele}`}>
                       {ele}
                     </label>
-                    <div className="before:content-[''] before:bg-secant3 before:h-[2px] before:w-full before:origin-center before:absolute before:bottom-0 before:left-0 before:transition-all before:ease-in-out before:duration-300 relative">
+                    <div className="sm:w-fit w-36 before:content-[''] before:bg-secant3 before:h-[2px] before:w-full before:origin-center before:absolute before:bottom-0 before:left-0 before:transition-all before:ease-in-out before:duration-300 relative">
                       <input
-                        className="focus:outline-none px-4 py-1  caret-secant"
+                        className="focus:outline-none px-4 py-1 sm:w-fit w-full caret-secant"
                         tabIndex={!currTab ? 1 : -1}
                         onChange={(event) => {
                           const { value } = event.target;

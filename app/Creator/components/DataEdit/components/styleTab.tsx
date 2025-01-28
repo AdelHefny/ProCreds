@@ -1,19 +1,54 @@
 "use client";
 
 import SelectedContext from "@/app/Creator/contexts/selectedContext";
+import TabContext from "@/app/Creator/contexts/tabContext";
 import { TemplateContext } from "@/app/providors/templateContext";
-import { useContext, useEffect } from "react";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { faX } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { RefObject, useContext } from "react";
 
-function StyleTab() {
+function StyleTab({
+  markerRef,
+  styleTab,
+}: {
+  markerRef: RefObject<HTMLDivElement>;
+  styleTab: RefObject<HTMLButtonElement>;
+}) {
   const [selectedElement] = useContext(SelectedContext);
   const [templateState, setter] = useContext(TemplateContext);
+  const [, setCurrTab] = useContext(TabContext);
 
   const selectedStyle = selectedElement
     ? templateState.style[selectedElement]
     : null;
 
   return (
-    <section className="relative w-[29rem] z-50  transition- bg-secant p-4 rounded-xl">
+    <section className="relative sm:w-[29rem] w-full z-50  transition- bg-secant p-4 rounded-xl">
+      <div className="absolute top-4 right-4 cursor-pointer z-40 sm:hidden">
+        <button
+          onClick={() => {
+            setCurrTab((prev) => {
+              if (prev == 1) {
+                if (markerRef.current) {
+                  markerRef.current.style.height = "0px";
+                }
+                return 3;
+              } else {
+                if (markerRef.current) {
+                  markerRef.current.style.height =
+                    styleTab.current.offsetHeight + "px";
+                  markerRef.current.style.top =
+                    styleTab.current.offsetTop + "px";
+                }
+                return 1;
+              }
+            });
+          }}
+        >
+          <FontAwesomeIcon icon={faX as IconProp} size="xl" />
+        </button>
+      </div>
       <h1 className="font-serif font-bold text-lg">Style</h1>
       {selectedElement === "" && (
         <div className="bg-secant3 p-5 rounded-full">
