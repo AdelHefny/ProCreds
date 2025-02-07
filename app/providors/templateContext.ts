@@ -47,31 +47,30 @@ export type templateType = {
   saved: boolean;
 };
 
+export const emptyTemplate: templateType = {
+  templateId: -1,
+  id: "",
+  uid: "",
+  templateType: "normal",
+  name: "",
+  dateCreated: new Date(Date.now()).getTime(),
+  content: {
+    header: {
+      jobTitle: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      Phone: "",
+      City: "",
+      description: "",
+    },
+    sections: [],
+    photo: { enabled: false, data: "", alt: "", id: "" },
+  },
+  style: {},
+  saved: false,
+};
+
 export const TemplateContext = createContext<
   [templateType, (arg: SetStateAction<templateType>) => void]
->([
-  {
-    templateId: -1,
-    id: "",
-    uid: "",
-    templateType: "normal",
-    name: "",
-    dateCreated: new Date(Date.now()).getTime(),
-    content: {
-      header: {
-        jobTitle: "",
-        firstName: "",
-        lastName: "",
-        email: "",
-        Phone: "",
-        City: "",
-        description: "",
-      },
-      sections: [],
-      photo: { enabled: false, data: "", alt: "", id: "" },
-    },
-    style: {},
-    saved: false,
-  },
-  (arg: SetStateAction<templateType>) => {},
-]);
+>([emptyTemplate, (arg: SetStateAction<templateType>) => {}]);

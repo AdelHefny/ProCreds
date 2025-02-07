@@ -6,3 +6,5 @@ export const convertTime = (currDate: Date) => {
   });
   return DateCreated;
 };
+export const sleep = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));

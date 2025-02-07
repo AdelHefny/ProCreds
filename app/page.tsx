@@ -9,7 +9,7 @@ import Footer from "./components/Footer";
 export default function Home() {
   return (
     <motion.div className="flex flex-col items-center justify-center">
-      <section className="flex flex-col items-center justify-center min-h-screen sm:mt-16 mt-24 px-16">
+      <section className="flex flex-col items-center justify-center min-h-screen sm:mt-16 mt-24 px-4 sm:px-16">
         <h1 className="font-bold text-3xl text-center pb-4">
           Resume builder, Easy way to start and apply
         </h1>
@@ -23,7 +23,7 @@ export default function Home() {
             alt="template image"
             width={150}
             height={300}
-            className="-rotate-[20deg] translate-y-5 translate-x-8 select-none"
+            className="-rotate-[20deg] translate-y-5 translate-x-8 select-none sm:block hidden"
           />
           <Image
             src={"/template.PNG"}
@@ -37,7 +37,7 @@ export default function Home() {
             alt="template image"
             width={150}
             height={300}
-            className="rotate-[20deg] translate-y-5 -translate-x-8 select-none"
+            className="rotate-[20deg] translate-y-5 -translate-x-8 select-none sm:block hidden"
           />
         </div>
         <Link

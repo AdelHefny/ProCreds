@@ -12,13 +12,15 @@ import "./creator.css";
 import TemplateCard from "./components/templateCard.tsx";
 import { AuthContext } from "../providors/authProvidor.tsx";
 import {
-  addDoc,
+  collection,
   doc,
   DocumentData,
   DocumentReference,
+  setDoc,
   Timestamp,
 } from "firebase/firestore";
 import { colRef } from "../firebase/config.ts";
+import { DocumentContext } from "../providors/documentContext.ts";
 
 const templatesvariants: Variants = {
   hidden: {
@@ -62,8 +64,7 @@ function Creator() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [storedTemplates, setStoredTemplates] = useState([]);
   const { user } = useContext(AuthContext);
-  const [documentReference, setDocumentReference] =
-    useState<DocumentReference<DocumentData, DocumentData>>();
+  const [documentReference, setDocumentReference] = useContext(DocumentContext);
   // Load templates from localStorage on mount
   useEffect(() => {
     const savedTemplates = localStorage.getItem("templates");
@@ -180,7 +181,7 @@ function Creator() {
                     {templates.map((ele) => (
                       <section
                         className="flex flex-col items-center justify-center space-y-2 relative h-max"
-                        onClick={() => {
+                        onClick={async () => {
                           const currDate = new Date(Date.now());
                           let val = 0;
                           if (storedTemplates.length == 0) {
@@ -194,7 +195,7 @@ function Creator() {
                             ...templateState,
                             dateCreated: currDate.getTime(),
                             uid: user?.uid,
-                            id: doc(colRef).id,
+                            id: doc(colRef, crypto.randomUUID()).id,
                             templateType: ele.templateType,
                             templateId: val,
                             name: "template" + val,
@@ -206,12 +207,13 @@ function Creator() {
                           setNewTemplateSelect(false);
                           if (user) {
                             const currTime = Timestamp.now();
-                            addDoc(colRef, {
+                            const docRef = doc(colRef, currTemplate.id); // Use template.id as the document ID
+                            await setDoc(docRef, {
                               ...currTemplate,
                               uid: user.uid,
                               dateCreated: currTime,
-                            }).then((docRef) => {
-                              setDocumentReference(docRef);
+                            }).then(() => {
+                              documentSetter(docRef);
                             });
                             return;
                           }
@@ -227,6 +229,7 @@ function Creator() {
                             };
                           });
                         }}
+                        key={ele.templateId}
                       >
                         <TemplateCard template={ele} key={ele.templateId} />
                       </section>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import "./contextMenu.css";
 import { TemplateContext, templateType } from "@/app/providors/templateContext";
@@ -6,17 +6,17 @@ import { AuthContext } from "@/app/providors/authProvidor";
 import { colRef } from "@/app/firebase/config";
 import { getDocs, query, where } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCloud } from "@fortawesome/fontawesome-free-solid";
+import { faCloud } from "@fortawesome/free-solid-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-function formatDate(seconds) {
-  const date = new Date(seconds); // Convert seconds to milliseconds
 
-  const day = String(date.getDate()).padStart(2, "0"); // Pad day with leading zero
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // Pad month with leading zero (months are 0-based)
+function formatDate(timestamp: number) {
+  const date = new Date(timestamp); // Convert to milliseconds
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
   const year = date.getFullYear();
-
   return `${day}/${month}/${year}`;
 }
+
 function LoadTemplateModal({
   dialogRef,
   isModalOpen,
@@ -35,50 +35,66 @@ function LoadTemplateModal({
   );
   const [, setter] = useContext(TemplateContext);
 
+  // Control dialog visibility
   useEffect(() => {
+    if (!dialogRef.current) return;
+    if (isModalOpen) {
+      dialogRef.current.showModal();
+    } else {
+      dialogRef.current.close();
+    }
+  }, [isModalOpen, dialogRef]);
+
+  // Fetch templates
+  useEffect(() => {
+    if (!isModalOpen) return;
     const settingData = async () => {
       const savedTemplatesObj: { template: templateType; isCloud: boolean }[] =
         [];
       const cloudTemplates: { template: any; isCloud: boolean }[] = [];
-      // More robust unique naming
+
       const generateUniqueName = (
         baseName: string,
-        existingTemplates: any[]
+        existingTemplates: { template: templateType; isCloud: boolean }[]
       ) => {
         let newName = baseName;
         let count = 1;
-        while (
-          existingTemplates.some(
-            (existingTemplate) => existingTemplate.template.name === newName
-          )
-        ) {
+        while (existingTemplates.some((t) => t.template.name === newName)) {
           newName = `${baseName} (${count})`;
           count++;
         }
         return newName;
       };
-      if (user) {
+
+      try {
         const q = query(colRef, where("uid", "==", user.uid));
         const querySnapshot = await getDocs(q);
-
         querySnapshot.forEach((doc) => {
-          let templateData = doc.data();
-
+          const data = doc.data();
+          const timestamp = data.dateCreated;
+          const dateCreated = timestamp?.toMillis
+            ? timestamp.toMillis()
+            : Date.now();
+          const templateData = {
+            ...data,
+            name: data.name || "Untitled",
+            id: doc.id,
+            dateCreated,
+          };
           templateData.name = generateUniqueName(
-            templateData.name,
+            templateData.name || "Untitled",
             cloudTemplates
           );
           cloudTemplates.push({ template: templateData, isCloud: true });
         });
+      } catch (error) {
+        console.error("Error loading templates:", error);
       }
-
-      // Similar logic for local templates
+      // Process local templates
       const savedTemplates = JSON.parse(
         localStorage.getItem("templates") || "[]"
       ) as templateType[];
-
       savedTemplates.forEach((ele) => {
-        // Avoid duplicates with cloud templates
         if (!cloudTemplates.some((elee) => elee.template.id === ele.id)) {
           ele.name = generateUniqueName(ele.name, [
             ...cloudTemplates,
@@ -91,29 +107,19 @@ function LoadTemplateModal({
       setStoredTemplates([...cloudTemplates, ...savedTemplatesObj]);
     };
     settingData();
-  }, [isModalOpen]);
+  }, [isModalOpen, user]);
 
+  // Close modal on outside click
   useEffect(() => {
+    if (!isModalOpen) return;
     const handleClickOutside = (e: MouseEvent) => {
-      const dialogDimensions = dialogRef.current?.getBoundingClientRect();
-      if (
-        isModalOpen &&
-        dialogDimensions &&
-        (e.clientX < dialogDimensions.left ||
-          e.clientX > dialogDimensions.right ||
-          e.clientY < dialogDimensions.top ||
-          e.clientY > dialogDimensions.bottom)
-      ) {
+      if (dialogRef.current && !dialogRef.current.contains(e.target as Node)) {
         handleCloseModal();
       }
     };
-
     document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [dialogRef, isModalOpen, handleCloseModal]);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [isModalOpen, dialogRef, handleCloseModal]);
 
   const handleRadioChange = (templateId: string) => {
     setSelectedTemplateId(templateId);
@@ -122,9 +128,9 @@ function LoadTemplateModal({
   const handleLoadTemplate = () => {
     if (selectedTemplateId) {
       const selectedTemplate = storedTemplates.find(
-        (template) => template.template.id === selectedTemplateId
+        (t) => t.template.id === selectedTemplateId
       );
-      if (selectedTemplate.template) {
+      if (selectedTemplate) {
         handleCloseModal();
         setter(selectedTemplate.template);
       }
@@ -145,38 +151,45 @@ function LoadTemplateModal({
         >
           <div className="h-[85%]">
             <h1 className="font-bold py-2">Select a template</h1>
-            <ul className="py-2 pr-4 h-[90%] flex flex-col justify-start items-center space-y-2 w-full overflow-y-scroll loadMenuList">
-              {storedTemplates.map((template) => (
-                <li
-                  className="w-full hover:bg-white hover:border-secant3 border-2 border-transparent items-center cursor-pointer p-2 rounded-2xl flex flex-row justify-between"
-                  key={template.template.id}
-                  onClick={() => handleRadioChange(template.template.id)}
-                >
-                  <label className="inline-flex items-center gap-2.5 my-1.25 cursor-pointer">
-                    <input
-                      type="radio"
-                      className="custom-radio"
-                      checked={selectedTemplateId === template.template.id}
-                      onChange={() => {}}
-                    />
-                    <h1 className="font-bold ">{template.template.name}</h1>
-                  </label>
-                  {template.isCloud && (
-                    <FontAwesomeIcon
-                      className="text-secant3"
-                      icon={faCloud as IconProp}
-                    />
-                  )}
-                  <h1 className="text-gray-300 text-sm">
-                    {formatDate(template.template.dateCreated)}
-                  </h1>
-                </li>
-              ))}
+            <ul className="py-2 pr-4 h-[90%] overflow-y-auto loadMenuList">
+              {storedTemplates.length > 0 ? (
+                storedTemplates.map((template) => (
+                  <li
+                    key={template.template.id}
+                    onClick={() => handleRadioChange(template.template.id)}
+                    className="w-full hover:bg-white hover:border-secant3 border-2 border-transparent p-2 rounded-2xl flex justify-between items-center cursor-pointer"
+                  >
+                    <label className="inline-flex items-center gap-2.5 cursor-pointer">
+                      <input
+                        type="radio"
+                        className="custom-radio"
+                        checked={selectedTemplateId === template.template.id}
+                        onChange={() => handleRadioChange(template.template.id)}
+                        aria-label={`Select template ${template.template.name}`}
+                      />
+                      <h1 className="font-bold">{template.template.name}</h1>
+                    </label>
+                    {template.isCloud && (
+                      <FontAwesomeIcon
+                        className="text-secant3"
+                        icon={faCloud as IconProp}
+                      />
+                    )}
+                    <h1 className="text-gray-300 text-sm">
+                      {formatDate(template.template.dateCreated)}
+                    </h1>
+                  </li>
+                ))
+              ) : (
+                <p className="text-gray-500 text-center py-4">
+                  No templates found.
+                </p>
+              )}
             </ul>
           </div>
-          <div className="flex flex-row justify-start items-center space-x-2 font-bold w-full py-2">
+          <div className="flex space-x-2 py-2">
             <button
-              className="bg-secant3 text-white hover:text-secant transition-colors duration-150 rounded-2xl p-1 px-4 hover:bg-secant2"
+              className="bg-secant3 text-white hover:bg-secant2 px-4 py-1 rounded-2xl transition-colors duration-150"
               onClick={handleLoadTemplate}
               disabled={!selectedTemplateId}
             >
@@ -184,7 +197,7 @@ function LoadTemplateModal({
             </button>
             <button
               onClick={handleCloseModal}
-              className="hover:bg-secant3 hover:text-white transition-colors duration-150 rounded-2xl p-1 px-4"
+              className="hover:bg-secant3 hover:text-white px-4 py-1 rounded-2xl transition-colors duration-150"
             >
               Close
             </button>

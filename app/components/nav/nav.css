@@ -10,3 +10,50 @@
 .logo:hover {
   animation: rotate 2s infinite linear;
 }
+@property --buttonChangeColor1 {
+  syntax: "<color>";
+  initial-value: #a3b18a;
+  inherits: false;
+}
+@property --buttonChangeColor2 {
+  syntax: "<color>";
+  initial-value: #344e41;
+  inherits: false;
+}
+.buttonChangeColor {
+  background: linear-gradient(
+    to bottom right,
+    var(--buttonChangeColor1),
+    var(--buttonChangeColor2)
+  );
+  transition: --buttonChangeColor1 0.7s 0.1s ease-in-out,
+    --buttonChangeColor2 0.5s ease-in-out;
+}
+.buttonChangeColor:hover {
+  --buttonChangeColor2: #a3b18a;
+  --buttonChangeColor1: #344e41;
+}
+
+@property --buttonChangeColorRed1 {
+  syntax: "<color>";
+  initial-value: #ff9886;
+  inherits: false;
+}
+@property --buttonChangeColorRed2 {
+  syntax: "<color>";
+  initial-value: #ff5100;
+  inherits: false;
+}
+.buttonChangeColorRed {
+  background: linear-gradient(
+    to bottom right,
+    var(--buttonChangeColorRed1),
+    var(--buttonChangeColorRed2)
+  );
+  transition: --buttonChangeColorRed1 0.7s 0.1s ease-in-out,
+    --buttonChangeColorRed2 0.5s ease-in-out;
+}
+.buttonChangeColorRed:hover {
+  --buttonChangeColorRed2: #ff9886;
+  --buttonChangeColorRed1: #ff5100;
+}

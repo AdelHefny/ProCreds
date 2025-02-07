@@ -1,14 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getApps, getApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  getFirestore,
-  onSnapshot,
-} from "firebase/firestore";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { collection, getFirestore, onSnapshot } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -22,18 +15,12 @@ const firebaseConfig = {
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
 const auth = getAuth(app);
+auth.languageCode = "en";
+
+const googleProvider = new GoogleAuthProvider();
 
 const db = getFirestore();
 
 const colRef = collection(db, "resumes");
-let data = [];
-onSnapshot(colRef, (snapshot) => {
-  let cache = [];
-  snapshot.docs.forEach((doc) => {
-    cache.push({ id: doc.id, ...doc.data() });
-  });
-  data = cache;
-  console.log(data);
-});
 
-export { app, auth, db, colRef };
+export { app, auth, db, colRef, googleProvider };

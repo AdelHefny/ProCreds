@@ -1,13 +1,18 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/app/firebase/config";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { auth, colRef, googleProvider } from "@/app/firebase/config";
 import { FirebaseError } from "firebase/app";
-
+import { TemplateContext } from "@/app/providors/templateContext";
+import { TemplatePrompt } from "./TemplatePrompt";
+import { doc, setDoc, Timestamp } from "firebase/firestore";
+import { DocumentContext } from "@/app/providors/documentContext";
+import { AuthContext } from "@/app/providors/authProvidor";
+import { emptyTemplate } from "@/app/providors/templateContext";
 function LoginModal({
   isModolOpen,
   handleCloseModal,
@@ -22,8 +27,40 @@ function LoginModal({
   const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [template, setter] = useContext(TemplateContext);
+  const [showTemplatePrompt, setShowTemplatePrompt] = useState(false);
+  const [, setDocumentReference] = useContext(DocumentContext);
+  const { user } = useContext(AuthContext);
+  const [isSaving, setIsSaving] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const removeTemplateFromLocalStorage = (templateId: string) => {
+    const templatesString = localStorage.getItem("templates");
+    if (!templatesString) return;
+
+    const templates = JSON.parse(templatesString);
+
+    const updatedTemplates = templates.filter(
+      (template: any) => template.id !== templateId
+    );
+
+    localStorage.setItem("templates", JSON.stringify(updatedTemplates));
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      if (template.id) {
+        setShowTemplatePrompt(true);
+      }
+    } catch (error) {
+      console.log("Google Sign in error:", error);
+    } finally {
+      setEmail("");
+      setPassword("");
+    }
+  };
+
+  const handleLogin = async (e?: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
@@ -34,8 +71,10 @@ function LoginModal({
         email,
         password
       );
-      console.log("User logged in:", userCredential.user);
-      handleCloseModal();
+
+      if (template.id) {
+        setShowTemplatePrompt(true);
+      }
     } catch (error) {
       if (error instanceof FirebaseError) {
         switch (error.code) {
@@ -63,7 +102,42 @@ function LoginModal({
       setPassword("");
     }
   };
+  const handleKeepLocal = () => {
+    setShowTemplatePrompt(false);
+    handleCloseModal();
+  };
 
+  const handleSaveToCloud = async () => {
+    if (isSaving) return;
+    setShowTemplatePrompt(false);
+    setIsSaving(true);
+    try {
+      // Example: Save templates to the cloud
+      const currTime = Timestamp.now();
+      const docRef = doc(colRef, template.id); // Use template.id as the document ID
+      await setDoc(docRef, {
+        ...template,
+        uid: user.uid,
+        dateCreated: currTime,
+      }).then(() => {
+        setDocumentReference(docRef);
+      });
+      removeTemplateFromLocalStorage(template.id);
+    } catch (error) {
+      console.log("Error saving to cloud:", error);
+      setter(emptyTemplate);
+    } finally {
+      setIsSaving(false);
+      handleCloseModal();
+    }
+  };
+
+  const handleDiscard = () => {
+    setShowTemplatePrompt(false);
+    removeTemplateFromLocalStorage(template.id);
+    setter(emptyTemplate);
+    handleCloseModal();
+  };
   useEffect(() => {
     if (isModolOpen) {
       dialogRef.current?.showModal();
@@ -125,7 +199,12 @@ function LoginModal({
                 {!isLoading ? "Login" : "loading..."}
               </button>
             </form>
-
+            <button
+              onClick={handleGoogleSignIn}
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+            >
+              Sign in with Google
+            </button>
             {/* Footer */}
             <div className="flex justify-between mt-4">
               <p className="text-sm">
@@ -144,6 +223,13 @@ function LoginModal({
           </motion.section>
         )}
       </AnimatePresence>
+      {showTemplatePrompt && (
+        <TemplatePrompt
+          onKeepLocal={handleKeepLocal}
+          onSaveToCloud={handleSaveToCloud}
+          onDiscard={handleDiscard}
+        />
+      )}
     </dialog>
   );
 }

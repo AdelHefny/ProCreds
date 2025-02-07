@@ -35,10 +35,10 @@ function ContinueSteps() {
   });
   return (
     <div className="flex flex-row justify-between relative w-full h-[350vh] bg-secant2 text-secant2 ">
-      <div className="flex lg:w-1/2 w-full mt-20 lg:mt-0 flex-col items-center justify-center space-y-[10%]">
+      <div className="flex lg:w-1/2 w-full mt-20 lg:mt-0 flex-col items-center justify-center space-y-[10%] sm:text-lg text-sm">
         <Reveal>
-          <section className="px-10 lg:px-5 w-full text-xl h-[75vh] flex flex-col items-center justify-center">
-            <h1 className="font-extrabold text-xl flex items-center justify-center flex-row space-x-6">
+          <section className="px-2 lg:px-5 w-full h-[75vh] flex flex-col items-center justify-center">
+            <h1 className="font-extrabold text-lg sm:text-xl flex items-center justify-center flex-row space-x-6">
               <motion.div
                 className="lg:w-16 lg:h-16 sm:w-12 sm:h-12 w-8 h-8 translate-x-1 transition rounded-full flex items-center justify-center text-lg font-bold"
                 style={{
@@ -69,7 +69,7 @@ function ContinueSteps() {
                 Start by choosing a Template
               </motion.span>
             </h1>
-            <p className="mt-12 px-5 line leading-relaxed">
+            <p className="mt-12 px-5 text-md sm:text-lg line leading-relaxed">
               <motion.span
                 style={{
                   color: "#dad7cd66",
@@ -90,8 +90,8 @@ function ContinueSteps() {
           </section>
         </Reveal>
         <Reveal>
-          <section className="px-10 lg:px-5 w-full text-xl h-[75vh] flex flex-col items-center justify-center">
-            <h1 className="font-extrabold text-xl flex items-center justify-center flex-row space-x-6">
+          <section className="px-2 lg:px-5 w-full h-[75vh] flex flex-col items-center justify-center">
+            <h1 className="font-extrabold text-lg sm:text-xl flex items-center justify-center flex-row space-x-6">
               <motion.div
                 className="lg:w-16 lg:h-16 sm:w-12 sm:h-12 w-8 h-8 rounded-full -translate-x-1 flex items-center justify-center text-lg font-bold"
                 style={{
@@ -122,7 +122,7 @@ function ContinueSteps() {
                 Edit the template as you want
               </motion.span>
             </h1>
-            <p className="mt-12 text-lg line leading-relaxed">
+            <p className="mt-12 text-md sm:text-lg line leading-relaxed">
               <motion.span
                 style={{
                   color: "#dad7cd66",
@@ -139,8 +139,8 @@ function ContinueSteps() {
           </section>
         </Reveal>
         <Reveal>
-          <section className="px-10 lg:px-5 w-full text-xl h-[75vh] flex flex-col items-center justify-center">
-            <h1 className="font-extrabold text-xl flex items-center justify-center flex-row space-x-6">
+          <section className="px-2 lg:px-5 w-full h-[75vh] flex flex-col items-center justify-center">
+            <h1 className="font-extrabold text-lg sm:text-xl flex items-center justify-center flex-row space-x-6">
               <motion.div
                 className="lg:w-16 lg:h-16 sm:w-12 sm:h-12 w-8 h-8 rounded-full -translate-x-1 flex items-center justify-center text-lg font-bold"
                 style={{
@@ -171,7 +171,7 @@ function ContinueSteps() {
                 Submit job applications with your resume.
               </motion.span>
             </h1>
-            <p className="mt-12 text-lg line leading-relaxed">
+            <p className="mt-12 text-md sm:text-lg line leading-relaxed">
               <motion.span
                 style={{
                   color: "#dad7cd66",

@@ -24,7 +24,7 @@ function HeaderEdit({
   sectionBtn: RefObject<HTMLButtonElement>;
 }) {
   const [templateState, setter] = useContext(TemplateContext);
-  const [history, setHistory] = useContext(HistoryContext);
+  const [, setHistory] = useContext(HistoryContext);
   const [currTab, setCurrTab] = useContext(TabContext);
   const [wordsCont, setWordsCont] = useState(0);
   const [EditSelect, setEditSelect] = useContext(EditSelectContext);
@@ -93,7 +93,7 @@ function HeaderEdit({
           ))}
         </ul>
       </section>
-      <section className="sm:w-[82%] w-full h-[88%] sm:h-fit">
+      <section className="sm:w-[82%] w-full h-[88%] sm:h-fit overflow-y-scroll overflow-x-hidden headerSec">
         <AnimatePresence>
           {EditSelect === 0 && (
             <motion.form

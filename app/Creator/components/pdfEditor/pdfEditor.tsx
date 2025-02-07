@@ -21,17 +21,17 @@ import EditModeContext from "../../contexts/editModeContext";
 import Options from "./components/options";
 import { AuthContext } from "@/app/providors/authProvidor";
 import {
-  addDoc,
   doc,
   DocumentData,
   DocumentReference,
-  getDoc,
   getDocs,
   query,
+  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
 import { colRef, db } from "@/app/firebase/config";
+import ResumeName from "./components/ResumeName";
 
 export default function PdfEditor({
   handleRedo,
@@ -182,66 +182,35 @@ export default function PdfEditor({
   };
 
   useEffect(() => {
-    const fetchOrAddDocument = async () => {
-      try {
-        if (user) {
-          console.log(templateState.id);
-          const q = query(
-            colRef,
-            where("uid", "==", user.uid),
-            where("id", "==", templateState.id)
-          );
-          const querySnapshot = await getDocs(q);
-
-          if (!querySnapshot.empty) {
-            const docRef = querySnapshot.docs[0].ref;
-            documentSetter(docRef);
-          } else {
-            const docRef = await addDoc(colRef, {
-              ...templateState,
-              uid: user.uid,
-            });
-            documentSetter(docRef);
-          }
-        } else {
-          // Clear document reference when user logs out
-          documentSetter(undefined);
-        }
-      } catch (error) {
-        console.error("Error fetching/adding document:", error);
-        // Handle error appropriately
-      }
-    };
-
-    fetchOrAddDocument();
-  }, [user, templateState.id]);
-
-  useEffect(() => {
     if (initialLoad) {
       setInitialLoad(false);
       return;
     }
-    if (templateState.templateId !== -1) {
-      setIsSaving(true);
-      const intervalId = setTimeout(async () => {
-        console.log(documentRef);
+    setIsSaving(true);
+    const saveTemplate = async () => {
+      try {
         if (user && documentRef) {
           await updateDoc(documentRef, templateState);
-          setIsSaving(false);
-          return;
+        } else {
+          const savedTemplates = JSON.parse(
+            localStorage.getItem("templates") || "[]"
+          );
+          const updatedTemplates = savedTemplates.filter(
+            (ele: any) => ele.templateId !== templateState.templateId
+          );
+          updatedTemplates.push(templateState);
+          localStorage.setItem("templates", JSON.stringify(updatedTemplates));
         }
-        const savedTemplates = JSON.parse(
-          localStorage.getItem("templates") || "[]"
-        );
-        const updatedTemplates = savedTemplates.filter(
-          (ele) => ele.templateId !== templateState.templateId
-        );
-        updatedTemplates.push(templateState);
-        localStorage.setItem("templates", JSON.stringify(updatedTemplates));
+      } catch (error) {
+        console.error("Save failed:", error);
+      } finally {
         setIsSaving(false);
-      }, 3000);
+      }
+    };
 
-      return () => clearTimeout(intervalId);
+    if (templateState.id != null) {
+      const timeoutId = setTimeout(saveTemplate, 3000);
+      return () => clearTimeout(timeoutId);
     }
   }, [templateState]);
 
@@ -355,26 +324,27 @@ export default function PdfEditor({
 
   return (
     <TabContext.Provider value={[currTab, setCurrTab]}>
-      <ContextMenu
-        refObject={contextMenuEle}
-        styleElement={styleElement}
-        marker={marker}
-        styleTab={styleTab}
-      />
       <DataEdit markerRef={marker} styleTab={styleTab} />
+      <Options templateComponent={contentDiv} />
+      <ResumeName />
       <section
         className="bg-secant2 overflow-hidden bg-opacity-70 h-full flex items-center justify-center relative w-full editor cursor-grab"
         ref={content}
         tabIndex={0}
         aria-label="PDF Editor"
       >
-        <Options templateComponent={contentDiv} />
-
+        <ContextMenu
+          refObject={contextMenuEle}
+          styleElement={styleElement}
+          marker={marker}
+          styleTab={styleTab}
+        />
         <div
           className="absolute bottom-0 text-secant3 right-0 flex items-center justify-center space-x-1 z-30"
           aria-label="Zoom Controls"
         >
           <button
+            role="button"
             className="w-12 h-5 rounded-md text-sm hover:text-secant transition-colors duration-150 ease-in-out"
             onClick={() => {
               let scaleValue = Math.min(
@@ -392,6 +362,7 @@ export default function PdfEditor({
             <FontAwesomeIcon icon={faPlus as IconProp} />
           </button>
           <button
+            role="button"
             className="w-12 h-5 rounded-md text-sm hover:text-secant transition-colors duration-150 ease-in-out"
             onClick={() => {
               let scaleValue = Math.max(

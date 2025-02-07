@@ -1,10 +1,8 @@
 "use client";
-import { TemplateContext, templateType } from "@/app/providors/templateContext";
-import { RefObject, useContext, useState } from "react";
+import { RefObject, useContext } from "react";
 import "./DataEdit.css";
 import StyleTab from "./components/styleTab";
 import TabSection from "./components/tabSection";
-import { HistoryContext } from "@/app/providors/historyContext";
 import TabContext from "../../contexts/tabContext";
 import HeaderEdit from "./components/HeaderDataEdit";
 import LayoutTab from "./components/layoutTab";
@@ -38,10 +36,10 @@ function DataEdit({
           className={`${
             currTab != 2
               ? "-translate-x-[105%] opacity-0 left-2"
-              : "opacity-100 translate-x-12"
-          } transition-all duration-500 absolute sm:w-max w-full left-0 top-1/2 -translate-y-1/2 z-20`}
+              : "opacity-100 sm:translate-x-12 translate-x-0"
+          } transition-all duration-500 absolute sm:w-max w-full left-0 top-1/2 -translate-y-1/2 sm:z-20 z-40`}
         >
-          <LayoutTab />
+          <LayoutTab markerRef={markerRef} sectionBtn={styleTab} />
         </section>
         <section
           className={`${

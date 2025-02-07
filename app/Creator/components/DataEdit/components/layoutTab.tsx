@@ -1,8 +1,12 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { RefObject, useContext, useEffect, useRef, useState } from "react";
 import "./checkbox.css";
 import { motion } from "framer-motion";
 import { TemplateContext, templateType } from "@/app/providors/templateContext";
 import { useBtnBubbleEffect } from "@/app/hooks";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faX } from "@fortawesome/free-solid-svg-icons";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import TabContext from "@/app/Creator/contexts/tabContext";
 const avSections = [
   "Experience",
   "Skills",
@@ -10,10 +14,17 @@ const avSections = [
   "Education",
   "Certification",
 ];
-function LayoutTab() {
+function LayoutTab({
+  markerRef,
+  sectionBtn,
+}: {
+  markerRef: RefObject<HTMLDivElement>;
+  sectionBtn: RefObject<HTMLButtonElement>;
+}) {
   const [template, setter] = useContext(TemplateContext);
   const [sectionsList, setSectionsList] = useState(avSections);
   const [showOptions, setShowOptions] = useState(false);
+  const [, setCurrTab] = useContext(TabContext);
 
   const addBtn = useRef<HTMLButtonElement>(null);
   const {
@@ -62,7 +73,31 @@ function LayoutTab() {
     }));
   };
   return (
-    <section className="relative w-[20rem] bg-secant p-4 rounded-xl flex flex-col justify-start items-center">
+    <section className="relative sm:w-[20rem] w-full bg-secant p-4 rounded-xl flex flex-col justify-start items-center">
+      <div className="absolute top-4 right-4 cursor-pointer z-40 sm:hidden">
+        <button
+          onClick={() => {
+            setCurrTab((prev) => {
+              if (prev == 2) {
+                if (markerRef.current) {
+                  markerRef.current.style.height = "0px";
+                }
+                return 3;
+              } else {
+                if (markerRef.current) {
+                  markerRef.current.style.height =
+                    sectionBtn.current.offsetHeight + "px";
+                  markerRef.current.style.top =
+                    sectionBtn.current.offsetTop + "px";
+                }
+                return 0;
+              }
+            });
+          }}
+        >
+          <FontAwesomeIcon icon={faX as IconProp} size="xl" />
+        </button>
+      </div>
       <h3 className="text-start w-full font-serif font-bold">Add Sections</h3>
       <section className="flex flex-col w-full justify-center items-center">
         <motion.button
